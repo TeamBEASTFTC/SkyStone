@@ -7,8 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name="AutoFoundationTests", group ="Concept")
-public class AutoFoundationTests extends LinearOpMode {
+@Autonomous(name="BlueAllianceAutoFoundationTests", group ="Concept")
+public class BlueAllianceAutoFoundationTests extends LinearOpMode {
     // Personal variables
     private String wallSide = "LEFT";
     //whether turns are done clockwise or anticlockwise
@@ -193,7 +193,7 @@ public class AutoFoundationTests extends LinearOpMode {
     }
 
     public void shuffle(double power, int time, boolean blueAlliance) {
-        if (!blueAlliance){
+        if (blueAlliance){
             // shuffling left
             driveTR.setPower(power);
             driveTL.setPower((power* -1));

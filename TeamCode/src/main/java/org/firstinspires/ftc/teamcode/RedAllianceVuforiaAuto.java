@@ -30,16 +30,13 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
@@ -47,9 +44,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-import org.firstinspires.ftc.robotcore.internal.vuforia.VuforiaException;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,12 +85,12 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  */
 
 
-@Autonomous(name="BlueAllianceVuforiaAuto", group ="Concept")
-public class BlueAllianceVuforiaAuto extends LinearOpMode {
+@Autonomous(name="RedAllianceVuforiaAuto", group ="Concept")
+public class RedAllianceVuforiaAuto extends LinearOpMode {
     // Personal variables
     private String wallSide = "RIGHT";
     //whether turns are done clockwise or anticlockwise
-    private boolean BlueAlliance = true;
+    private boolean BlueAlliance = false;
     public String[] args = {"false", "", "", "", ""};
 
     private ElapsedTime computerVisionTime = new ElapsedTime();
@@ -359,7 +354,7 @@ public class BlueAllianceVuforiaAuto extends LinearOpMode {
     }
 
     //close the Squeezers on the intake
-    //Just tell us how much you want to open/close by and then wether you want to open or close
+    //Just tell us how much you want to open/close by and then whether you want to open or close
     public void OpenCloseSqueezers(double position, boolean close){
         //if we want to close the squeezers, set the servo power to + "ve"
         if (close){
@@ -611,7 +606,9 @@ public class BlueAllianceVuforiaAuto extends LinearOpMode {
             }
             if ((yPosition <= yPosCentreBoundaryRight) & (yPosition >= yPosCentreBoundaryLeft)) {
                 yposisitonSkystone = "CENTRE, GRAB!!";
-
+//                    }
+//                    if (yPosition > -1 ){
+//                        yposisitonSkystone = "LEFT";
             } else if (yPosition > yPosCentreBoundaryRight) {
                 yposisitonSkystone = "To Field Border";
             } else if (yPosition < yPosCentreBoundaryLeft) {
