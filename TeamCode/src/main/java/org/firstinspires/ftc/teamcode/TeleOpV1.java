@@ -74,6 +74,7 @@ public class TeleOpV1 extends LinearOpMode {
     double turn;
     double pie = Math.PI;
     boolean dpad;
+    int sector;
 
     static final String LFoundationHookName = "LFoundationHook";
     static final String RFoundationHookName = "RFoundationHook";
@@ -171,6 +172,46 @@ public class TeleOpV1 extends LinearOpMode {
 //        Math.sqrt(x * x + y * y) * 10 / 7;
 
         turn = -gamepad1.right_stick_x / 2;
+        if (x > 0){
+            if ((y/x) > 0 && (y/x) < 1){
+                sector = 1;
+            }
+            else if ((x/y) > 0 && (x/y) < 1){
+                sector = 2;
+            }
+            else if ((x/y) < 0 && (x/y) > -1){
+                sector = 7;
+            }
+            else if ((y/x) < 0 && (y/x) > -1){
+                sector = 8;
+            }
+        }
+        else if (x<0){
+            if ((y/x) > 0 && (y/x) < 1){
+                sector = 5;
+            }
+            else if ((x/y) > 0 && (x/y) < 1){
+                sector = 6;
+            }
+            else if ((x/y) < 0 && (x/y) > -1){
+                sector = 3;
+            }
+            else if ((y/x) < 0 && (y/x) > -1){
+                sector = 4;
+            }
+        }
+        else if (x==0){
+            if (y < 1) {
+                sector = 10;
+            }
+            else if (y > 9){
+                sector = 9;
+            }
+            else sector = 0;
+        }
+        else {
+            sector = 0;
+        }
     }
 
     private void sendOutput() {
@@ -259,6 +300,7 @@ public class TeleOpV1 extends LinearOpMode {
             directionTR = 1;
             directionTL = -1;
         } else {
+            dpad  = false;
             directionTR = 0;
             directionTL = 0;
             directionBL = 0;
@@ -286,7 +328,7 @@ public class TeleOpV1 extends LinearOpMode {
             //close servo
             servoPower = closing;
         } else if (gamepad2.x) {
-            servoPower = opening;
+            servoPower = opening; //FIX this actually cloess
             //open servo
         } else{
             servoPower = 0;
@@ -319,10 +361,63 @@ public class TeleOpV1 extends LinearOpMode {
             /* joystick controls */
             // only takes the up and down motion of the joystick and not the horizontal
             dpad = false;
-            powerTR = power * (Math.sin(angle - pie));
-            powerTL = power * (Math.sin(angle + pie));
-            powerBL = power * (Math.sin(angle - pie));
-            powerBR = power * (Math.sin(angle + pie));
+            if (sector == 1) {
+                powerTR = -1;
+                powerTL = 1;
+                powerBR = 1;
+                powerBL = -1;
+
+            } else if (sector == 2) {
+                powerTR = 1;
+                powerTL = 1;
+                powerBR = 1;
+                powerBL = 1;
+            } else if (sector == 3) {
+                powerTR = 1;
+                powerTL = 1;
+                powerBR = 1;
+                powerBL = 1;
+            } else if (sector == 4) {
+                powerTR = 1;
+                powerTL = -1;
+                powerBR = -1;
+                powerBL = 1;
+            } else if (sector == 5) {
+                powerTR = 1;
+                powerTL = -1;
+                powerBR = -1;
+                powerBL = 1;
+            } else if (sector == 6) {
+                powerTR = -1;
+                powerTL = -1;
+                powerBR = -1;
+                powerBL = -1;
+            } else if (sector == 7) {
+                powerTR = -1;
+                powerTL = -1;
+                powerBR = -1;
+                powerBL = -1;
+            } else if (sector == 8) {
+                powerTR = -1;
+                powerTL = 1;
+                powerBR = 1;
+                powerBL = -1;
+            } else if (sector == 9) {
+                powerTR = 1;
+                powerTL = 1;
+                powerBR = 1;
+                powerBL = 1;
+            } else if (sector == 10) {
+                powerTR = -1;
+                powerTL = -1;
+                powerBR = -1;
+                powerBL = -1;
+            } else {
+                powerTR = 0;
+                powerTL = 0;
+                powerBR = 0;
+                powerBL = 0;
+            }
         }
         powerCrane = directionCrane * dpadPower;//was not initialised before, meaning it had no value,
         //The value was hidden inside the if statement
@@ -341,7 +436,7 @@ public class TeleOpV1 extends LinearOpMode {
         driveBL.setPower(powerBL);
         driveBR.setPower(powerBR);
 
-        rotateCrane.setPower(powerCrane);
+        rotateCrane.setPower(powerCrane * 0.75);
 
         //servos
         LFoundationHook.setPower(servoPower);

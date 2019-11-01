@@ -78,6 +78,12 @@ public class AutoFoundationTests extends LinearOpMode {
     double riseCrane = -0.75; //raises the crane
     double lowerCrane = 0.75; //lowers the crane
 
+    //distances
+    int timeToFoundation = 1549;
+    int timeToFoundationAndMore = timeToFoundation + 51;
+    int timeToWallWithFoudation = 860; //Time to wall with foundation
+    int timeshuffleToGate = 3000; //update when we have the numbers!
+
     @Override
     public void runOpMode() {
         //initialisation code first
@@ -116,8 +122,27 @@ public class AutoFoundationTests extends LinearOpMode {
 //        LSqueezer.setPosition(SqueezerServoPos);
 //        RSqueezer.setPosition(SqueezerServoPos);
         //start
+        //servos move up
+        servoPower = 1;
+        LFoundationHook.setPower(servoPower);
+        RFoundationHook.setPower(servoPower*-1);
+        sleep(2000);
+        LFoundationHook.setPower(0);
+        RFoundationHook.setPower(0);
+
+
+
+
+
 
         waitForStart();
+//        bring the clips up
+        // moving to foundation backwards
+        moveForwBack(0.5, timeToFoundationAndMore, true);
+        //grabs foundation
+        lockFoundationClips(1,true);
+//        moveForwBack(0.25,);
+//FELIX HERE
     shuffle(0.5, 1000, false);
 
 
@@ -129,6 +154,7 @@ public class AutoFoundationTests extends LinearOpMode {
         if (back){
             power = power * -1;
         }
+
         driveTR.setPower(power);
         driveTL.setPower(power);
         driveBL.setPower(power);
@@ -139,6 +165,22 @@ public class AutoFoundationTests extends LinearOpMode {
         driveBL.setPower(0);
         driveBR.setPower(0);
     }
+    // moves the ckips down or up
+    public void lockFoundationClips(double power, boolean down) {
+
+        if (down){
+            power = power * -1;
+        }
+        //servos move up
+        LFoundationHook.setPower(power);
+        RFoundationHook.setPower(power*-1);
+    }
+    //turns off power in servos
+    public void unlockFoundationClips() {
+        LFoundationHook.setPower(0);
+        RFoundationHook.setPower(0);
+    }
+
     public void shuffle(double power, int time, boolean blueAlliance) {
         if (!blueAlliance){
             // shuffling left
