@@ -75,20 +75,25 @@ public class TeleOpV1 extends LinearOpMode {
     double pie = Math.PI;
     boolean dpad;
     int sector;
+    boolean Turn;
+    boolean joystick;
 
     static final String LFoundationHookName = "LFoundationHook";
     static final String RFoundationHookName = "RFoundationHook";
-//    static final String RsqueezerName = "Lsqueezer";
-//    static final String LsqueezerName = "Rsqueezer";
+    static final String RsqueezerName = "Lsqueezer";
+    static final String LsqueezerName = "Rsqueezer";
 
     //    CRServo squeezer;
     CRServo LFoundationHook; //
     CRServo RFoundationHook;
-//    Servo LSqueezer;
-//    Servo RSqueezer;
+    Servo LSqueezer;
+    Servo RSqueezer;
 
     double servoPower = 0.0;
     double SqueezerServoPower = 0.0;
+    double SqueezerServoPosOpen = 0.3;
+    double SqueezerServoPosClosed = 0.0;
+    double SqueezerServoPos;
     double SqueezerStartPos = 0.1; //assuming 0 is closed
     double closing = 1;
     double opening = -1;
@@ -124,15 +129,15 @@ public class TeleOpV1 extends LinearOpMode {
 //        squeezer = hardwareMap.get(CRServo.class, squeezerName);
         LFoundationHook = hardwareMap.get(CRServo.class, LFoundationHookName);
         RFoundationHook = hardwareMap.get(CRServo.class, RFoundationHookName);
-//        LSqueezer = hardwareMap.get(Servo.class, LsqueezerName);
-//        RSqueezer = hardwareMap.get(Servo.class, RsqueezerName);
+        LSqueezer = hardwareMap.get(Servo.class, LsqueezerName);
+        RSqueezer = hardwareMap.get(Servo.class, RsqueezerName);
 
 
 //        squeezer.setPower(servoPower);
         LFoundationHook.setPower(servoPower);
         RFoundationHook.setPower(servoPower*-1);
-//        LSqueezer.setPosition(SqueezerStartPos);
-//        RSqueezer.setPosition(SqueezerStartPos);
+        LSqueezer.setPosition(SqueezerStartPos);
+        RSqueezer.setPosition(SqueezerStartPos);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -201,13 +206,15 @@ public class TeleOpV1 extends LinearOpMode {
             }
         }
         else if (x==0){
-            if (y < 1) {
+            if (y < 0) {
                 sector = 10;
             }
-            else if (y > 9){
+            else if (y > 0){
                 sector = 9;
             }
-            else sector = 0;
+            else {
+                sector = 0;
+            }
         }
         else {
             sector = 0;
@@ -252,6 +259,7 @@ public class TeleOpV1 extends LinearOpMode {
             telemetry.addLine("gamepad1.dpad_up");
             telemetry.update();
             dpad = true;
+            joystick = false;
             directionTR = 1;
             directionTL = 1;
             directionBL = 1;
@@ -260,6 +268,7 @@ public class TeleOpV1 extends LinearOpMode {
             telemetry.addLine("gamepad1.dpad_down");
             telemetry.update();
             dpad = true;
+            joystick = false;
             directionTR = -1;
             directionTL = -1;
             directionBL = -1;
@@ -268,6 +277,7 @@ public class TeleOpV1 extends LinearOpMode {
             telemetry.addLine("gamepad1.dpad_left");
             telemetry.update();
             dpad = true;
+            joystick = false;
             directionTR = 1;
             directionTL = -1;
             directionBL = 1;
@@ -276,11 +286,16 @@ public class TeleOpV1 extends LinearOpMode {
             telemetry.addLine("gamepad1.dpad_right");
             telemetry.update();
             dpad = true;
+            joystick = false;
             directionTR = -1;
             directionTL = 1;
             directionBL = -1;
             directionBR = 1;
         } else if (gamepad1.right_bumper) {
+            Turn = true;
+            telemetry.addLine("right bumper");
+            telemetry.update();
+            joystick = false;
 //            driveTR.setPower(backTurnPower);
 //            driveTL.setPower(turnPower);
 //            driveBL.setPower(turnPower);
@@ -291,16 +306,23 @@ public class TeleOpV1 extends LinearOpMode {
             directionTL = 1;
 
         } else if (gamepad1.left_bumper){
+            Turn = true;
+            telemetry.addLine("left bumper");
+            telemetry.update();
+            joystick = false;
 //            driveTR.setPower(turnPower);
 //            driveTL.setPower(backTurnPower);
 //            driveBL.setPower(backTurnPower);
 //            driveBR.setPower(turnPower);
+
             directionBR = 1;
             directionBL = -1;
             directionTR = 1;
             directionTL = -1;
         } else {
+            Turn = false;
             dpad  = false;
+            joystick = true;
             directionTR = 0;
             directionTL = 0;
             directionBL = 0;
@@ -337,6 +359,7 @@ public class TeleOpV1 extends LinearOpMode {
         // Crane control
         if (gamepad2.dpad_up){
             directionCrane = 1;
+
         } else if (gamepad2.dpad_down){
             directionCrane = -1;
         } else{
@@ -344,105 +367,138 @@ public class TeleOpV1 extends LinearOpMode {
         }
         //squeezer control
         if (gamepad2.left_stick_button){
-            SqueezerServoPower = 1;
+            SqueezerServoPos = SqueezerServoPosClosed;
         } else if (gamepad2.right_stick_button){
-            SqueezerServoPower = -1;
+            SqueezerServoPos= SqueezerServoPosOpen;
         } else {
-            SqueezerServoPower = 0;
+            SqueezerServoPos = SqueezerServoPosOpen;
         }
-
+        powerBL = 0;
+        powerTR = 0;
+        powerBR =0;
+        powerTL = 0;
         //setting the motor powers
-        if (dpad) {
+        if (!joystick) {
+            telemetry.addLine("dpad driving");
+            telemetry.update();
             powerTR = directionTR * dpadPower;
             powerTL = directionTL * dpadPower;
             powerBL = directionBL * dpadPower;
             powerBR = directionBR * dpadPower;
-        } else {
+        } else if (joystick){
             /* joystick controls */
             // only takes the up and down motion of the joystick and not the horizontal
             dpad = false;
+
             if (sector == 1) {
+                telemetry.addLine("sector 1");
+                telemetry.update();
                 powerTR = -1;
                 powerTL = 1;
                 powerBR = 1;
                 powerBL = -1;
 
             } else if (sector == 2) {
+                telemetry.addLine("sector 2");
+                telemetry.update();
                 powerTR = 1;
                 powerTL = 1;
                 powerBR = 1;
                 powerBL = 1;
             } else if (sector == 3) {
+                telemetry.addLine("sector 3");
+                telemetry.update();
                 powerTR = 1;
                 powerTL = 1;
                 powerBR = 1;
                 powerBL = 1;
             } else if (sector == 4) {
+                telemetry.addLine("sector 4");
+                telemetry.update();
                 powerTR = 1;
                 powerTL = -1;
                 powerBR = -1;
                 powerBL = 1;
             } else if (sector == 5) {
+                telemetry.addLine("sector 5");
+                telemetry.update();
                 powerTR = 1;
                 powerTL = -1;
                 powerBR = -1;
                 powerBL = 1;
             } else if (sector == 6) {
+                telemetry.addLine("sector 6");
+                telemetry.update();
                 powerTR = -1;
                 powerTL = -1;
                 powerBR = -1;
                 powerBL = -1;
             } else if (sector == 7) {
+                telemetry.addLine("sector 7");
+                telemetry.update();
                 powerTR = -1;
                 powerTL = -1;
                 powerBR = -1;
                 powerBL = -1;
             } else if (sector == 8) {
+                telemetry.addLine("sector 8");
+                telemetry.update();
                 powerTR = -1;
                 powerTL = 1;
                 powerBR = 1;
                 powerBL = -1;
             } else if (sector == 9) {
+                telemetry.addLine("sector 9");
+                telemetry.update();
                 powerTR = 1;
                 powerTL = 1;
                 powerBR = 1;
                 powerBL = 1;
             } else if (sector == 10) {
+                telemetry.addLine("sector 10");
+                telemetry.update();
                 powerTR = -1;
                 powerTL = -1;
                 powerBR = -1;
                 powerBL = -1;
+            } else if (sector == 0){
+                telemetry.addLine("sector 0");
+                telemetry.update();
+                powerBL = 0;
+                powerBR = 0;
+                powerTR = 0;
+                powerBL = 0;
             } else {
+                telemetry.addLine("sector none");
+                telemetry.update();
                 powerTR = 0;
                 powerTL = 0;
                 powerBR = 0;
                 powerBL = 0;
             }
+
         }
         powerCrane = directionCrane * dpadPower;//was not initialised before, meaning it had no value,
         //The value was hidden inside the if statement
-
-
-        if (turn != 0) {
-            powerTR += turn;
-            powerTL += turn;
-            powerBL += turn;
-            powerBR += turn;
-        }
-
 
         driveTR.setPower(powerTR);
         driveTL.setPower(powerTL);
         driveBL.setPower(powerBL);
         driveBR.setPower(powerBR);
 
-        rotateCrane.setPower(powerCrane * 0.75);
+        if (directionCrane > 0){
+            rotateCrane.setPower(powerCrane * 1);
+
+        } else {
+
+            rotateCrane.setPower(powerCrane * 0.75);
+        }
 
         //servos
         LFoundationHook.setPower(servoPower);
         RFoundationHook.setPower(servoPower*-1);
 
-//                LSqueezer.setPower(SqueezerServoPower);
-//                RSqueezer.setPower(SqueezerServoPower*-1);
+                LSqueezer.setPosition(SqueezerServoPos);
+                RSqueezer.setPosition(SqueezerServoPos);
 
     }}

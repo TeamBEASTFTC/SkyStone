@@ -51,8 +51,8 @@ public class AutoFoundationTests extends LinearOpMode {
     //Servos declaration
     static final String LFoundationHookName = "LFoundationHook";
     static final String RFoundationHookName = "RFoundationHook";
-//    static final String RsqueezerName = "Lsqueezer";
-//    static final String LsqueezerName = "Rsqueezer";
+    static final String RsqueezerName = "Lsqueezer";
+    static final String LsqueezerName = "Rsqueezer";
 //    static final String squeezerName = "squeezer";
 
     //    Servos;
@@ -81,8 +81,8 @@ public class AutoFoundationTests extends LinearOpMode {
     //distances
     int timeToFoundation = 1549;
     int timeToFoundationAndMore = timeToFoundation + 51;
-    int timeToWallWithFoudation = 860; //Time to wall with foundation
-    int timeshuffleToGate = 3000; //update when we have the numbers!
+    int timeToWallWithFoudation = (860*2) + 400; //Time to wall with foundation
+    int timeshuffleToGate = 6000; //update when we have the numbers!
 
     @Override
     public void runOpMode() {
@@ -114,13 +114,13 @@ public class AutoFoundationTests extends LinearOpMode {
 //        squeezer = hardwareMap.get(CRServo.class, squeezerName);
         LFoundationHook = hardwareMap.get(CRServo.class, LFoundationHookName);
         RFoundationHook = hardwareMap.get(CRServo.class, RFoundationHookName);
-//        LSqueezer = hardwareMap.get(Servo.class, LsqueezerName);
-//        RSqueezer = hardwareMap.get(Servo.class, RsqueezerName);
+        LSqueezer = hardwareMap.get(Servo.class, LsqueezerName);
+        RSqueezer = hardwareMap.get(Servo.class, RsqueezerName);
 //        squeezer.setPower(servoPower);
         LFoundationHook.setPower(servoPower);
         RFoundationHook.setPower(servoPower*-1);
-//        LSqueezer.setPosition(SqueezerServoPos);
-//        RSqueezer.setPosition(SqueezerServoPos);
+        LSqueezer.setPosition(SqueezerServoPos);
+        RSqueezer.setPosition(SqueezerServoPos);
         //start
         //servos move up
         servoPower = 1;
@@ -138,12 +138,21 @@ public class AutoFoundationTests extends LinearOpMode {
         waitForStart();
 //        bring the clips up
         // moving to foundation backwards
-        moveForwBack(0.5, timeToFoundationAndMore, true);
+        moveForwBack(0.5, (timeToFoundationAndMore - 500), true);
+        moveForwBack(0.25, 750, true);
         //grabs foundation
         lockFoundationClips(1,true);
+        //moves back towards the wall
+        moveForwBack(0.25, timeToWallWithFoudation, false);
+        // unclips
+        lockFoundationClips(1, false);
+        unlockFoundationClips();
+        sleep(2000);
+        shuffle(0.5, timeshuffleToGate, false);
+
 //        moveForwBack(0.25,);
 //FELIX HERE
-    shuffle(0.5, 1000, false);
+//    shuffle(0.5, 1000, false);
 
 
     }
@@ -165,7 +174,7 @@ public class AutoFoundationTests extends LinearOpMode {
         driveBL.setPower(0);
         driveBR.setPower(0);
     }
-    // moves the ckips down or up
+    // moves the clips down or up
     public void lockFoundationClips(double power, boolean down) {
 
         if (down){
@@ -174,6 +183,8 @@ public class AutoFoundationTests extends LinearOpMode {
         //servos move up
         LFoundationHook.setPower(power);
         RFoundationHook.setPower(power*-1);
+        // time for teh clip to go down
+        sleep(2000);
     }
     //turns off power in servos
     public void unlockFoundationClips() {
