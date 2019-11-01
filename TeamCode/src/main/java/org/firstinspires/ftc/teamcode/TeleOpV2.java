@@ -40,9 +40,9 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 
 
-@TeleOp(name = "TeleOpV1", group = "Linear Opmode")
+@TeleOp(name = "TeleOpV2", group = "Linear Opmode")
 
-public class TeleOpV1 extends LinearOpMode {
+public class TeleOpV2 extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
 
