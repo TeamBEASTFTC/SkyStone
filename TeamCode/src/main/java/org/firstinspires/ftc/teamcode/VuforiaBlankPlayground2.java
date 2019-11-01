@@ -102,8 +102,8 @@ public class VuforiaBlankPlayground2 extends LinearOpMode {
     private int loopCounter = 0;
 
     //Positioning constants
-    private double yPosCentreBoundaryRight = 2.2;
-    private double yPosCentreBoundaryLeft = -2.2;
+    private double yPosCentreBoundaryRight = 30.5;
+    private double yPosCentreBoundaryLeft = -30.5;
 
 
     // Motor configurations
@@ -369,9 +369,9 @@ public class VuforiaBlankPlayground2 extends LinearOpMode {
 
         // Next, translate the camera lens to where it is on the robot.
         // In this example, it is centered (left to right), but forward of the middle of the robot, and above ground level.
-        final float CAMERA_FORWARD_DISPLACEMENT = -1.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot center
+        final float CAMERA_FORWARD_DISPLACEMENT = 0;   // eg: Camera is 4 Inches in front of robot center
         final float CAMERA_VERTICAL_DISPLACEMENT = 2.0f * mmPerInch;   // eg: Camera is 8 Inches above ground
-        final float CAMERA_LEFT_DISPLACEMENT = 3.0f * mmPerInch;     // eg: Camera is ON the robot's center line
+        final float CAMERA_LEFT_DISPLACEMENT = -3.0f * mmPerInch;     // eg: Camera is ON the robot's center line
 
         OpenGLMatrix robotFromCamera = OpenGLMatrix
                 .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
@@ -510,9 +510,15 @@ public class VuforiaBlankPlayground2 extends LinearOpMode {
             String xposisitonSkystone = "";
 
             // If we are on the blue alliance side of the field
+            telemetry.addData("X Pos: ", xPosition);
+            telemetry.update();
+            sleep(3000); //REMOVE
             if (!BlueAlliance) {
                 // flip the values
                 yPosition *= -1;
+                telemetry.addData("Y Pos flipped: ", yPosition);
+                telemetry.update();
+                sleep(3000); //REMOVE
             }
             if ((yPosition <= yPosCentreBoundaryRight) & (yPosition >= yPosCentreBoundaryLeft)) {
                 yposisitonSkystone = "CENTRE, GRAB!!";
@@ -527,7 +533,7 @@ public class VuforiaBlankPlayground2 extends LinearOpMode {
 
             telemetry.addData("yPositionSkyStone: ", yposisitonSkystone);
             telemetry.update();
-            sleep(2000);
+            sleep(4000); //REMOVE!
             // not using yet
             if (BlueAlliance) {
                 if (xPosition > -8) {

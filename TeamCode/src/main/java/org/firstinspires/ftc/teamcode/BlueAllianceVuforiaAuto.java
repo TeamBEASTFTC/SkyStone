@@ -107,8 +107,8 @@ public class BlueAllianceVuforiaAuto extends LinearOpMode {
     private int loopCounter = 0;
 
     //Positioning constants
-    private double yPosCentreBoundaryRight = 2.2;
-    private double yPosCentreBoundaryLeft = -2.2;
+    private double yPosCentreBoundaryRight = 30.5;
+    private double yPosCentreBoundaryLeft = -30.5;
 
 
     // Motor configurations
@@ -268,13 +268,18 @@ public class BlueAllianceVuforiaAuto extends LinearOpMode {
         RSqueezer.setPosition(SqueezerServoPos);
         //start
         checkComputerVision();
-//        waitForStart();
-//        moveForwBack(0.75);
-//        sleep(10000);
-//        rotate90Clockwise(0.35,1000);
-//        sleep(3000);
-//        rotate90Clockwise(-0.35, 1000);
-
+        telemetry.addLine("Moving to stone!");
+        telemetry.update();
+        sleep(500);
+        moveForwBack(0.5, moveToBlockTime, false);
+        grabSkyStone();
+        moveForwBack(0.5, moveToBlockTime, true);
+        //rotate clockwise if on left side, anti if on right - when starting,
+        // blue alliance is on the right side
+        rotate90(BlueAlliance);
+        moveForwBack(0.5, (timeToGate - (moveAcrossOneBlockTime * loopCounter)), false);
+        telemetry.addLine("complete");
+        telemetry.update();
 
     }
 
@@ -382,9 +387,7 @@ public class BlueAllianceVuforiaAuto extends LinearOpMode {
     }
 
     //String[] because we are returning an array of values
-    public String[] checkComputerVision() {
-        //defaulting that no SkyStone is found
-        args[0] = String.valueOf(false);
+    public void checkComputerVision() {
 
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
@@ -469,9 +472,9 @@ public class BlueAllianceVuforiaAuto extends LinearOpMode {
 
         // Next, translate the camera lens to where it is on the robot.
         // In this example, it is centered (left to right), but forward of the middle of the robot, and above ground level.
-        final float CAMERA_FORWARD_DISPLACEMENT = -1.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot center
+        final float CAMERA_FORWARD_DISPLACEMENT = 0;   // eg: Camera is 4 Inches in front of robot center
         final float CAMERA_VERTICAL_DISPLACEMENT = 2.0f * mmPerInch;   // eg: Camera is 8 Inches above ground
-        final float CAMERA_LEFT_DISPLACEMENT = 3.0f * mmPerInch;     // eg: Camera is ON the robot's center line
+        final float CAMERA_LEFT_DISPLACEMENT = -3.0f * mmPerInch;     // eg: Camera is ON the robot's center line
 
         OpenGLMatrix robotFromCamera = OpenGLMatrix
                 .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
@@ -488,6 +491,9 @@ public class BlueAllianceVuforiaAuto extends LinearOpMode {
         // CONSEQUENTLY do not put any driving commands in this loop.
         // To restore the normal opmode structure, just un-comment the following line:
         //CHECK HERE TO RUN VUFORIA ON INIT
+        telemetry.addLine("Status: Initialised");
+        telemetry.update();
+
         waitForStart();
         moveForwBack(0.5, moveTowardsBlockTime, false);
 
@@ -503,69 +509,43 @@ public class BlueAllianceVuforiaAuto extends LinearOpMode {
             //calling the computer vision now
             String[] computerVisionResults = computerVisionRunning(allTrackables);
             targetsSkyStone.deactivate();
-            telemetry.addData("yPos value:", computerVisionResults[1] );
-            telemetry.update();
-            sleep(3000);
             //if robot is not center
             if (computerVisionResults[1].equals("CENTRE, GRAB!!")){
-                moveForwBack(0.5, moveToBlockTime, false);
-                grabSkyStone(String.valueOf(computerVisionResults[3]));
-                moveForwBack(0.5, moveToBlockTime, true);
-                //rotate clockwise if on left side, anti if on right - when starting,
-                // blue alliance is on the right side
-                rotate90(BlueAlliance);
-                moveForwBack(0.5, (timeToGate - (moveAcrossOneBlockTime * loopCounter)), false );
-                SkySkoneCaptured = true;
-            } else if (computerVisionResults[0].equals("false"))  {
-                ////shuffle the side of the field we are on,
-                //eg on left side, means we shuffle left :)
-                shuffle(0.5, moveAcrossOneBlockTime, BlueAlliance);
-            }else if ((computerVisionResults[1].equals("To Field Centre"))){
-                telemetry.addLine("HEEEEEER!");
+                telemetry.addLine("HEEREE! centre");
                 telemetry.update();
-                sleep(2000);
-                shuffle(0.5, moveAcrossOneBlockTime, BlueAlliance);
-                moveForwBack(0.5, moveToBlockTime, false);
-                grabSkyStone(String.valueOf(computerVisionResults[3]));
-                moveForwBack(0.5, moveToBlockTime, true);
-                //rotate clockwise if on left side, anti if on right - when starting,
-                // blue alliance is on the right side
-                rotate90(BlueAlliance);
-                moveForwBack(0.5, (timeToGate - (moveAcrossOneBlockTime * loopCounter)), false);
+                sleep(500);
                 SkySkoneCaptured = true;
 
+            }else if ((computerVisionResults[1].equals("To Field Centre"))){
+                telemetry.addLine("HERE! To field centre");
+                telemetry.update();
+                sleep(500);
+                shuffle(0.5, (moveAcrossOneBlockTime/2), BlueAlliance);
+                SkySkoneCaptured = true;
 
             } else if (computerVisionResults[1].equals("To Field Border")){
                 // if this is not the first loop then we consider this more carefully
                 //we shuffle a tiny bit for adjustment's sake
                 if (loopCounter >= 1){
                     shuffle(0.5,(moveAcrossOneBlockTime/2), !BlueAlliance);// We want to go towards to side again
-                    telemetry.addLine("HEEEEEER2!");
+                    telemetry.addLine("To Field border!");
                     telemetry.update();
-                    sleep(2000);
-                    shuffle(0.5, moveAcrossOneBlockTime, BlueAlliance);
-                    moveForwBack(0.5, moveToBlockTime, false);
-                    grabSkyStone(String.valueOf(computerVisionResults[3]));
-                    moveForwBack(0.5, moveToBlockTime, true);
-                    //rotate clockwise if on left side, anti if on right - when starting,
-                    // blue alliance is on the right side
-                    rotate90(BlueAlliance);
-                    moveForwBack(0.5, (timeToGate - (moveAcrossOneBlockTime * loopCounter)), false);
+                    sleep(500);
+                    SkySkoneCaptured = true;
                 }
+            }else if (computerVisionResults[0].equals("false")) {
+                ////shuffle the side of the field we are on,
+                //eg on left side, means we shuffle left :)
+                shuffle(0.5, moveAcrossOneBlockTime, BlueAlliance);
+            } else {
+                // if for what ever reason something does not work, don't stop the robot...
+                shuffle(0.5,(moveAcrossOneBlockTime/4), BlueAlliance);// We want to go towards to side again
+
             }
 
         }
 
-        //args:
 
-        //0 = targetVisible
-        //1 = yposisitonSkystone
-        //2 = xposisitonSkystone
-        //3 = xposition
-
-//        args = {targetVisible};
-
-        return args;
     }
 
     public String[] computerVisionRunning(List<VuforiaTrackable> allTrackables){
@@ -624,9 +604,11 @@ public class BlueAllianceVuforiaAuto extends LinearOpMode {
             String xposisitonSkystone = "";
 
             // If we are on the blue alliance side of the field
+
             if (!BlueAlliance) {
                 // flip the values
                 yPosition *= -1;
+
             }
             if ((yPosition <= yPosCentreBoundaryRight) & (yPosition >= yPosCentreBoundaryLeft)) {
                 yposisitonSkystone = "CENTRE, GRAB!!";
@@ -636,22 +618,12 @@ public class BlueAllianceVuforiaAuto extends LinearOpMode {
             } else if (yPosition > yPosCentreBoundaryRight) {
                 yposisitonSkystone = "To Field Border";
             } else if (yPosition < yPosCentreBoundaryLeft) {
-                yposisitonSkystone = "To Field Center";
+                yposisitonSkystone = "To Field Centre";
             }
-//                if ((yPosition <= yPosCentreBoundaryRight) & (yPosition >= yPosCentreBoundaryLeft)) {
-//                    yposisitonSkystone = "CENTRE, GRAB!!";
-////                    }
-////                    if (yPosition > -1 ){
-////                        yposisitonSkystone = "LEFT";
-//                } else if (yPosition > yPosCentreBoundaryRight) {
-//                    yposisitonSkystone = "To Field Center";
-//                } else if (yPosition < yPosCentreBoundaryLeft) {
-//                    yposisitonSkystone = "To Field Border";
-//                }
-//            }
+
             telemetry.addData("yPositionSkyStone: ", yposisitonSkystone);
             telemetry.update();
-            sleep(2000);
+            sleep(4000); //REMOVE!
             // not using yet
             if (BlueAlliance) {
                 if (xPosition > -8) {
@@ -689,4 +661,5 @@ public class BlueAllianceVuforiaAuto extends LinearOpMode {
         return args;
     }
 }
+
 
