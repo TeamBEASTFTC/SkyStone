@@ -191,7 +191,7 @@ public class HardwareSetup {
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-/*        driveTR = hardwareMap.get(DcMotor.class, DriveTRName);
+        driveTR = hardwareMap.get(DcMotor.class, DriveTRName);
         driveTL = hardwareMap.get(DcMotor.class, DriveTLName);
         driveBL = hardwareMap.get(DcMotor.class, DriveBLName);
         driveBR = hardwareMap.get(DcMotor.class, DriveBRName);
@@ -205,18 +205,18 @@ public class HardwareSetup {
         driveTL.setPower(0);
         driveBL.setPower(0);
         driveBR.setPower(0);
-        rotateCrane.setPower(0);*/
+        rotateCrane.setPower(0);
 
 //        squeezer = hardwareMap.get(CRServo.class, squeezerName);
         // SERVOS
 //        squeezer = hardwareMap.get(CRServo.class, squeezerName);
-/*        LFoundationHook = hardwareMap.get(CRServo.class, LFoundationHookName);
+        LFoundationHook = hardwareMap.get(CRServo.class, LFoundationHookName);
         RFoundationHook = hardwareMap.get(CRServo.class, RFoundationHookName);
         LSqueezer = hardwareMap.get(Servo.class, LsqueezerName);
         RSqueezer = hardwareMap.get(Servo.class, RsqueezerName);
 //        squeezer.setPower(servoPower);
         LFoundationHook.setPower(servoPower);
-        RFoundationHook.setPower(servoPower*-1);*/
+        RFoundationHook.setPower(servoPower*-1);
 
 
 //        driveBL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -240,10 +240,10 @@ public class HardwareSetup {
 
     //If we are using vuforia for this opMode, we need to initialise it
         if (vuforia_program){
-/*            LFoundationHook.setPower(servoPower);
+            LFoundationHook.setPower(servoPower);
             RFoundationHook.setPower(servoPower*-1);
             LSqueezer.setPosition(SqueezerServoPos);
-            RSqueezer.setPosition(1-SqueezerServoPos);*/
+            RSqueezer.setPosition(1-SqueezerServoPos);
 
             /*
              * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
@@ -352,10 +352,10 @@ public class HardwareSetup {
     //Motor/Driver functions
     public void turnOffDrive() {
         telementryLineMessage("Turning off drive motor power/");
-/*        driveTR.setPower(0);
+        driveTR.setPower(0);
         driveTL.setPower(0);
         driveBL.setPower(0);
-        driveBR.setPower(0);*/
+        driveBR.setPower(0);
     }
 
     public void moveForwBack(double power, int time, boolean back) {
@@ -365,10 +365,10 @@ public class HardwareSetup {
         }
 
 
-/*        driveTR.setPower(power);
+        driveTR.setPower(power);
         driveTL.setPower(power);
         driveBL.setPower(power);
-        driveBR.setPower(power);*/
+        driveBR.setPower(power);
         this.telemetry.addData("Moving at power: ", power);
         this.telemetry.update();
         sleep(time);
@@ -378,16 +378,16 @@ public class HardwareSetup {
     public void shuffle(double power, int time, boolean right) {
         if (!right) {
             // shuffling left
-/*            driveTR.setPower(power);
+            driveTR.setPower(power);
             driveTL.setPower((power * -1));
             driveBL.setPower(power);
-            driveBR.setPower((power * -1));*/
+            driveBR.setPower((power * -1));
         } else {
             // shuffling right
-/*            driveTR.setPower((power * -1));
+            driveTR.setPower((power * -1));
             driveTL.setPower(power);
             driveBL.setPower((power * -1));
-            driveBR.setPower(power);*/
+            driveBR.setPower(power);
         }
         this.telemetry.addData("Shuffling at power: ", power);
         this.telemetry.update();
@@ -401,18 +401,18 @@ public class HardwareSetup {
             this.telemetry.addLine("Rotating 90 Anti-Clockwise!");
             this.telemetry.update();
             backwardsPower = rotationPower * -1;
-/*            driveTR.setPower(rotationPower);
+            driveTR.setPower(rotationPower);
             driveTL.setPower(backwardsPower);
             driveBL.setPower(backwardsPower);
-            driveBR.setPower(rotationPower);*/
+            driveBR.setPower(rotationPower);
         } else {
             this.telemetry.addLine("Rotating 90 Clockwise!");
             this.telemetry.update();
-/*            backwardsPower = rotationPower * -1;
+            backwardsPower = rotationPower * -1;
             driveTR.setPower(backwardsPower);
             driveTL.setPower(rotationPower);
             driveBL.setPower(rotationPower);
-            driveBR.setPower(backwardsPower);*/
+            driveBR.setPower(backwardsPower);
 
         }
 
@@ -431,8 +431,8 @@ public class HardwareSetup {
     // Servos
     public void unlockFoundationClips() {
         telementryLineMessage("Unlocking Foundation Clips");
-//        LFoundationHook.setPower(0);
-//        RFoundationHook.setPower(0);
+        LFoundationHook.setPower(0);
+        RFoundationHook.setPower(0);
     }
 
 
