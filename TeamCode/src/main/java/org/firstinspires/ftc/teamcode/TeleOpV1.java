@@ -80,8 +80,8 @@ public class TeleOpV1 extends LinearOpMode {
 
     static final String LFoundationHookName = "LFoundationHook";
     static final String RFoundationHookName = "RFoundationHook";
-    static final String RsqueezerName = "Lsqueezer";
-    static final String LsqueezerName = "Rsqueezer";
+    static final String RsqueezerName = "Rsqueezer";
+    static final String LsqueezerName = "Lsqueezer";
 
     //    CRServo squeezer;
     CRServo LFoundationHook; //
@@ -89,12 +89,18 @@ public class TeleOpV1 extends LinearOpMode {
     Servo LSqueezer;
     Servo RSqueezer;
 
+    double LSqueezerOpen = 0.1;
+    double RSqueezerOpen = 0.5; //open values good
+    double LSqueezerClose = 0.3;
+    double RSqueezerClose = 0.1;
+
     double servoPower = 0.0;
     double SqueezerServoPower = 0.0;
-    double SqueezerServoPosOpen = 0.3;
-    double SqueezerServoPosClosed = 0.0;
-    double SqueezerServoPos;
-    double SqueezerStartPos = 0.1; //assuming 0 is closed
+    double SqueezerServoPosOpen = 0.7;
+    double SqueezerServoPosClosed = 0.3;
+    double LSqueezerServoPos = LSqueezerOpen;
+    double RSqueezerServoPos = RSqueezerOpen;
+    double SqueezerStartPos = 0; //assuming 0 is closed
     double closing = 1;
     double opening = -1;
     double modifier = 1;
@@ -133,14 +139,17 @@ public class TeleOpV1 extends LinearOpMode {
         RSqueezer = hardwareMap.get(Servo.class, RsqueezerName);
 
 
-//        squeezer.setPower(servoPower);
-        LFoundationHook.setPower(servoPower);
-        RFoundationHook.setPower(servoPower*-1);
-        LSqueezer.setPosition(SqueezerStartPos);
-        RSqueezer.setPosition(SqueezerStartPos);
+
+//        rotateCrane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
+//        squeezer.setPower(servoPower);
+        LFoundationHook.setPower(servoPower);
+        RFoundationHook.setPower(servoPower*-1);
+        LSqueezer.setPosition(LSqueezerOpen);
+        RSqueezer.setPosition(RSqueezerOpen);
 
         runtime.reset();
 
@@ -256,7 +265,7 @@ public class TeleOpV1 extends LinearOpMode {
 
         //driving with the dpad
         if (gamepad1.dpad_up) {
-            telemetry.addLine("gamepad1.dpad_up");
+            telemetry.addLine("gamepad1.dpad_down");
             telemetry.update();
             dpad = true;
             joystick = false;
@@ -265,7 +274,7 @@ public class TeleOpV1 extends LinearOpMode {
             directionBL = 1;
             directionBR = 1;
         } else if (gamepad1.dpad_down) {
-            telemetry.addLine("gamepad1.dpad_down");
+            telemetry.addLine("gamepad1.dpad_up");
             telemetry.update();
             dpad = true;
             joystick = false;
@@ -366,12 +375,12 @@ public class TeleOpV1 extends LinearOpMode {
             directionCrane = 0;
         }
         //squeezer control
-        if (gamepad2.left_stick_button){
-            SqueezerServoPos = SqueezerServoPosClosed;
-        } else if (gamepad2.right_stick_button){
-            SqueezerServoPos= SqueezerServoPosOpen;
+        if (gamepad2.left_bumper){
+            LSqueezerServoPos = LSqueezerClose; //closes left
+            RSqueezerServoPos = RSqueezerClose; //closes right
         } else {
-            SqueezerServoPos = SqueezerServoPosOpen;
+            LSqueezerServoPos = LSqueezerOpen; //opens left
+            RSqueezerServoPos = RSqueezerOpen; //opens right
         }
         powerBL = 0;
         powerTR = 0;
@@ -487,18 +496,20 @@ public class TeleOpV1 extends LinearOpMode {
         driveBR.setPower(powerBR);
 
         if (directionCrane > 0){
-            rotateCrane.setPower(powerCrane * 1);
+            rotateCrane.setPower(powerCrane);
 
         } else {
 
-            rotateCrane.setPower(powerCrane * 0.75);
+            rotateCrane.setPower(powerCrane * 0.5); //test encoder here
         }
 
         //servos
         LFoundationHook.setPower(servoPower);
         RFoundationHook.setPower(servoPower*-1);
 
-                LSqueezer.setPosition(SqueezerServoPos);
-                RSqueezer.setPosition(SqueezerServoPos);
+//                LSqueezer.setPosition(1-SqueezerServoPos);
+//                RSqueezer.setPosition(SqueezerServoPos);
+                  LSqueezer.setPosition(LSqueezerServoPos);
+                  RSqueezer.setPosition(RSqueezerServoPos); //open values good
 
     }}

@@ -9,10 +9,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name="BlueAllianceAutoFoundationTests", group ="Concept")
 public class BlueAllianceAutoFoundationTests extends LinearOpMode {
+
+    HardwareSetup robot = new HardwareSetup();
+
     // Personal variables
     private String wallSide = "LEFT";
     //whether turns are done clockwise or anticlockwise
-    private boolean BlueAlliance = true;
+    private boolean RedAlliance = false;
     public String[] args = {"false", "", "", "", ""};
 
     private ElapsedTime timeCounter = new ElapsedTime();
@@ -77,11 +80,13 @@ public class BlueAllianceAutoFoundationTests extends LinearOpMode {
     double modifier = 1;
     double riseCrane = -0.75; //raises the crane
     double lowerCrane = 0.75; //lowers the crane
+    double LSqueezerClose = 0.15;
+    double RSqueezerClose = 0.25;
 
     //distances
     int timeToFoundation = 1549;
     int timeToFoundationAndMore = timeToFoundation + 51;
-    int timeToWallWithFoudation = (860*2) + 400; //Time to wall with foundation
+    int timeToWallWithFoudation = (860*2) + 1200; //Time to wall with foundation
     int timeshuffleToGate = 6000; //update when we have the numbers!
 
     @Override
@@ -119,16 +124,22 @@ public class BlueAllianceAutoFoundationTests extends LinearOpMode {
 //        squeezer.setPower(servoPower);
         LFoundationHook.setPower(servoPower);
         RFoundationHook.setPower(servoPower*-1);
-        LSqueezer.setPosition(SqueezerServoPos);
-        RSqueezer.setPosition(SqueezerServoPos);
+        LSqueezer.setPosition(LSqueezerClose);
+        RSqueezer.setPosition(RSqueezerClose);
         //start
         //servos move up
-        servoPower = 1;
+        servoPower = 0.75;
         LFoundationHook.setPower(servoPower);
         RFoundationHook.setPower(servoPower*-1);
         sleep(2000);
         LFoundationHook.setPower(0);
         RFoundationHook.setPower(0);
+        servoPower = 0.1;
+        LFoundationHook.setPower(servoPower);
+        RFoundationHook.setPower(servoPower*-1);
+
+
+
 
 
 
@@ -139,7 +150,7 @@ public class BlueAllianceAutoFoundationTests extends LinearOpMode {
 //        bring the clips up
         // moving to foundation backwards
         moveForwBack(0.5, (timeToFoundationAndMore - 500), true);
-        moveForwBack(0.25, 750, true);
+        moveForwBack(0.25, 950, true);
         //grabs foundation
         lockFoundationClips(1,true);
         //moves back towards the wall
@@ -148,7 +159,7 @@ public class BlueAllianceAutoFoundationTests extends LinearOpMode {
         lockFoundationClips(1, false);
         unlockFoundationClips();
         sleep(2000);
-        shuffle(0.5, timeshuffleToGate, false);
+//        shuffle(0.5, timeshuffleToGate, false);
 
 //        moveForwBack(0.25,);
 //FELIX HERE
@@ -192,8 +203,8 @@ public class BlueAllianceAutoFoundationTests extends LinearOpMode {
         RFoundationHook.setPower(0);
     }
 
-    public void shuffle(double power, int time, boolean blueAlliance) {
-        if (blueAlliance){
+    public void shuffle(double power, int time, boolean RedAlliance) {
+        if (!RedAlliance){
             // shuffling left
             driveTR.setPower(power);
             driveTL.setPower((power* -1));

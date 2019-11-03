@@ -165,14 +165,15 @@ public class BlueAllianceVuforiaAuto extends LinearOpMode {
     double lowerCrane = 0.75; //lowers the crane
 
     //movement timings
-    int moveTowardsBlockTime = 1270;
+    int moveTowardsBlockTime = 17500;
     int moveAcrossOneBlockTime = 406;
-    int moveToBlockTime = 305;
-    int timeToGate = 3124;
+    int moveToBlockTime = 605;
+    int timeToGate = 3624;
 
     //servo positions
     double squeezerOpenPos = 0.3;
     double squeezerClosePos = 0;
+    int craneStartUpPosition = 1000;
 
 
 
@@ -252,7 +253,23 @@ public class BlueAllianceVuforiaAuto extends LinearOpMode {
         driveTL.setPower(0);
         driveBL.setPower(0);
         driveBR.setPower(0);
+
+        //setting up the crane
+        //set to 1750 ticks
+        // max 2986.66 ticks
+
+        rotateCrane.setPower(1);
+        sleep(600);
         rotateCrane.setPower(0);
+        sleep(2000);
+//        rotateCrane.setPower(-0.5);
+//        sleep(750);
+//        rotateCrane.setPower(0);
+        //750ms going down
+
+
+
+
 
 //        squeezer = hardwareMap.get(CRServo.class, squeezerName);
         // SERVOS
@@ -262,10 +279,7 @@ public class BlueAllianceVuforiaAuto extends LinearOpMode {
         LSqueezer = hardwareMap.get(Servo.class, LsqueezerName);
         RSqueezer = hardwareMap.get(Servo.class, RsqueezerName);
 //        squeezer.setPower(servoPower);
-        LFoundationHook.setPower(servoPower);
-        RFoundationHook.setPower(servoPower*-1);
-        LSqueezer.setPosition(SqueezerServoPos);
-        RSqueezer.setPosition(SqueezerServoPos);
+
         //start
         checkComputerVision();
         telemetry.addLine("Moving to stone!");
@@ -350,9 +364,22 @@ public class BlueAllianceVuforiaAuto extends LinearOpMode {
 
     }
 
+    // To do later: use parameters to set it, not necesasry due to only 1 use currently
     public void grabSkyStone() {
         telemetry.addLine("Grabing SkyStone");
         telemetry.update();
+        //lowering the crane again
+        //go back to 0
+////        rotateCrane.setTargetPosition(encoderValue);
+//        rotateCrane.setTargetPosition(0);
+//        rotateCrane.setPower(0.5);
+//        while (rotateCrane.isBusy()){
+//
+//        }
+        rotateCrane.setPower(-0.5);
+        sleep(750);
+        rotateCrane.setPower(0);
+
         // assuming 0 is closed for both servos
         OpenCloseSqueezers(0, true);
 
@@ -374,8 +401,8 @@ public class BlueAllianceVuforiaAuto extends LinearOpMode {
                 SqueezerServoPos = 0.5 - position;
             }
         }
-        RSqueezer.setPosition(SqueezerServoPos);
         LSqueezer.setPosition(SqueezerServoPos);
+        RSqueezer.setPosition(1-SqueezerServoPos);
 
         telemetry.addData("SqueezerServoPos: ", SqueezerServoPos);
         telemetry.update();
@@ -387,6 +414,10 @@ public class BlueAllianceVuforiaAuto extends LinearOpMode {
 
     //String[] because we are returning an array of values
     public void checkComputerVision() {
+        LFoundationHook.setPower(servoPower);
+        RFoundationHook.setPower(servoPower*-1);
+        LSqueezer.setPosition(SqueezerServoPos);
+        RSqueezer.setPosition(1-SqueezerServoPos);
 
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
@@ -473,7 +504,7 @@ public class BlueAllianceVuforiaAuto extends LinearOpMode {
         // In this example, it is centered (left to right), but forward of the middle of the robot, and above ground level.
         final float CAMERA_FORWARD_DISPLACEMENT = 0;   // eg: Camera is 4 Inches in front of robot center
         final float CAMERA_VERTICAL_DISPLACEMENT = 2.0f * mmPerInch;   // eg: Camera is 8 Inches above ground
-        final float CAMERA_LEFT_DISPLACEMENT = -3.0f * mmPerInch;     // eg: Camera is ON the robot's center line
+        final float CAMERA_LEFT_DISPLACEMENT = -80;     // eg: Camera is ON the robot's center line
 
         OpenGLMatrix robotFromCamera = OpenGLMatrix
                 .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
@@ -518,11 +549,14 @@ public class BlueAllianceVuforiaAuto extends LinearOpMode {
             }else if ((computerVisionResults[1].equals("To Field Centre"))){
                 telemetry.addLine("HERE! To field centre");
                 telemetry.update();
-                sleep(500);
+                sleep(5000);
                 shuffle(0.5, (moveAcrossOneBlockTime/2), BlueAlliance);
                 SkySkoneCaptured = true;
 
             } else if (computerVisionResults[1].equals("To Field Border")){
+                telemetry.addLine("HERE! To field border");
+                telemetry.update();
+                sleep(5000);
                 // if this is not the first loop then we consider this more carefully
                 //we shuffle a tiny bit for adjustment's sake
                 if (loopCounter >= 1){

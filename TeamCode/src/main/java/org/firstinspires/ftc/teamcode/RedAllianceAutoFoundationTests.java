@@ -9,10 +9,11 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name="RedAllianceAutoFoundationTests", group ="Concept")
 public class RedAllianceAutoFoundationTests extends LinearOpMode {
+
     // Personal variables
     private String wallSide = "LEFT";
     //whether turns are done clockwise or anticlockwise
-    private boolean BlueAlliance = false;
+    private boolean RedAlliance = true;
     public String[] args = {"false", "", "", "", ""};
 
     private ElapsedTime timeCounter = new ElapsedTime();
@@ -75,17 +76,21 @@ public class RedAllianceAutoFoundationTests extends LinearOpMode {
     double backwardsPower = -1.0;
     double rotationPower = 0.35; //allows for one 90 turn in 1s
     double modifier = 1;
+
     double riseCrane = -0.75; //raises the crane
     double lowerCrane = 0.75; //lowers the crane
+    double LSqueezerClose = 0.15;
+    double RSqueezerClose = 0.25;
 
     //distances
     int timeToFoundation = 1549;
     int timeToFoundationAndMore = timeToFoundation + 51;
-    int timeToWallWithFoudation = (860*2) + 400; //Time to wall with foundation
-    int timeshuffleToGate = 6000; //update when we have the numbers!
+    int timeToWallWithFoudation = (860*2) + 730; //Time to wall with foundation
+    int timeshuffleToGate = 6600; //update when we have the numbers!
 
     @Override
     public void runOpMode() {
+//        telemetry
         //initialisation code first
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -119,16 +124,22 @@ public class RedAllianceAutoFoundationTests extends LinearOpMode {
 //        squeezer.setPower(servoPower);
         LFoundationHook.setPower(servoPower);
         RFoundationHook.setPower(servoPower*-1);
-        LSqueezer.setPosition(SqueezerServoPos);
-        RSqueezer.setPosition(SqueezerServoPos);
+        LSqueezer.setPosition(LSqueezerClose);
+        RSqueezer.setPosition(RSqueezerClose);
         //start
         //servos move up
-        servoPower = 1;
+        servoPower = 0.75;
         LFoundationHook.setPower(servoPower);
         RFoundationHook.setPower(servoPower*-1);
         sleep(2000);
         LFoundationHook.setPower(0);
         RFoundationHook.setPower(0);
+        servoPower = 0.1;
+        LFoundationHook.setPower(servoPower);
+        RFoundationHook.setPower(servoPower*-1);
+
+
+
 
 
 
@@ -136,19 +147,29 @@ public class RedAllianceAutoFoundationTests extends LinearOpMode {
 
 
         waitForStart();
+        moveForwBack(0.5, 1000, !RedAlliance);
+        shuffle(0.5, 1000, RedAlliance);
 //        bring the clips up
-        // moving to foundation backwards
-        moveForwBack(0.5, (timeToFoundationAndMore - 500), true);
-        moveForwBack(0.25, 750, true);
-        //grabs foundation
-        lockFoundationClips(1,true);
-        //moves back towards the wall
-        moveForwBack(0.25, timeToWallWithFoudation, false);
-        // unclips
-        lockFoundationClips(1, false);
-        unlockFoundationClips();
-        sleep(2000);
-        shuffle(0.5, timeshuffleToGate, false);
+//         moving to foundation backwards
+//        moveForwBack(0.5, (timeToFoundationAndMore - 500), true);
+//        moveForwBack(0.25, 950, true);
+//        //grabs foundation
+//        lockFoundationClips(1,true);
+//        //moves back towards the wall
+//        moveForwBack(0.25, timeToWallWithFoudation, false);
+//        // unclips
+//        lockFoundationClips(1, false);
+//        unlockFoundationClips();
+//        servoPower = 0.75;
+//        LFoundationHook.setPower(servoPower);
+//        RFoundationHook.setPower(servoPower*-1);
+//        moveForwBack(0.25,100, false);
+//        moveForwBack(0.25,200, false);
+
+//        if (RedAlliance){
+//            rotate90(false, 100);
+//        }
+//        shuffle(0.5, timeshuffleToGate, RedAlliance);
 
 //        moveForwBack(0.25,);
 //FELIX HERE
@@ -192,8 +213,9 @@ public class RedAllianceAutoFoundationTests extends LinearOpMode {
         RFoundationHook.setPower(0);
     }
 
-    public void shuffle(double power, int time, boolean blueAlliance) {
-        if (blueAlliance){
+    public void shuffle(double power, int time, boolean RedAlliance) {
+        timeCounter.reset();
+        if (!RedAlliance){
             // shuffling left
             driveTR.setPower(power);
             driveTL.setPower((power* -1));
@@ -206,15 +228,32 @@ public class RedAllianceAutoFoundationTests extends LinearOpMode {
             driveBL.setPower((power * -1));
             driveBR.setPower(power);
         }
-
-        sleep(time);
+//
+//        while (!(timeCounter.milliseconds()>= time)) {
+//            telemetry.addData("timer: ", timeCounter.milliseconds());
+//            telemetry.update();
+//            if ((RedAlliance) & ((timeCounter.milliseconds() > 1000) & (timeCounter.milliseconds() < 1100))) {
+//                telemetry.addLine("turning!");
+//                telemetry.update();
+//                sleep(1000);
+//                driveTR.setPower(0);
+//                driveTL.setPower(0);
+//                driveBL.setPower(0);
+//                driveBR.setPower(0);
+//                rotate90(false, 250);
+//                driveTR.setPower((power * -1));
+//                driveTL.setPower(power);
+//                driveBL.setPower((power * -1));
+//                driveBR.setPower(power);
+//            }
+//        }
         driveTR.setPower(0);
         driveTL.setPower(0);
         driveBL.setPower(0);
         driveBR.setPower(0);
     }
-    public void rotate90(boolean clockwise) {
-        int time = 1000;
+    public void rotate90(boolean clockwise, int time) {
+//        int time = 1000;
 
         if (!(clockwise)){
             telemetry.addLine("Rotating 90 Anti-Clockwise!");
