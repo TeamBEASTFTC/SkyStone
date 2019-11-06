@@ -132,6 +132,7 @@ public class ChoppyTeleOpV extends LinearOpMode {
     double riseCrane = -0.75; //raises the crane
     double lowerCrane = 0.75; //lowers the crane*/
     double cranePower;
+    double speedFactor =1; //allow for chqanges in the speed of the robot
 
     double angle;
     double power;
@@ -379,6 +380,19 @@ public class ChoppyTeleOpV extends LinearOpMode {
             modifier = 0.25;
         } else modifier = 1;
 
+        // changing the speed factor of the robot
+        if (gamepad1.x){
+            speedFactor = 0.25;
+        } else if (gamepad1.y){
+            speedFactor = 0.5;
+        } else if (gamepad1.b){
+            speedFactor = 0.75;
+        } else if (gamepad1.a){
+            speedFactor = 0.1;
+        } else {
+            speedFactor = 1;
+        }
+
 
 
 
@@ -528,6 +542,12 @@ public class ChoppyTeleOpV extends LinearOpMode {
         //The value was hidden inside the if statement
 
         //final change to speed depending on user change of it
+        //eg. if user presses y it will reduce the speed till 0.25
+        powerTR *= speedFactor;
+        powerTL *= speedFactor;
+        powerBR *= speedFactor;
+        powerBL *= speedFactor;
+
 
 
         choppy.driveTR.setPower(powerTR);
