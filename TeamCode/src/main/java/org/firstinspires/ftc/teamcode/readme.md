@@ -1,121 +1,165 @@
-## TeamCode Module
+## Team BEAST Team Code
 
 Welcome!
+This is the main codebase for Team BEAST's programs. The programs are split accordingly:
+1) Anything with the name with TeleOp corresponds to a TeleOp program
+2) Anything with the name with Hardware involves configuration of the hardware
+3) All else is autonomous
 
-This module, TeamCode, is the place where you will write/paste the code for your team's
-robot controller App. This module is currently empty (a clean slate) but the
-process for adding OpModes is straightforward.
-
-## Creating your own OpModes
-
-The easiest way to create your own OpMode is to copy a Sample OpMode and make it your own.
-
-Sample opmodes exist in the FtcRobotController module.
-To locate these samples, find the FtcRobotController module in the "Project/Android" tab.
-
-Expand the following tree elements:
- FtcRobotController / java / org.firstinspires.ftc.robotcontroller / external / samples
-
-A range of different samples classes can be seen in this folder.
-The class names follow a naming convention which indicates the purpose of each class.
-The full description of this convention is found in the samples/sample_convention.md file.
-
-A brief synopsis of the naming convention is given here:
-The prefix of the name will be one of the following:
-
-* Basic:    This is a minimally functional OpMode used to illustrate the skeleton/structure
-            of a particular style of OpMode.  These are bare bones examples.
-* Sensor:   This is a Sample OpMode that shows how to use a specific sensor.
-            It is not intended as a functioning robot, it is simply showing the minimal code
-            required to read and display the sensor values.
-* Hardware: This is not an actual OpMode, but a helper class that is used to describe
-            one particular robot's hardware devices: eg: for a Pushbot.  Look at any
-            Pushbot sample to see how this can be used in an OpMode.
-            Teams can copy one of these to create their own robot definition.
-* Pushbot:  This is a Sample OpMode that uses the Pushbot robot structure as a base.
-* Concept:	This is a sample OpMode that illustrates performing a specific function or concept.
-            These may be complex, but their operation should be explained clearly in the comments,
-            or the header should reference an external doc, guide or tutorial.
-* Library:  This is a class, or set of classes used to implement some strategy.
-            These will typically NOT implement a full OpMode.  Instead they will be included
-            by an OpMode to provide some stand-alone capability.
-
-Once you are familiar with the range of samples available, you can choose one to be the
-basis for your own robot.  In all cases, the desired sample(s) needs to be copied into
-your TeamCode module to be used.
-
-This is done inside Android Studio directly, using the following steps:
-
- 1) Locate the desired sample class in the Project/Android tree.
-
- 2) Right click on the sample class and select "Copy"
-
- 3) Expand the  TeamCode / java folder
-
- 4) Right click on the org.firstinspires.ftc.teamcode folder and select "Paste"
-
- 5) You will be prompted for a class name for the copy.
-    Choose something meaningful based on the purpose of this class.
-    Start with a capital letter, and remember that there may be more similar classes later.
-
-Once your copy has been created, you should prepare it for use on your robot.
-This is done by adjusting the OpMode's name, and enabling it to be displayed on the
-Driver Station's OpMode list.
-
-Each OpMode sample class begins with several lines of code like the ones shown below:
-
-```
- @TeleOp(name="Template: Linear OpMode", group="Linear Opmode")
- @Disabled
-```
-
-The name that will appear on the driver station's "opmode list" is defined by the code:
- ``name="Template: Linear OpMode"``
-You can change what appears between the quotes to better describe your opmode.
-The "group=" portion of the code can be used to help organize your list of OpModes.
-
-As shown, the current OpMode will NOT appear on the driver station's OpMode list because of the
-  ``@Disabled`` annotation which has been included.
-This line can simply be deleted , or commented out, to make the OpMode visible.
+###Writing an Autonomous
+####The setup
+To start an autonomous you'll need the following:
+'''
+@Autonomous(name="HardwareTest", group="Tests")
+public class HardwareTests extends LinearOpMode {
 
 
+    HardwareSetup choppy = new HardwareSetup();
+    @Override
+    public void runOpMode() {
 
-## ADVANCED Multi-Team App management:  Cloning the TeamCode Module
 
-In some situations, you have multiple teams in your club and you want them to all share
-a common code organization, with each being able to *see* the others code but each having
-their own team module with their own code that they maintain themselves.
+        robot.init(hardwareMap, telemetry, true);
+        waitForStart();
+        robot.telementryLineMessage("Success we can call functions");
+        sleep(1000);
+    }
+}
+'''
+Now let's brake this down. Firstly:
+'''
+@Autonomous(name="fileName", group="Tests")
+'''
+The '''@Autonomous''' tells the program that this is an autonomous program. If you want to make a TeleOp, simple have '''@TeleOp'''.
+The name is the name of the file which will be shown on the phone and the group is just a group for the program, the phone will have a small line sepearting the different programs of different groups. It is not too important though.
 
-In this situation, you might wish to clone the TeamCode module, once for each of these teams.
-Each of the clones would then appear along side each other in the Android Studio module list,
-together with the FtcRobotController module (and the original TeamCode module).
+Next:
+'''
+public class fileNmae extends LinearOpMode {
+'''
+This may be a bit confusing, but all you really need to know is that the text in the middle: fileName, needs to be the name of the file.
 
-Selective Team phones can then be programmed by selecting the desired Module from the pulldown list
-prior to clicking to the green Run arrow.
+Within this loop but before the next is where we can do the configuration, setups, naming of variables. The following code does some of this:
+'''
+    HardwareSetup choppy = new HardwareSetup();
+'''
+What this does is it do a lot of the setup for you. All the code is written within a file called HardwareSetup and you basically get to copy all of it and place it within a variable called choppy (this can be whatever you want it though).
+Think of it like you have an infinite amount of toolboxes. You say "hey I want a toolbox", and then you say: "I'll name you choppy".
+Within this toolbox there's a lot of tools! Duh...
+To use these tools ou need to say choppy.toolName. This is like first saying, "I want that toolbox and then I want to use that tool."
+However, these "tools" will require information from you, think of it like giving the tool the batteries it needs to run.
+These are called parameters and within Android Studio you should be prompted with what these are.
+Let's go through a couple of these tools.
+'''
+choppy.init(hardwareMap, telemetry, vuforia_program)
+'''
+This does the initialisation of the robot's hardware behind the scenes. This does the "mapping" between the variable for each piece of hardware within our code and its corresponding variable we gave it on the phone (the phone variable is where we say: Servo Controller Port 1 = LFoundationHook).
+The hardwaremap is just a variable ou pass through.
+The telemetry allows us to do telemetry calls (calls to the phone's screen with text for us to read).
+The vuforia_program is a true or false. So you literally type true or false for this one. This tells the program if it needs to setup the phone's camera for computer vision or not. Leaves this to false if you do not plan on doing computer vision.
 
-Warning:  This is not for the inexperienced Software developer.
-You will need to be comfortable with File manipulations and managing Android Studio Modules.
-These changes are performed OUTSIDE of Android Studios, so close Android Studios before you do this.
- 
-Also.. Make a full project backup before you start this :)
+'''
+choppy.turnOffDrive();
+'''
+This tool (function/method) set all the drive motors to 0.
 
-To clone TeamCode, do the following:
 
-Note: Some names start with "Team" and others start with "team".  This is intentional.
+'''
+choppy.moveForwBack(power, time, back)
+'''
+This one allows us to move the robot forwards or backwards.
+Power: a value from 0 - 1 which determines the power given to the motors
+Time: the amount of time in miliseconds that you want to drive
+Back: a true/false on whether you want the robot to drive backwards. If false it will move forwards.
 
-1)  Using your operating system file management tools, copy the whole "TeamCode"
-    folder to a sibling folder with a corresponding new name, eg: "Team0417".
+'''
+choppy.shuffle(power, time, right);
+'''
+This allows for the shuffling of the robot.
+Power: a value from 0 - 1 which determines the power given to the motors
+Time: the amount of time in miliseconds that you want to shuffle
+right: a true/false on whether you want the robot to shuffle right. If false it will shuffle left.
 
-2)  In the new Team0417 folder, delete the TeamCode.iml file.
+'''
+choppy.rotate90(clockwise, time);
+'''
+This allows for the robot to turn. It has a preset power of 0.35 as 1s of this power does a 90deg turn.
+Clockwise: true/false depending if you want to go clockwise or anti clockwise
+Time: the amount of time in miliseconds that you want to turn. 90deg = 1000
 
-3)  the new Team0417 folder, rename the "src/main/java/org/firstinspires/ftc/teamcode" folder
-    to a matching name with a lowercase 'team' eg:  "team0417".
+'''
+choppy.telementryLineMessage(message);
+'''
+If you ever want to just send a piece of text to the phone for debugging without any data, this is a nice way to do it.
+message = a string with the message you want to say.
 
-4)  In the new Team0417/src/main folder, edit the "AndroidManifest.xml" file, change the line that contains
-         package="org.firstinspires.ftc.teamcode"
-    to be
-         package="org.firstinspires.ftc.team0417"
+'''
+choppy.unlockFoundationClips();
+'''
+This sets the foundation clips to power 0.
 
-5)  Add:    include ':Team0417' to the "/settings.gradle" file.
-    
-6)  Open up Android Studios and clean out any old files by using the menu to "Build/Clean Project""
+
+'''
+choppy.computerVisionRunning(allTrackables)
+'''
+This does the checking of whether a skystone can be seen. You need to pass it the allTrackables variable by doing '''choppy.allTrackables'''.
+It will return an array with the following:
+choppy.computerVisionRunning(allTrackables)[0] = targetVisible
+choppy.computerVisionRunning(allTrackables)[1]= yposisitonSkystone
+choppy.computerVisionRunning(allTrackables)[2]= xposisitonSkystone
+choppy.computerVisionRunning(allTrackables)[3]= xPosition value
+
+Here's an example of how this is used:
+'''
+boolean SkyStoneCaptured = false;
+        int loopCounter = 0;
+        while (!(SkyStoneCaptured)){
+            loopCounter += 1;
+            telemetry.addData("Loop counter: ", loopCounter);
+            telemetry.update();
+
+            choppy.targetsSkyStone.activate();
+            //calling the computer vision now
+            String[] computerVisionResults = choppy.computerVisionRunning(choppy.allTrackables);
+            choppy.targetsSkyStone.deactivate();
+            //if robot is not center
+            if (computerVisionResults[1].equals("CENTRE, GRAB!!")){
+                choppy.telementryLineMessage("HEEREE! centre");
+                sleep(500);
+                SkyStoneCaptured = true;
+
+            }else if ((computerVisionResults[1].equals("To Field Centre"))){
+                choppy.telementryLineMessage("HERE! To field centre");
+                sleep(2000);
+                choppy.shuffle(0.5, (moveAcrossOneBlockTime/2), BlueAlliance);
+                SkyStoneCaptured = true;
+
+            } else if (computerVisionResults[1].equals("To Field Border")){
+                choppy.telementryLineMessagee("HERE! To field border");
+                sleep(2000);
+                // if this is not the first loop then we consider this more carefully
+                //we shuffle a tiny bit for adjustment's sake
+                if (loopCounter >= 1){
+                    choppy.shuffle(0.5,(moveAcrossOneBlockTime/2), !BlueAlliance);// We want to go towards to side again
+                    choppy.telementryLineMessage("To Field border!");
+                    sleep(500);
+                    SkyStoneCaptured = true;
+                }
+            }else if (computerVisionResults[0].equals("false")) {
+                ////shuffle the side of the field we are on,
+                //eg on left side, means we shuffle left :)
+                choppy.shuffle(0.5, moveAcrossOneBlockTime, BlueAlliance);
+                robot.telementryLineMessage("Vuforia computer vision = false");
+                sleep(1000);
+            } else {
+                // if for what ever reason something does not work, don't stop the robot...
+                choppy.telementryLineMessage("Vuforia else statement");
+                sleep(1000);
+                choppy.shuffle(0.5,(moveAcrossOneBlockTime/4), BlueAlliance);// We want to go towards to side again
+
+            }
+
+        }
+        '''
+
+#If you have any questions just ask!
