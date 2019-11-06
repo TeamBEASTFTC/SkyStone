@@ -16,14 +16,19 @@ public class HardwareTests extends LinearOpMode {
 
 
     HardwareSetup robot = new HardwareSetup();
+
+
     @Override
     public void runOpMode() {
 
 
         robot.init(hardwareMap, telemetry, true);
+
+
         waitForStart();
         robot.telementryLineMessage("Success we can call functions");
         sleep(1000);
+
 
 
         //sample vuforia code
