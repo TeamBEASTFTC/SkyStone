@@ -37,7 +37,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-@TeleOp(name = "TeleOpV1", group = "Linear Opmode")
+@TeleOp(name = "ChoppyTeleOpV", group = "Linear Opmode")
 
 public class ChoppyTeleOpV extends LinearOpMode {
 
