@@ -11,9 +11,9 @@ This is the main codebase for Team BEAST's programs. The programs are split acco
 To start an autonomous you'll need the following:
 
 ```
-@Autonomous(name="HardwareTest", group="Tests")
+@Autonomous(name="fileName", group="Tests")
 
-public class HardwareTests extends LinearOpMode {
+public class fileName extends LinearOpMode {
 
 `
 
@@ -24,7 +24,7 @@ public class HardwareTests extends LinearOpMode {
 
         robot.init(hardwareMap, telemetry, true);
         waitForStart();
-        robot.telementryLineMessage("Success we can call functions");
+        choppy.telementryLineMessage("Success we can call functions");
         sleep(1000);
     }
 }
