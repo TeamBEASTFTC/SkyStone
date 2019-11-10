@@ -37,7 +37,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-@TeleOp(name = "TeleOpV1", group = "Linear Opmode")
+@TeleOp(name = "ChoppyTeleOpV", group = "Linear Opmode")
 
 public class ChoppyTeleOpV extends LinearOpMode {
 
@@ -119,7 +119,7 @@ public class ChoppyTeleOpV extends LinearOpMode {
     double LSqueezerClose = 0.3;
     double RSqueezerClose = 0.1;
 
-    double servoPower = 0.0;
+    double servoPower = -0.1;
     double SqueezerServoPower = 0.0;
     double SqueezerServoPosOpen = 0.7;
     double SqueezerServoPosClosed = 0.3;
@@ -147,7 +147,7 @@ public class ChoppyTeleOpV extends LinearOpMode {
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-        choppy.init(hardwareMap, telemetry, false);
+        choppy.init(hardwareMap, telemetry, false, false);
 
 /*        // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
@@ -213,10 +213,10 @@ public class ChoppyTeleOpV extends LinearOpMode {
 
 
     private void getInput() {
-        double x = gamepad1.left_stick_x;
+        double x = -gamepad1.left_stick_x;
         telemetry.addData("x gamepad 1: ", x);
         telemetry.update();
-        double y = gamepad1.left_stick_y;
+        double y = -gamepad1.left_stick_y;
 
         angle = Math.atan2(y, x); //Joah was here
 

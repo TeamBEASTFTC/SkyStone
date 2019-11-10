@@ -19,7 +19,7 @@ public class TestPlayground1 extends LinearOpMode{
     @Override
     public void runOpMode() {
 
-        robot.init(hardwareMap, telemetry, true);
+        robot.init(hardwareMap, telemetry, true, false);
 
         waitForStart();
         robot.moveForwBack(power,20000,false);
@@ -31,6 +31,8 @@ public class TestPlayground1 extends LinearOpMode{
         robot.moveForwBack(power,5000,false);
         robot.shuffle(power,5000,true);
         robot.unlockFoundationClips();
+
+
 
 
     }
