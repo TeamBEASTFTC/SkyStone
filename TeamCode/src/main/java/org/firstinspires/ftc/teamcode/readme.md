@@ -167,7 +167,7 @@ This sets the foundation clips to this power. The exact code within this is:
 
 ```
         LFoundationHook.setPower(power);
-        RFoundationHook.setPower(power*1);
+        RFoundationHook.setPower(power*-1);
 ```
 
 So the amount of power goes in directly. The *-1 reverses the power on the one so they both move in teh same direction - because one is mirrored the other. This "tool" (methods/functions) is what will be used in the following "tools" (methods/functions) as well.
