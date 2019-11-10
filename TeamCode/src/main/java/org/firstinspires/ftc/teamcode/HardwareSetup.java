@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -164,6 +165,14 @@ public class HardwareSetup {
     VuforiaTrackables targetsSkyStone;
     VuforiaTrackable stoneTarget;
 
+    //For movement
+    boolean driveEncoders = false;//whether or not we are using encoders, defaults to false to nothing breaks
+    double d_encoderValue; //the double
+    int encoderValue = (int) d_encoderValue;
+    double pie = Math.PI;
+    double driveWheelCircumference = 2* pie * ((4 * mmPerInch)/2);//2 * pie * r
+    int driveMotorTicks = 1120;
+
 
     HardwareMap hardwareMap;
     Telemetry telemetry;
@@ -176,12 +185,13 @@ public class HardwareSetup {
     }
 
     /* Initialize standard Hardware interfaces */
-    public void init(HardwareMap hardwareMap, Telemetry telemetry, boolean vuforia_program) {
+    public void init(HardwareMap hardwareMap, Telemetry telemetry, boolean vuforia_program, boolean driveEncoders) {
 
         String[] args = {"","","","",""};
 
         this.telemetry = telemetry;
         this.hardwareMap = hardwareMap;
+        this.driveEncoders = driveEncoders; //whether or not we are using encoders
         // Save reference to Hardware map
         // Define and Initialize Motors
         //initialisation code first
@@ -196,7 +206,6 @@ public class HardwareSetup {
         driveBL = hardwareMap.get(DcMotor.class, DriveBLName);
         driveBR = hardwareMap.get(DcMotor.class, DriveBRName);
         rotateCrane = hardwareMap.get(DcMotor.class, RotateCraneName);
-
 
         driveTL.setDirection(DcMotor.Direction.REVERSE);
         driveBL.setDirection(DcMotor.Direction.REVERSE);
@@ -217,6 +226,17 @@ public class HardwareSetup {
 //        squeezer.setPower(servoPower);
         LFoundationHook.setPower(servoPower);
         RFoundationHook.setPower(servoPower*-1);
+
+        if (this.driveEncoders){
+            // if we have encoders plugged, let's reset them
+            driveBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            driveBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            driveTL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            driveTR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        }
+
+
+
 
 
 //        driveBL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -348,20 +368,38 @@ public class HardwareSetup {
 
     }
 
-
     //Motor/Driver functions
+    public void encoderConfig(){
+        if (this.driveEncoders){
+            driveTL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            driveTR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            driveBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            driveBL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        } else{
+            driveTL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            driveTR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            driveBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            driveBL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
+    }
+
+    //sets the one power to all motors
+    public void setDrivePower(double power){
+        driveTR.setPower(power);
+        driveTL.setPower(power);
+        driveBL.setPower(power);
+        driveBR.setPower(power);
+    }
+
     public void turnOffDrive() {
         telementryLineMessage("Turning off drive motor power/");
-        driveTR.setPower(0);
-        driveTL.setPower(0);
-        driveBL.setPower(0);
-        driveBR.setPower(0);
+        setDrivePower(0);
     }
 
     public void moveForwBack(double power, int time, boolean back) {
 
         if (back) {
-            power = power * -1;
+            power *= -1;
         }
 
 
@@ -374,6 +412,47 @@ public class HardwareSetup {
         sleep(time);
         turnOffDrive();
     }
+
+    public void moveForwBackEncoder(double power, int distance, boolean back) {
+        //we need encoders plugged in
+        if (this.driveEncoders){
+            //ensuring the values we get allow us to do what we want
+            if (back) {
+                distance = Math.abs(distance) -1;
+            }
+
+            d_encoderValue = (driveMotorTicks * (distance/driveWheelCircumference));
+            encoderValue = (int) Math.round(d_encoderValue);//convert the double back to int after rounding
+
+            //ensuring no negative power
+            power = Math.abs(power);
+
+            driveTR.setTargetPosition(encoderValue);
+            driveTL.setTargetPosition(encoderValue);
+            driveBR.setTargetPosition(encoderValue);
+            driveBL.setTargetPosition(encoderValue);
+
+            driveTL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            driveTR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            driveBR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            driveBL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+           setDrivePower(power);
+            this.telemetry.addData("Moving to position: ", encoderValue);
+            this.telemetry.update();
+            while ((driveTL.isBusy() || driveTR.isBusy() || driveBL.isBusy() || driveBR.isBusy())) {
+                telemetry.addData("Moved: ", "TL: %d, TR: %d, BL: %d, BR: %d",
+                        driveTL.getCurrentPosition(), driveTR.getCurrentPosition(), driveBL.getCurrentPosition(), driveBR.getCurrentPosition());
+                telemetry.update();
+            }
+
+        } else{
+            telementryLineMessage("no encoders initialised. Make sure it's plugged in and teh var is passed through the init method");
+        }
+
+
+    }
+
 
     public void shuffle(double power, int time, boolean right) {
         if (!right) {
@@ -429,12 +508,33 @@ public class HardwareSetup {
 
 
     // Servos
-    public void unlockFoundationClips() {
-        telementryLineMessage("Unlocking Foundation Clips");
-        LFoundationHook.setPower(0);
-        RFoundationHook.setPower(0);
+    public void setFoundationClipPower(double power){
+        LFoundationHook.setPower(power);
+        RFoundationHook.setPower(power*-1);
     }
 
+    public void unlockFoundationClips() {
+        telementryLineMessage("Unlocking Foundation Clips");
+        setFoundationClipPower(0);
+    }
+
+    public void lowerFoundationClips() {
+        telementryLineMessage("Unlocking Foundation Clips");
+        setFoundationClipPower(1);
+        sleep(1500);
+        //try this for now, to reduce wear on servo
+        //TEST
+        setFoundationClipPower(0.75);
+    }
+
+    public void raiseFoundationClips() {
+        telementryLineMessage("Unlocking Foundation Clips");
+        setFoundationClipPower(-1);
+        sleep(1500);
+        setFoundationClipPower(-0.25);
+        sleep(500);
+        setFoundationClipPower(0);
+    }
 
 
     // Computer vivion/Vuforia
@@ -556,4 +656,5 @@ public class HardwareSetup {
     }
 
 }
+
 

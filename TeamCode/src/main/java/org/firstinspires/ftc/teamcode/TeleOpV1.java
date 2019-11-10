@@ -94,7 +94,7 @@ public class TeleOpV1 extends LinearOpMode {
     double LSqueezerClose = 0.3;
     double RSqueezerClose = 0.1;
 
-    double servoPower = 0.0;
+    double servoPower = -0.1;
     double SqueezerServoPower = 0.0;
     double SqueezerServoPosOpen = 0.7;
     double SqueezerServoPosClosed = 0.3;

@@ -22,7 +22,7 @@ public class HardwareTests extends LinearOpMode {
     public void runOpMode() {
 
 
-        robot.init(hardwareMap, telemetry, true);
+        robot.init(hardwareMap, telemetry, true, false);
 
 
         waitForStart();

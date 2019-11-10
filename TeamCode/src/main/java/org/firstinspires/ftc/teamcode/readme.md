@@ -65,15 +65,17 @@ However, these "tools" will require information from you, think of it like givin
 These are called parameters and within Android Studio you should be prompted with what these are.
 Let's go through a couple of these tools.
 `
-choppy.init(hardwareMap, telemetry, vuforia_program)
+choppy.init(hardwareMap, telemetry, vuforia_program, driveEncoder)
 `
 This does the initialisation of the robot's hardware behind the scenes. This does the "mapping" between the variable for each piece of hardware within our code and its corresponding variable we gave it on the phone (the phone variable is where we say: Servo Controller Port 1 = LFoundationHook).
 
-The hardwaremap is just a variable you pass through.
+The `hardwaremap` is just a variable you pass through.
 
-The telemetry allows us to do telemetry calls (calls to the phone's screen with text for us to read).
+The `telemetry` allows us to do telemetry calls (calls to the phone's screen with text for us to read).
 
-The vuforia_program is a true or false. So you literally type true or false for this one. This tells the program if it needs to setup the phone's camera for computer vision or not. Leaves this to false if you do not plan on doing computer vision.
+The `vuforia_program` is a true or false. So you literally type true or false for this one. This tells the program if it needs to setup the phone's camera for computer vision or not. Leaves this to false if you do not plan on doing computer vision.
+
+The `driveEncoder` is just another true/false depending on whether the drive motor encoders have been plugged in or not. If it's set to false the encoder functions will not run.
 
 ## Accessing more tools - making Choppy move
 
@@ -84,6 +86,19 @@ This tool (function/method) set all the drive motors to 0.
 
 
 ***
+`public void setDrivePower(power){}`
+
+This gives each motor the amount of power you specify. Amount needs to be between -1 and 1.
+Directly this does the following:
+
+```        driveTR.setPower(power);
+           driveTL.setPower(power);
+           driveBL.setPower(power);
+           driveBR.setPower(power);```
+           
+           
+***
+
 
 `choppy.moveForwBack(power, time, back)`
 
@@ -92,6 +107,20 @@ This one allows us to move the robot forwards or backwards.
 Power: a value from 0 - 1 which determines the power given to the motors
 
 Time: the amount of time in miliseconds that you want to drive
+
+Back: a true/false on whether you want the robot to drive backwards. If false it will move forwards.
+
+
+***
+
+`choppy.moveForwBackEncoder(double power, int distance, boolean back);`
+This one allows us to move the robot forwards or backwards a set distance using encoders. For this to work the driveEncoder value in the init() must be set to true and the encoders must be plugged in.
+
+Power: a value from 0 - 1 which determines the power given to the motors
+
+Distance: The desired distance in mm that is to be travelled. This will be converted into the number of ticks by doing:
+1. Finding the scalar amount of rotations (this can also be a fraction)
+2. Multiplying this by the number of ticks in a wheel's rotation (think of a tick like a tick within the second hand of the watch. The 40:1 motors have 1120 ticks per rotation)
 
 Back: a true/false on whether you want the robot to drive backwards. If false it will move forwards.
 
@@ -122,20 +151,61 @@ Time: the amount of time in miliseconds that you want to turn. 90deg = 1000
 
 ***
 
-`
-choppy.telementryLineMessage(message);
-`
+`choppy.telementryLineMessage(message);`
+
 If you ever want to just send a piece of text to the phone for debugging without any data, this is a nice way to do it.
 
 message = a string with the message you want to say.
 
 ***
 
+`setFoundationClipPower(power);`
+
+This sets the foundation clips to this power. The exact code within this is:
+
+```
+        LFoundationHook.setPower(power);
+        RFoundationHook.setPower(power*1);
+```
+
+So the amount of power goes in directly. The *-1 reverses the power on the one so they both move in teh same direction - because one is mirrored the other. This "tool" (methods/functions) is what will be used in the following "tools" (methods/functions) as well.
+
+
+***
 
 `choppy.unlockFoundationClips();`
 
 This sets the foundation clips to power 0.
 
+
+***
+
+`choppy.raiseFoundationClips()`
+
+This raises the foundation clips. It is roughly equivalent to doing:
+`setFoundationClipPower(-1);` 
+
+Or:
+
+```       
+LFoundationHook.setPower(-1);
+RFoundationHook.setPower(1);
+```
+
+
+***
+
+`choppy.lowerFoundationClips()`
+
+This lowers the foundation clips. It is roughly equivalent to doing:
+`setFoundationClipPower(1);` 
+
+Or:
+
+```       
+LFoundationHook.setPower(1);
+RFoundationHook.setPower(-1);
+```
 
 
 ***
@@ -148,13 +218,16 @@ This does the checking of whether a skystone can be seen. You need to pass it th
 
 It will return an array with the following:
 
-choppy.computerVisionRunning(allTrackables)[0] = targetVisible
+`choppy.computerVisionRunning(allTrackables)[0] = targetVisible`
 
-choppy.computerVisionRunning(allTrackables)[1]= yposisitonSkystone
 
-choppy.computerVisionRunning(allTrackables)[2]= xposisitonSkystone
+`choppy.computerVisionRunning(allTrackables)[1]= yposisitonSkystone`
 
-choppy.computerVisionRunning(allTrackables)[3]= xPosition value
+
+`choppy.computerVisionRunning(allTrackables)[2]= xposisitonSkystone`
+
+
+`choppy.computerVisionRunning(allTrackables)[3]= xPosition value`
 
 
 Here's an example of how this is used:
