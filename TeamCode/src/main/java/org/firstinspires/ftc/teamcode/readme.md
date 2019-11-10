@@ -91,16 +91,18 @@ This tool (function/method) set all the drive motors to 0.
 This gives each motor the amount of power you specify. Amount needs to be between -1 and 1.
 Directly this does the following:
 
-```        driveTR.setPower(power);
-           driveTL.setPower(power);
-           driveBL.setPower(power);
-           driveBR.setPower(power);```
-           
+```
+driveTR.setPower(power);
+driveTL.setPower(power);
+driveBL.setPower(power);
+driveBR.setPower(power);
+``` 
            
 ***
 
 
-`choppy.moveForwBack(power, time, back)`
+`choppy.moveForwBack(power, time, back)
+`
 
 This one allows us to move the robot forwards or backwards.
 
