@@ -115,7 +115,7 @@ Back: a true/false on whether you want the robot to drive backwards. If false it
 
 ***
 
-`choppy.moveForwBackEncoder(double power, int distance, boolean back);`
+`choppy.moveForwBackEncoder(double power, int distance, boolean is_distances_in_inches, boolean back);`
 This one allows us to move the robot forwards or backwards a set distance using encoders. For this to work the driveEncoder value in the init() must be set to true and the encoders must be plugged in.
 
 Power: a value from 0 - 1 which determines the power given to the motors
@@ -123,6 +123,8 @@ Power: a value from 0 - 1 which determines the power given to the motors
 Distance: The desired distance in mm that is to be travelled. This will be converted into the number of ticks by doing:
 1. Finding the scalar amount of rotations (this can also be a fraction)
 2. Multiplying this by the number of ticks in a wheel's rotation (think of a tick like a tick within the second hand of the watch. The 40:1 motors have 1120 ticks per rotation)
+
+Is_distances_in_inches: a true/false on whether the distance was given in inches.
 
 Back: a true/false on whether you want the robot to drive backwards. If false it will move forwards.
 

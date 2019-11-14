@@ -413,12 +413,15 @@ public class HardwareSetup {
         turnOffDrive();
     }
 
-    public void moveForwBackEncoder(double power, int distance, boolean back) {
+    public void moveForwBackEncoder(double power, int distance, boolean is_distances_in_inches, boolean back) {
         //we need encoders plugged in
         if (this.driveEncoders){
             //ensuring the values we get allow us to do what we want
             if (back) {
                 distance = Math.abs(distance) -1;
+            }
+            if (is_distances_in_inches){
+                distance *= mmPerInch;
             }
 
             d_encoderValue = (driveMotorTicks * (distance/driveWheelCircumference));
