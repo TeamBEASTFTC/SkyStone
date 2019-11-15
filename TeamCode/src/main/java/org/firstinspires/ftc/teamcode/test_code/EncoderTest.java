@@ -1,7 +1,9 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.test_code;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
+import org.firstinspires.ftc.teamcode.HardwareSetup;
 
 @Autonomous(name="EncoderTest", group="Tests")
 public class EncoderTest extends LinearOpMode{
@@ -21,7 +23,7 @@ public class EncoderTest extends LinearOpMode{
 //                choppy.driveTL.getCurrentPosition(), choppy.driveTR.getCurrentPosition(), choppy.driveBL.getCurrentPosition(), choppy.driveBR.getCurrentPosition());
 //        telemetry.update();
 //        sleep(2000);
-        choppy.moveForwBackEncoder(0.5,1000,false, false);
+        choppy.moveForwBackEncoder(0.5, 1000, false, false);
 
 
 
