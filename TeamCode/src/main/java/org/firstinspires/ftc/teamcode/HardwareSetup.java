@@ -64,6 +64,10 @@ public class HardwareSetup {
     public DcMotor driveBR;
     public DcMotor rotateCrane; //-ve power makes it go down
     //    rotateCrane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+    //PID for motors
+//    PIDController pidDrive;
+
     //variables that hold the current position of the DC Motors
     double positionTR;
     double positionTL;
@@ -89,10 +93,17 @@ public class HardwareSetup {
     public double SqueezerServoPower = 0.0;
     public double SqueezerServoPos = 0.1; //assuming 0 is closed
     public double backwardsPower = -1.0;
-    public double rotationPower = 0.35; //allows for one 90 turn in 1s
 
-    //positioning var
+    // Positioning var
+    // Servo positions
+    public double rotationPower = 0.35; //allows for one 90 turn in 1s, to be changed
+
+    double LSqueezerOpen = 0.1;
+    double RSqueezerOpen = 0.5; //open values good
+    double LSqueezerClose = 0.3;
+    double RSqueezerClose = 0.1;
     //Positioning constants
+
     private double yPosCentreBoundaryRight = 30.5;
     private double yPosCentreBoundaryLeft = -30.5;
 
@@ -413,7 +424,7 @@ public class HardwareSetup {
         turnOffDrive();
     }
 
-    public void moveForwBackEncoder(double power, int distance, boolean is_distances_in_inches, boolean back) {
+    public void moveForwBackEncoder(double power, double distance, boolean is_distances_in_inches, boolean back) {
         //we need encoders plugged in
         if (this.driveEncoders){
             //ensuring the values we get allow us to do what we want
@@ -511,6 +522,7 @@ public class HardwareSetup {
 
 
     // Servos
+    // Foundation clips
     public void setFoundationClipPower(double power){
         LFoundationHook.setPower(power);
         RFoundationHook.setPower(power*-1);
@@ -537,6 +549,20 @@ public class HardwareSetup {
         setFoundationClipPower(-0.25);
         sleep(500);
         setFoundationClipPower(0);
+    }
+
+    // Intake Servos
+    public void grabStoneFlipperControl(boolean grab){
+        // If we wanna grab the stone, then close the flippers
+        if (grab){
+            LSqueezer.setPosition(LSqueezerClose);
+            RSqueezer.setPosition(RSqueezerClose);
+        }
+        else{
+            LSqueezer.setPosition(LSqueezerOpen);
+            RSqueezer.setPosition(RSqueezerOpen);
+        }
+
     }
 
 
@@ -632,6 +658,7 @@ public class HardwareSetup {
             args[1] = yposisitonSkystone;
             args[2] = xposisitonSkystone;
             args[3] = String.valueOf(xPosition);
+            args[4] = String.valueOf(yPosition);
             telemetry.addData("positionSkystone: ", "Stone located: %s, %s", yposisitonSkystone, xposisitonSkystone);
 
             // express the rotation of the robot in degrees.
@@ -654,6 +681,7 @@ public class HardwareSetup {
         //1 = yposisitonSkystone
         //2 = xposisitonSkystone
         //3 = xPosition value
+        //4 = yPosition value
 
         return args;
     }
