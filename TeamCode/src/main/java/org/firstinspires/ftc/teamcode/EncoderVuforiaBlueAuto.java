@@ -7,12 +7,13 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 public class EncoderVuforiaBlueAuto extends LinearOpMode{
     double power=0.5;
 //    boolean redAlliance = false;
-    boolean blueAlliance = true;
+    boolean blueAlliance = false;
 
     // distances
     double robot_inch_distance = 15.75; // 15.75"
     double distance_to_blocks_inches = 48.0 - robot_inch_distance;
     double distance_block_width = 8;//8"
+//    double distance_to_gate = 13.5; // starting distance to gate 13.5"
     double distance_to_gate = 13.5; // starting distance to gate 13.5"
 
     double distance_to_center_of_stone;
@@ -37,7 +38,7 @@ public class EncoderVuforiaBlueAuto extends LinearOpMode{
         choppy.moveForwBackEncoder(0.5, distance_to_blocks_inches, true, false);
 
         //rotate90 towards the back wall
-        choppy.rotate90(!blueAlliance,1);
+        choppy.rotateEncoder(0.5, 400, false, blueAlliance);
 
 
         //work your way towards the SkyStone
@@ -66,6 +67,7 @@ public class EncoderVuforiaBlueAuto extends LinearOpMode{
                 telemetry.update();
                 distance_to_center_of_stone = Math.abs(Double.parseDouble(computerVisionResults[3])) + 10;//+10 for error correction
                 choppy.moveForwBackEncoder(0.3, distance_to_center_of_stone, false, true);
+                distance_to_gate -= distance_to_center_of_stone;
                 SkyStoneFound = false;//This may be set to true if the above is effective
 
             } else if (computerVisionResults[1].equals("To Field Border")){
@@ -77,6 +79,7 @@ public class EncoderVuforiaBlueAuto extends LinearOpMode{
                 if (loopCounter >= 1){
                     distance_to_center_of_stone = Math.abs(Double.parseDouble(computerVisionResults[3])) + 10;//+10 for error correction
                     choppy.moveForwBackEncoder(0.3, distance_to_center_of_stone, false, true);                    telemetry.addLine("To Field border!");
+                    distance_to_gate += distance_to_center_of_stone;
                     telemetry.update();
                     sleep(500);
                     SkyStoneFound = false;
@@ -85,11 +88,13 @@ public class EncoderVuforiaBlueAuto extends LinearOpMode{
             }else if (computerVisionResults[0].equals("false")) {
                 // move down a block distance!,
                 choppy.moveForwBackEncoder(0.5,distance_block_width, true,false);
+                distance_to_gate += distance_to_center_of_stone;
                 choppy.telementryLineMessage("Vuforia computer vision = false");
                 sleep(1000);
             } else {
                 // if for what ever reason something does not work, don't stop the robot... just keep trying!
                 choppy.moveForwBackEncoder(0.5,distance_block_width, true,false);
+                distance_to_gate += distance_to_center_of_stone;
                 choppy.telementryLineMessage("Vuforia else statement");
                 sleep(1000);
 
@@ -99,7 +104,7 @@ public class EncoderVuforiaBlueAuto extends LinearOpMode{
 
         // The robot is now lined up with the stone
         // Now we rotate to face it
-        choppy.rotate90(blueAlliance, 1);
+        choppy.rotateEncoder(0.5, 400, false, blueAlliance);
 
         // Move towards the block
         choppy.moveForwBackEncoder(0.5, distance_to_blocks_inches, true, false);
@@ -111,7 +116,8 @@ public class EncoderVuforiaBlueAuto extends LinearOpMode{
         choppy.moveForwBackEncoder(0.5, distance_to_blocks_inches, true, true);
 
         // Rotate towards the gate
-        choppy.rotate90(blueAlliance, 1);
+//        choppy.rotate90(blueAlliance, 1);
+        choppy.rotateEncoder(0.5, 400, false, true);
 
         // Move to the gate and a bit beyond
         choppy.moveForwBackEncoder(0.75, distance_to_gate+10, true, false);
