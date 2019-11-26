@@ -53,10 +53,11 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
     double positionCrane;
 
    //servo positions
-   double LSqueezerOpen = 0.1;
-    double RSqueezerOpen = 0.5; //open values good
-    double LSqueezerClose = 0.3;
-    double RSqueezerClose = 0.1;
+    double LSqueezerClose = 0.56;
+    double LSqueezerOpen = 0.4;
+
+    double RSqueezerClose = 0.32;
+    double RSqueezerOpen = 0.45; //open values good
 
     double servoPower = -0.1;
     double SqueezerServoPower = 0.0;
@@ -157,8 +158,14 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
             getInput(gamepad1);
             getInput(gamepad2);
             gamepad_control(gamepad1);
-            gamepad_control(gamepad2);
+//            gamepad_control(gamepad2);
 //            sendOutput();
+        //shuffling is rotating
+            //shuffle right rotates right
+            // the two classes are causing for it to be jumpy
+            // foundation hook is too fast
+            // setting teh motor speeds twice
+
         }}
 
 
@@ -358,10 +365,10 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
         if (!joystick) {
             telemetry.addLine("dpad driving");
             telemetry.update();
-            powerTR = directionTR * dpadPower;
-            powerTL = directionTL * dpadPower;
-            powerBL = directionBL * dpadPower;
-            powerBR = directionBR * dpadPower;
+            powerTR = directionTR;
+            powerTL = directionTL;
+            powerBL = directionBL;
+            powerBR = directionBR;
         } else if (joystick){
             /* joystick controls */
             // only takes the up and down motion of the joystick and not the horizontal
@@ -456,7 +463,7 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
 
         }
 
-        powerCrane = directionCrane * dpadPower;//was not initialised before, meaning it had no value,
+        powerCrane = directionCrane;//was not initialised before, meaning it had no value,
         //The value was hidden inside the if statement
 
         //final change to speed depending on user change of it

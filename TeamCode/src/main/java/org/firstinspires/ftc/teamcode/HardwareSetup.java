@@ -78,8 +78,8 @@ public class HardwareSetup {
     //Servos declaration
     static final String LFoundationHookName = "LFoundationHook";
     static final String RFoundationHookName = "RFoundationHook";
-    static final String RsqueezerName = "Lsqueezer";
-    static final String LsqueezerName = "Rsqueezer";
+    static final String RsqueezerName = "Rsqueezer";
+    static final String LsqueezerName = "Lsqueezer";
     //    static final String squeezerName = "squeezer";
 
         //    Servos;
