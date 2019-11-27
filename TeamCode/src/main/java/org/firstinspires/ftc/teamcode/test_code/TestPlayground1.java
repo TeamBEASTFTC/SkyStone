@@ -26,8 +26,8 @@ public class TestPlayground1 extends LinearOpMode{
         robot.moveForwBack(power,20000,false);
         robot.rotate90(true,5000);
         robot.moveForwBack(power,10000,true);
-        robot.LFoundationHook.setPower(1);
-        robot.RFoundationHook.setPower(1);
+//        robot.LFoundationHook.setPower(1);
+//        robot.RFoundationHook.setPower(1);
         sleep(2000);
         robot.moveForwBack(power,5000,false);
         robot.shuffle(power,5000,true);

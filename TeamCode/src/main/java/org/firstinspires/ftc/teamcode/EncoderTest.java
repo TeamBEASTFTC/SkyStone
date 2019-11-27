@@ -20,9 +20,9 @@ public class EncoderTest extends LinearOpMode {
 
 
         waitForStart();
-        choppy.rotateEncoder(0.5, 405, false, false);
-        sleep(1000);
-        choppy.rotateEncoder(0.5, 405, false, true);
+//        choppy.rotateEncoder(0.5, 405, false, false);
+//        sleep(1000);
+//        choppy.rotateEncoder(0.5, 405, false, true);
 
 
 

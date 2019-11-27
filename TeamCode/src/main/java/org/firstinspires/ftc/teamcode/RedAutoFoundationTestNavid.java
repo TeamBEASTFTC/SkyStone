@@ -15,7 +15,7 @@ public class RedAutoFoundationTestNavid extends LinearOpMode{
 
 
         choppy.init(hardwareMap, telemetry, true, true);
-        choppy.setFoundationClipPower(-0.02);
+//        choppy.setFoundationClipPosition(up_value);
 
         waitForStart();
 //        choppy.shuffle(0.5, 500, !blueAlliance);
@@ -26,7 +26,7 @@ public class RedAutoFoundationTestNavid extends LinearOpMode{
         choppy.releaseCapstone();
 //        choppy.lowerFoundationClips();
 //        choppy.raiseFoundationClips();
-        choppy.setFoundationClipPower(-0.02);
+//        choppy.setFoundationClipPower(-0.02);
         //reversing to centre of foundation
         choppy.moveForwBackEncoder(0.5,16.75,true,false);
         //turn so clips face foundation

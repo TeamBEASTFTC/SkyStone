@@ -83,14 +83,14 @@ public class HardwareSetup {
     //    static final String squeezerName = "squeezer";
 
         //    Servos;
-        public CRServo LFoundationHook; //
-        public CRServo RFoundationHook;
+        public Servo LFoundationHook; //
+        public Servo RFoundationHook;
         public Servo LSqueezer;
         public Servo RSqueezer;
 
     //    //Power var
-    public double servoPower = 0.0;
-    public double SqueezerServoPower = 0.0;
+    public double servoPosition = 0.0;
+    public double SqueezerServoPosition = 0.0;
     public double SqueezerServoPos = 0.1; //assuming 0 is closed
     public double backwardsPower = -1.0;
 
@@ -232,13 +232,14 @@ public class HardwareSetup {
 //        squeezer = hardwareMap.get(CRServo.class, squeezerName);
         // SERVOS
 //        squeezer = hardwareMap.get(CRServo.class, squeezerName);
-        LFoundationHook = hardwareMap.get(CRServo.class, LFoundationHookName);
-        RFoundationHook = hardwareMap.get(CRServo.class, RFoundationHookName);
+        LFoundationHook = hardwareMap.get(Servo.class, LFoundationHookName);
+        RFoundationHook = hardwareMap.get(Servo.class, RFoundationHookName);
         LSqueezer = hardwareMap.get(Servo.class, LsqueezerName);
         RSqueezer = hardwareMap.get(Servo.class, RsqueezerName);
 //        squeezer.setPower(servoPower);
-        LFoundationHook.setPower(servoPower);
-        RFoundationHook.setPower(servoPower*-1);
+        setFoundationClipPosition(0);
+        LSqueezer.setPosition(0);
+        RSqueezer.setPosition(0.9);
 
         if (this.driveEncoders){
             // if we have encoders plugged, let's reset them
@@ -271,12 +272,8 @@ public class HardwareSetup {
         leftClaw.setPosition(MID_SERVO);
         rightClaw.setPosition(MID_SERVO);*/
 
-    //If we are using vuforia for this opMode, we need to initialise it
+        //If we are using vuforia for this opMode, we need to initialise it
         if (vuforia_program){
-            LFoundationHook.setPower(servoPower);
-            RFoundationHook.setPower(servoPower*-1);
-            LSqueezer.setPosition(SqueezerServoPos);
-            RSqueezer.setPosition(1-SqueezerServoPos);
 
             /*
              * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
@@ -658,60 +655,71 @@ public class HardwareSetup {
 
     // Servos
     // Foundation clips
-    public void setFoundationClipPower(double power){
+    public void setFoundationClipPosition(double position){
+        //choppy.setFoundationClipPosition(0); raises foundation all the way up
+        //choppy.setFoundationClipPosition(1); lowers the clips all the way down
+/*
         LFoundationHook.setPower(power);
         RFoundationHook.setPower(power*-1);
+*/
+        LFoundationHook.setPosition(position);
+        RFoundationHook.setPosition(1-position);
     }
 
     public void unlockFoundationClips() {
         telementryLineMessage("Unlocking Foundation Clips");
-        setFoundationClipPower(0);
+        setFoundationClipPosition(0);
     }
 
     public void lowerFoundationClips() {
-        telementryLineMessage("Unlocking Foundation Clips");
-        setFoundationClipPower(1);
+        setFoundationClipPosition(1);
+        telementryLineMessage("Locking Foundation Clips");
+/*        setFoundationClipPosition(1);
         sleep(1500);
         //try this for now, to reduce wear on servo
         //TEST
-        setFoundationClipPower(0.75);
+        setFoundationClipPosition(0.75);*/
     }
 
     public void raiseFoundationClips() {
+        //choppy.setFoundationClipPosition(0); raises foundation all the way up
+        //choppy.setFoundationClipPosition(1); lowers the clips all the way down
         telementryLineMessage("Unlocking Foundation Clips");
-        setFoundationClipPower(-1);
+        setFoundationClipPosition(0);
+
+/*        setFoundationClipPosition(-1);
         sleep(1500);
-        setFoundationClipPower(-0.25);
+        setFoundationClipPosition(-0.25);
         sleep(500);
-        setFoundationClipPower(0);
+        setFoundationClipPosition(0);*/
     }
 
     public void foundationHookHold(int time, boolean up){
         if (up){
             foundationHookOscillationTime.reset();
             while (foundationHookOscillationTime.milliseconds() != time){
-                setFoundationClipPower(-0.02);
+                setFoundationClipPosition(-0.02);
                 sleep(10);
-                setFoundationClipPower(0);
+                setFoundationClipPosition(0);
                 sleep(5);
             }
 
         } else{
-            setFoundationClipPower(-0.02);
+            setFoundationClipPosition(-0.02);
         }
     }
 
     public void releaseCapstone(){
         telementryLineMessage("Releasing the capstone!");
-        setFoundationClipPower(0.07);
+        setFoundationClipPosition(0.07);
         sleep(1000);
-        setFoundationClipPower(-0.02);
+        setFoundationClipPosition(-0.02);
         sleep(2000);
-        setFoundationClipPower(0);
+        setFoundationClipPosition(0);
         sleep(500);
-        setFoundationClipPower(-0.04);
+        setFoundationClipPosition(-0.04);
         sleep(1500);
-        setFoundationClipPower(-0.02);
+        setFoundationClipPosition(-0.02);
     }
 
     // Intake Servos

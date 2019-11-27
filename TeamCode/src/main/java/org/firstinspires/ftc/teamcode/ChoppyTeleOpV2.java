@@ -123,8 +123,8 @@ public class ChoppyTeleOpV2 extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 //        squeezer.setPower(servoPower);
-        choppy.LFoundationHook.setPower(servoPower);
-        choppy.RFoundationHook.setPower(servoPower*-1);
+/*        choppy.LFoundationHook.setPower(servoPower);
+        choppy.RFoundationHook.setPower(servoPower*-1);*/
         choppy.LSqueezer.setPosition(LSqueezerOpen);
        choppy. RSqueezer.setPosition(RSqueezerOpen);
 
@@ -755,9 +755,11 @@ public class ChoppyTeleOpV2 extends LinearOpMode {
         choppy.rotateCrane.setPower(powerCrane);
 
 
+/*
         //servos
-        choppy.LFoundationHook.setPower(servoPower);
-        choppy.RFoundationHook.setPower(servoPower*-1);
+        choppy.LFoundationHook.setPosition(servoPower);
+        choppy.RFoundationHook.setPosition(servo*-1);
+*/
 
         choppy.LSqueezer.setPosition(LSqueezerServoPos);
         choppy.RSqueezer.setPosition(RSqueezerServoPos); //open values good

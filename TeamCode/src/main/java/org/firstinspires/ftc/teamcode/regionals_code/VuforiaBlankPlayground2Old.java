@@ -85,8 +85,8 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  */
 
 
-@Autonomous(name="VuforiaBlankPlayground2", group ="Concept")
-public class VuforiaBlankPlayground2 extends LinearOpMode {
+@Autonomous(name="VuforiaBlankPlayground2Old", group ="Concept")
+public class VuforiaBlankPlayground2Old extends LinearOpMode {
     // Personal variables
     private String wallSide = "LEFT";
     //whether turns are done clockwise or anticlockwise

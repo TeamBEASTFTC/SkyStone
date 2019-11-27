@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.HardwareSetup;
 
-@Autonomous(name="EncoderTest", group="Tests")
-public class EncoderTest extends LinearOpMode{
+@Autonomous(name="EncoderTestOld", group="Tests")
+public class EncoderTestOld extends LinearOpMode{
     double power=0.5;
     boolean redAlliance = false;
 

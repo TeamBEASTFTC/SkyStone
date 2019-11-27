@@ -61,13 +61,14 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
 
     double servoPower = -0.1;
     double SqueezerServoPower = 0.0;
+    double foundationPosition = 0;
     double SqueezerServoPosOpen = 0.7;
     double SqueezerServoPosClosed = 0.3;
     double LSqueezerServoPos = LSqueezerOpen;
     double RSqueezerServoPos = RSqueezerOpen;
     double SqueezerStartPos = 0; //assuming 0 is closed
     double closing = 1;
-    double opening = -1;
+    double opening = 0;
     double modifier = 1;
     double riseCrane = -0.75; //raises the crane
     double lowerCrane = 0.75; //lowers the crane*/
@@ -124,8 +125,15 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 //        squeezer.setPower(servoPower);
-        choppy.LFoundationHook.setPower(servoPower);
-        choppy.RFoundationHook.setPower(servoPower*-1);
+
+        //setting foundation clip positions
+        /*choppy.LFoundationHook.setPower(servoPower);
+        choppy.RFoundationHook.setPower(servoPower*-1);*/
+        /*
+        choppy.LFoundationHook.setPosition(foundationPosition);
+        choppy.RFoundationHook.setPosition(1-foundationPosition);
+        */
+        choppy.setFoundationClipPosition(foundationPosition);
         choppy.LSqueezer.setPosition(LSqueezerOpen);
        choppy. RSqueezer.setPosition(RSqueezerOpen);
 
@@ -158,7 +166,8 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
             getInput(gamepad1);
             getInput(gamepad2);
             gamepad_control(gamepad1);
-//            gamepad_control(gamepad2);
+            gamepad_control(gamepad2);
+            motor_output();
 //            sendOutput();
         //shuffling is rotating
             //shuffle right rotates right
@@ -327,12 +336,10 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
         //foundation hooks
         if (gamepad.left_trigger > 0){
             //lower foundation
-            servoPower = closing;
+            foundationPosition = closing;
         } else if (gamepad.right_trigger > 0) {
-            servoPower = opening; //FIX this actually cloess
+            foundationPosition = opening; //FIX this actually closes
             //raise foundation
-        } else{
-            servoPower = 0;
         }
 
         //squeezer control
@@ -475,6 +482,10 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
 
 
 
+    }
+
+    private  void motor_output(){
+
         choppy.driveTR.setPower(powerTR);
         choppy.driveTL.setPower(powerTL);
         choppy.driveBL.setPower(powerBL);
@@ -484,12 +495,18 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
 
 
         //servos
-        choppy.LFoundationHook.setPower(servoPower);
-        choppy.RFoundationHook.setPower(servoPower*-1);
+
+        /*choppy.LFoundationHook.setPosition(squeezerPostition);
+        choppy.RFoundationHook.setPosition(squeezerPostition);*/
+        choppy.setFoundationClipPosition(foundationPosition);
+
+/*        choppy.LFoundationHook.setPower(servoPower);
+        choppy.RFoundationHook.setPower(servoPower*-1);*/
 
         choppy.LSqueezer.setPosition(LSqueezerServoPos);
         choppy.RSqueezer.setPosition(RSqueezerServoPos); //open values good
 
 
     }
+
 }
