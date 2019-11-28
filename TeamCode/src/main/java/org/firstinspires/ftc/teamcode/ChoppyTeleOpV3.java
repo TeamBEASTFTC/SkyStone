@@ -64,6 +64,7 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
     double foundationPosition = 0;
     double SqueezerServoPosOpen = 0.7;
     double SqueezerServoPosClosed = 0.3;
+    double SqueezerServoPos = 0;
     double LSqueezerServoPos = LSqueezerOpen;
     double RSqueezerServoPos = RSqueezerOpen;
     double SqueezerStartPos = 0; //assuming 0 is closed
@@ -134,8 +135,7 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
         choppy.RFoundationHook.setPosition(1-foundationPosition);
         */
         choppy.setFoundationClipPosition(foundationPosition);
-        choppy.LSqueezer.setPosition(LSqueezerOpen);
-       choppy. RSqueezer.setPosition(RSqueezerOpen);
+//        choppy.setIntakeServoPos(0);
 
         runtime.reset();
 
@@ -344,11 +344,9 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
 
         //squeezer control
         if (gamepad.a){
-            LSqueezerServoPos = LSqueezerClose; //closes left
-            RSqueezerServoPos = RSqueezerClose; //closes right
+            SqueezerServoPos = SqueezerServoPosClosed;
         } else if (gamepad.b){
-            LSqueezerServoPos = LSqueezerOpen; //opens left
-            RSqueezerServoPos = RSqueezerOpen; //opens right
+            SqueezerServoPos = SqueezerServoPosOpen;
         }
 
 
@@ -496,15 +494,15 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
 
         //servos
 
-        /*choppy.LFoundationHook.setPosition(squeezerPostition);
-        choppy.RFoundationHook.setPosition(squeezerPostition);*/
+        /*choppy.LFoundationHook.setPosition(SqueezerServoPostition);
+        choppy.RFoundationHook.setPosition(SqueezerServoPostition);*/
         choppy.setFoundationClipPosition(foundationPosition);
 
 /*        choppy.LFoundationHook.setPower(servoPower);
         choppy.RFoundationHook.setPower(servoPower*-1);*/
-
-        choppy.LSqueezer.setPosition(LSqueezerServoPos);
-        choppy.RSqueezer.setPosition(RSqueezerServoPos); //open values good
+        choppy.setIntakeServoPos(SqueezerServoPos);
+//        choppy.LSqueezer.setPosition(LSqueezerServoPos);
+//        choppy.RSqueezer.setPosition(RSqueezerServoPos); //open values good
 
 
     }
