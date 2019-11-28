@@ -105,6 +105,17 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
     int directionBR;
     double directionCrane;
 
+    int stick_left;
+    int intake_control;
+    int speed_control;
+    int dpad_control;
+    int joystick_right;
+    int trigger_control;
+    int bumper_control;
+
+
+
+
 
 
 
@@ -180,7 +191,7 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
 
 
     private void getInput(Gamepad gamepad) {
-        double x = -gamepad.left_stick_x;
+        double x = gamepad.left_stick_x;
         telemetry.addData("gamepad 1: ", x);
         telemetry.update();
         double y = -gamepad.left_stick_y;
@@ -195,43 +206,44 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
 
         if (x > 0){
             // Top Right of circle
-            if ((y/x) >= 0 && (x/y) > (root_3/1)){
+            if ((y/x) >= 0 && (x/y) > (1/(Math.tan(pie/8))))
+            {
                 sector = 1;
             }
 
-            else if ((x/y) > (1/root_3) && (x/y) <= (root_3/1)){
+            else if (((x/y) < ((1/(Math.tan(pie/8))))) && ((x/y) >= (1/(Math.tan(3*pie/8))))){
                 sector = 2;
 
-            } else if ( (x/y) > 0 && (x/y) <= (1/root_3)){
+            } else if ( (x/y) < (1/(Math.tan(3*pie/8))) && (x/y) >= (0)){
                 sector = 3;
             }
 
             // Bottom Right of circle
-            else if ((y/x) < 0 && (x/y) <= (-root_3/1)){
-                sector = 12;
-            }else if ((x/y) > (-root_3/1) && (x/y) <= (-1/root_3)){
-                sector = 11;
+            else if ((y/x) < 0 && (x/y) <= (-1/(Math.tan(pie/8)))){
+                sector = 1;
+            }else if ((x/y) > (-1/(Math.tan(pie/8))) && (x/y) <= (-1/(Math.tan(3*pie/8)))){
+                sector = 8;
 
-            } else if ((x/y) > (-1/root_3) && (x/y) <= 0){
-                sector = 10;
+            } else if ((x/y) > (-1/(Math.tan(3*pie/8))) && (x/y) <= 0){
+                sector = 7;
             }
         }
         else if (x<0){
             // Top Left of circle
-            if ((x/y) <= 0 && (x/y) > (-1/root_3)){
+            if ((x/y) <= 0 && (x/y) > (-1/(Math.tan(3*pie/8)))){
+                sector = 3;
+            }else if ((x/y) <= (-1/(Math.tan(3*pie/8))) && (x/y) > (-1/(Math.tan(pie/8)))){
                 sector = 4;
-            }else if ((x/y) <= (-1/root_3) && (x/y) > (-root_3/1)){
+            } else if ((x/y) <= (-1/(Math.tan(pie/8))) && (y/x) < 0 ){
                 sector = 5;
-            } else if ((x/y) <= (-root_3/1) && (y/x) < 0 ){
-                sector = 6;
 
             // Bottom Left of circle
-            }else if ((y/x) >= 0 && (x/y) > (root_3/1)){
+            }else if ((y/x) >= 0 && (x/y) > (1/(Math.tan(pie/8)))){
+                sector = 5;
+            } else if ((x/y) <= (1/(Math.tan(pie/8))) && (x/y) > (1/(Math.tan(3*pie/8)))){
+                sector = 6;
+            } else if ((x/y) <= (1/(Math.tan(3*pie/8))) && (x/y) > 0){
                 sector = 7;
-            } else if ((x/y) <= (root_3/1) && (x/y) > (1/root_3)){
-                sector = 8;
-            } else if ((x/y) <= (1/root_3) && (x/y) > 0){
-                sector = 9;
             }
         }
 
@@ -241,6 +253,7 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
         }
     }
     private void gamepad_control(Gamepad gamepad) {
+        telemetry.addData("controller: ", gamepad.id);
 
 
         positionTR = choppy.driveTR.getCurrentPosition();
@@ -252,6 +265,8 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
 
         //driving with the dpad
         if (gamepad.dpad_up) {
+
+
             telemetry.addLine("gamepad.dpad_up");
             telemetry.update();
             dpad = true;
@@ -326,26 +341,38 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
 
         // changing the speed factor of the robot
         if (gamepad.x){
+            speed_control = gamepad.id;
+            joystick = true;
             speedFactor = 0.25;
         } else if (gamepad.y){
+
+            speed_control = gamepad.id;
+            joystick = true;
             speedFactor = 0.5;
         }  else {
-            speedFactor = 1;
+            if (speed_control == gamepad.id){
+                speedFactor = 1;
+                speed_control = 0;
+            }
         }
 
         //foundation hooks
         if (gamepad.left_trigger > 0){
+            joystick = true;
             //lower foundation
             foundationPosition = closing;
         } else if (gamepad.right_trigger > 0) {
+            joystick = true;
             foundationPosition = opening; //FIX this actually closes
             //raise foundation
         }
 
         //squeezer control
         if (gamepad.a){
+            joystick = true;
             SqueezerServoPos = SqueezerServoPosClosed;
         } else if (gamepad.b){
+            joystick = false;
             SqueezerServoPos = SqueezerServoPosOpen;
         }
 
@@ -354,9 +381,11 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
         // If joystick is up, bring crane up!
         y_crane_value = -gamepad.right_stick_y;
         if (y_crane_value > 0){
+            joystick = true;
             directionCrane = 1;
 
         } else if (y_crane_value < 0){
+            joystick = true;
             directionCrane = -0.75; //slightly slower going down
         } else{
             directionCrane = 0;
@@ -390,8 +419,8 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
                 choppy.telementryLineMessage("Sector 2: Diagonal top right");
                 powerTR = 0;
                 powerTL = 1;
-                powerBR = 0;
-                powerBL = 1;
+                powerBR = 1;
+                powerBL = 0;
             } else if (sector == 3) {
                 choppy.telementryLineMessage("Sector 3: Forwards");
                 powerTR = 1;
@@ -473,6 +502,7 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
 
         //final change to speed depending on user change of it
         //eg. if user presses y it will reduce the speed till 0.25
+
         powerTR *= speedFactor;
         powerTL *= speedFactor;
         powerBR *= speedFactor;

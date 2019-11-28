@@ -103,8 +103,8 @@ public class HardwareSetup {
     double LSqueezerClose = 0.3;
     double RSqueezerClose = 0.1;
 
-    double squeezerCloseOnStone = 0.4;
     double squeezerOpenOnStone = 0.65;
+    double squeezerCloseOnStone= 0.4;
     double squeezerWideOpen = 0;
 
     //Positioning constants
@@ -436,6 +436,7 @@ public class HardwareSetup {
             driveBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             driveTL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             driveTR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            sleep(500);
             //ensuring the values we get allow us to do what we want
             if (back) {
                 distance = Math.abs(distance) *-1;

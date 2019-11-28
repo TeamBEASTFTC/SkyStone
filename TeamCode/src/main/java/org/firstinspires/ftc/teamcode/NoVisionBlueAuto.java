@@ -5,16 +5,18 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 @Autonomous(name="NoVisionBlueAuto", group="Tests")
 public class NoVisionBlueAuto extends LinearOpMode{
+    //TO do:
+    //Write a catch for if it gets stuck in using the encoders
     double power=0.5;
 //    boolean redAlliance = false;
-    boolean blueAlliance = false;
+    boolean blueAlliance = true;
 
     // distances
     double robot_inch_distance = 15.75; // 15.75"
-    double distance_to_blocks_inches = 48.0 - robot_inch_distance;
+    double distance_to_blocks_inches = 55.0 - robot_inch_distance;
     double distance_block_width = 8;//8"
 //    double distance_to_gate = 13.5; // starting distance to gate 13.5"
-    double distance_to_gate = 13.5; // starting distance to gate 13.5"
+    double distance_to_gate = 19.5; // starting distance to gate 13.5"
 
     double distance_to_center_of_stone;
 
@@ -35,7 +37,7 @@ public class NoVisionBlueAuto extends LinearOpMode{
         // robot is 15.75inches long
         // move by 18.5"
         choppy.moveForwBackEncoder(0.5, 18.5, true, false);
-        distance_to_blocks_inches -= 18.5;
+        distance_to_blocks_inches -= 20;
 
         //rotate90 towards the back wall
         choppy.rotateEncoder(0.5, 400, false, blueAlliance);
@@ -50,26 +52,34 @@ public class NoVisionBlueAuto extends LinearOpMode{
 
         // The robot is now lined up with the stone...well hopefully
         // Now we rotate to face it
-        choppy.rotateEncoder(0.5, 400, false, blueAlliance);
+        choppy.rotateEncoder(0.5, 400, false, !blueAlliance);
 
+        //prepare intake
+//        choppy.grabStoneFlipperControl(false);
+        choppy.setIntakeServoPos(0.4);
         // Move towards the block
         choppy.moveForwBackEncoder(0.5, distance_to_blocks_inches, true, false);
 
         // Grab the block
-        choppy.grabStoneFlipperControl(true);
+//        choppy.grabStoneFlipperControl(true);
+        choppy.setIntakeServoPos(0.65);
 
         // Move back
         choppy.moveForwBackEncoder(0.5, distance_to_blocks_inches, true, true);
 
         // Rotate towards the gate
 //        choppy.rotate90(blueAlliance, 1);
-        choppy.rotateEncoder(0.5, 400, false, true);
+        choppy.rotateEncoder(0.5, 400, false, !blueAlliance);
 
         // Move to the gate and a bit beyond
+        telemetry.addData("distance to gate: ", distance_to_gate);
+        telemetry.update();
+        sleep(1000);
         choppy.moveForwBackEncoder(0.75, distance_to_gate+10, true, false);
 
         // Release the stone
         choppy.grabStoneFlipperControl(false);
+        choppy.setIntakeServoPos(0.4);
 
         // Move back under the gate
         choppy.moveForwBackEncoder(0.5, 10, true, true);
