@@ -188,6 +188,8 @@ public class HardwareSetup {
     HardwareMap hardwareMap;
     Telemetry telemetry;
     private ElapsedTime period = new ElapsedTime();
+    private ElapsedTime foundationHookOscillationTime = new ElapsedTime();
+
 
     /* Constructor */
     public String HardwareSetup() {
@@ -539,6 +541,67 @@ public class HardwareSetup {
 
     }
 
+    public void shuffleEncoder(double power, double distance, boolean is_distances_in_inches, boolean right) {
+        //we need encoders plugged in
+        if (this.driveEncoders){
+            driveBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            driveBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            driveTL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            driveTR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            //ensuring the values we get allow us to do what we want
+            if (is_distances_in_inches){
+                distance *= mmPerInch;
+            }
+
+            d_encoderValue = (driveMotorTicks * (distance/driveWheelCircumference));
+            encoderValue = (int) Math.round(d_encoderValue);//convert the double back to int after rounding
+
+            //ensuring no negative power
+            power = Math.abs(power);
+
+            if (!right){
+                driveTR.setTargetPosition(encoderValue);
+                driveTL.setTargetPosition((encoderValue*-1));
+                driveBL.setTargetPosition(encoderValue);
+                driveBR.setTargetPosition((encoderValue*-1));
+
+                //
+            }
+            else {
+                driveTR.setTargetPosition((encoderValue*-1));
+                driveTL.setTargetPosition(encoderValue);
+                driveBL.setTargetPosition((encoderValue*-1));
+                driveBR.setTargetPosition(encoderValue);
+
+            }
+
+            driveTL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            driveTR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            driveBR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            driveBL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            setDrivePower(power);
+
+            this.telemetry.addData("Moving to position: ", encoderValue);
+            this.telemetry.update();
+            while ((driveTL.isBusy() || driveTR.isBusy() || driveBL.isBusy() || driveBR.isBusy())) {
+                telemetry.addData("Moved: ", "TL: %d, TR: %d, BL: %d, BR: %d",
+                        driveTL.getCurrentPosition(), driveTR.getCurrentPosition(), driveBL.getCurrentPosition(), driveBR.getCurrentPosition());
+                telemetry.update();
+            }
+            setDrivePower(0);
+//            driveBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//            driveBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//            driveTL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//            driveTR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
+        } else{
+            telementryLineMessage("no encoders initialised. Make sure it's plugged in and teh var is passed through the init method");
+        }
+
+
+    }
 
     public void shuffle(double power, int time, boolean right) {
         if (!right) {
@@ -623,23 +686,32 @@ public class HardwareSetup {
         setFoundationClipPower(0);
     }
 
+    public void foundationHookHold(int time, boolean up){
+        if (up){
+            foundationHookOscillationTime.reset();
+            while (foundationHookOscillationTime.milliseconds() != time){
+                setFoundationClipPower(-0.02);
+                sleep(10);
+                setFoundationClipPower(0);
+                sleep(5);
+            }
+
+        } else{
+            setFoundationClipPower(-0.02);
+        }
+    }
+
     public void releaseCapstone(){
         telementryLineMessage("Releasing the capstone!");
-        setFoundationClipPower(0.75);
-        sleep(800);
+        setFoundationClipPower(0.07);
+        sleep(1000);
+        setFoundationClipPower(-0.02);
+        sleep(2000);
         setFoundationClipPower(0);
         sleep(500);
-        setFoundationClipPower(-1);
-        sleep(500);
-        setFoundationClipPower(0);
-        sleep(250);
-        setFoundationClipPower(-0.75);
-        sleep(500);
-        setFoundationClipPower(0);
-        sleep(500);
-        setFoundationClipPower(-0.5);
-        sleep(500);
-        setFoundationClipPower(0);
+        setFoundationClipPower(-0.04);
+        sleep(1500);
+        setFoundationClipPower(-0.02);
     }
 
     // Intake Servos
