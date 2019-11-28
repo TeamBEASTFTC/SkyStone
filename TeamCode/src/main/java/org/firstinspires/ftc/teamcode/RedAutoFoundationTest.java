@@ -25,8 +25,8 @@ public class RedAutoFoundationTest extends LinearOpMode{
 
         waitForStart();
         choppy.moveForwBack(0.5,3000, true);
-        choppy.LFoundationHook.setPower(1);
-        choppy.RFoundationHook.setPower(1);
+        choppy.LFoundationHook.setPosition(0);//FIX
+        choppy.RFoundationHook.setPosition(0);
         sleep(3000);
         choppy.moveForwBack(0.5, 2000,false);
         choppy.unlockFoundationClips();

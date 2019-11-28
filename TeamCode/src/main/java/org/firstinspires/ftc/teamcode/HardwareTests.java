@@ -28,6 +28,7 @@ public class HardwareTests extends LinearOpMode {
 //        choppy.LFoundationHook.setPower(0);
 //        choppy.RFoundationHook.setPower(0);
 //        choppy.LFoundationHook.setDirection();
+<<<<<<< HEAD
         choppy.setFoundationClipPower(-0.02);
         waitForStart();
 
@@ -36,6 +37,45 @@ public class HardwareTests extends LinearOpMode {
 //        choppy.shuffle(0.75, 2000, false);
         choppy.rotateEncoder(0.25, ((400/90)*6), false, true);
         choppy.shuffleEncoder(0.5, 1000, false, false);
+=======
+//        choppy.setFoundationClipPower(-0.02);
+        waitForStart();
+        choppy.setFoundationClipPosition(1);
+//        choppy.LFoundationHook.setPosition(0);
+//        choppy.RFoundationHook.setPosition(0.9);
+
+        choppy.telementryLineMessage("pos: 0");
+        sleep(2000);
+//        choppy.LFoundationHook.setPosition(0.5);
+//        choppy.RFoundationHook.setPosition(0.5);
+        //1- position + 0.1
+        choppy.setFoundationClipPosition(0.75);
+        choppy.telementryLineMessage("pos 0.75");
+        sleep(2000);
+//        choppy.LFoundationHook.setPosition(0.6);
+//        choppy.RFoundationHook.setPosition(0.4);
+        choppy.setFoundationClipPosition(0.5);
+        choppy.telementryLineMessage("pos 0.5");
+        sleep(2000);
+        choppy.setFoundationClipPosition(0.25);
+//        choppy.LFoundationHook.setPosition(0.8);
+//        choppy.RFoundationHook.setPosition(0.3);
+        choppy.telementryLineMessage("pos 0.25");
+        sleep(2000);
+        choppy.setFoundationClipPosition(0);
+//        choppy.LFoundationHook.setPosition(1);
+//        choppy.RFoundationHook.setPosition(0);
+        choppy.telementryLineMessage("pos 0");
+        sleep(4000);
+
+        //choppy.setFoundationClipPosition(0); raises foundation all the way up
+        //choppy.setFoundationClipPosition(1); lowers the clips all teh way down
+
+//        choppy.releaseCapstone();
+////        choppy.shuffle(0.75, 2000, false);
+//        choppy.rotateEncoder(0.25, ((400/90)*6), false, true);
+//        choppy.shuffleEncoder(0.5, 1000, false, false);
+>>>>>>> 6e8a9e375d947777b13c17492b961a2a5f50dd32
         /*
         Test:
         x: 850
