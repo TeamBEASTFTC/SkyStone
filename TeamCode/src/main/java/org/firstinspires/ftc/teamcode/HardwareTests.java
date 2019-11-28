@@ -24,6 +24,24 @@ public class HardwareTests extends LinearOpMode {
 
 
         choppy.init(hardwareMap, telemetry, false, true);
+//        choppy.setIntakeServoPos(0.5);
+/*        choppy.LSqueezer.setPosition(1);
+        choppy.RSqueezer.setPosition(0);
+        choppy.telementryLineMessage("pos: 0");
+        sleep(2000);
+        choppy.LSqueezer.setPosition(0.75);
+        choppy.RSqueezer.setPosition(0.25);
+        choppy.telementryLineMessage("pos: 0.25");
+        sleep(2000);
+        choppy.LSqueezer.setPosition(0.5);
+        choppy.RSqueezer.setPosition(0.5);
+        choppy.telementryLineMessage("pos: 0.5");
+        sleep(2000);
+        choppy.LSqueezer.setPosition(0);
+        choppy.RSqueezer.setPosition(1);
+        choppy.telementryLineMessage("pos: 1");
+        sleep(2000);*/
+//        waitForStart();
 //
 //        choppy.LFoundationHook.setPower(0);
 //        choppy.RFoundationHook.setPower(0);
@@ -40,7 +58,15 @@ public class HardwareTests extends LinearOpMode {
 =======
 //        choppy.setFoundationClipPower(-0.02);
         waitForStart();
-        choppy.setFoundationClipPosition(1);
+        choppy.setIntakeServoPos(0);
+//        choppy.setFoundationClipPosition(0);
+        sleep(2000);
+        choppy.setIntakeServoPos(0.4);
+        sleep(2000);
+        choppy.setIntakeServoPos(0.65);
+//        choppy.setFoundationClipPosition(0.5);
+        sleep(2000);
+        /*choppy.setFoundationClipPosition(1);
 //        choppy.LFoundationHook.setPosition(0);
 //        choppy.RFoundationHook.setPosition(0.9);
 
@@ -66,7 +92,7 @@ public class HardwareTests extends LinearOpMode {
 //        choppy.LFoundationHook.setPosition(1);
 //        choppy.RFoundationHook.setPosition(0);
         choppy.telementryLineMessage("pos 0");
-        sleep(4000);
+        sleep(4000);*/
 
         //choppy.setFoundationClipPosition(0); raises foundation all the way up
         //choppy.setFoundationClipPosition(1); lowers the clips all teh way down

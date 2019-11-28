@@ -102,6 +102,11 @@ public class HardwareSetup {
     double RSqueezerOpen = 0.5; //open values good
     double LSqueezerClose = 0.3;
     double RSqueezerClose = 0.1;
+
+    double squeezerOpenOnStone = 0.65;
+    double squeezerCloseOnStone= 0.4;
+    double squeezerWideOpen = 0;
+
     //Positioning constants
 
     private double yPosCentreBoundaryRight = 30.5;
@@ -238,6 +243,7 @@ public class HardwareSetup {
         RSqueezer = hardwareMap.get(Servo.class, RsqueezerName);
 //        squeezer.setPower(servoPower);
         setFoundationClipPosition(0);
+        setIntakeServoPos(0);
         LSqueezer.setPosition(0);
         RSqueezer.setPosition(0.9);
 
@@ -430,6 +436,7 @@ public class HardwareSetup {
             driveBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             driveTL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             driveTR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            sleep(500);
             //ensuring the values we get allow us to do what we want
             if (back) {
                 distance = Math.abs(distance) *-1;
@@ -709,56 +716,31 @@ public class HardwareSetup {
         }
     }
 
-    public void foundationHookHold(int time, boolean up){
-        if (up){
-            foundationHookOscillationTime.reset();
-            while (foundationHookOscillationTime.milliseconds() != time){
-                setFoundationClipPower(-0.02);
-                sleep(10);
-                setFoundationClipPower(0);
-                sleep(5);
-            }
-
-        } else{
-            setFoundationClipPower(-0.02);
-        }
-    }
-
     public void releaseCapstone(){
         telementryLineMessage("Releasing the capstone!");
-<<<<<<< HEAD
-        setFoundationClipPower(0.07);
+        setFoundationClipPosition(0.5);
         sleep(1000);
-        setFoundationClipPower(-0.02);
-        sleep(2000);
-        setFoundationClipPower(0);
-        sleep(500);
-        setFoundationClipPower(-0.04);
-        sleep(1500);
-        setFoundationClipPower(-0.02);
-=======
-        setFoundationClipPosition(0.07);
-        sleep(1000);
-        setFoundationClipPosition(-0.02);
-        sleep(2000);
         setFoundationClipPosition(0);
-        sleep(500);
-        setFoundationClipPosition(-0.04);
-        sleep(1500);
-        setFoundationClipPosition(-0.02);
->>>>>>> 6e8a9e375d947777b13c17492b961a2a5f50dd32
     }
 
+
     // Intake Servos
+    public void setIntakeServoPos(double position){
+        LSqueezer.setPosition(position);
+        RSqueezer.setPosition(1-position);
+        /*
+        Open position
+        choppy.LSqueezer.setPosition(0);
+        choppy.RSqueezer.setPosition(1);
+         */
+    }
     public void grabStoneFlipperControl(boolean grab){
         // If we wanna grab the stone, then close the flippers
         if (grab){
-            LSqueezer.setPosition(LSqueezerClose);
-            RSqueezer.setPosition(RSqueezerClose);
+            setIntakeServoPos(squeezerCloseOnStone);
         }
         else{
-            LSqueezer.setPosition(LSqueezerOpen);
-            RSqueezer.setPosition(RSqueezerOpen);
+            setIntakeServoPos(squeezerOpenOnStone);
         }
 
     }
