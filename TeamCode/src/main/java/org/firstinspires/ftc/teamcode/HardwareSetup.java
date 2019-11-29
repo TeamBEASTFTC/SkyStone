@@ -253,6 +253,7 @@ public class HardwareSetup {
             driveBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             driveTL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             driveTR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rotateCrane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         }
 
 

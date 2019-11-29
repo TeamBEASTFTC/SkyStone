@@ -31,6 +31,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -106,10 +107,11 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
     double directionCrane;
 
     int stick_left;
+    int moving_control;
     int intake_control;
     int speed_control;
     int dpad_control;
-    int joystick_right;
+    int crane_control;
     int trigger_control;
     int bumper_control;
 
@@ -129,6 +131,9 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         choppy.init(hardwareMap, telemetry, false, false);
+
+        choppy.rotateCrane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        choppy.rotateCrane.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 
 
@@ -174,10 +179,11 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
             telemetry.update();
 
             //Drive input and output
-            getInput(gamepad1);
-            getInput(gamepad2);
+            getJoystickInput(gamepad1);
+            getJoystickInput(gamepad2);
             gamepad_control(gamepad1);
             gamepad_control(gamepad2);
+            gamepad_control_motors();
             motor_output();
 //            sendOutput();
         //shuffling is rotating
@@ -190,7 +196,7 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
 
 
 
-    private void getInput(Gamepad gamepad) {
+    private void getJoystickInput(Gamepad gamepad) {
         double x = gamepad.left_stick_x;
         telemetry.addData("gamepad 1: ", x);
         telemetry.update();
@@ -253,7 +259,110 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
         }
     }
     private void gamepad_control(Gamepad gamepad) {
-        telemetry.addData("controller: ", gamepad.id);
+
+
+
+//        if (gamepad.a){
+//            modifier = 0.5;
+//        } else if (gamepad2.b){
+//            modifier = 0.25;
+//        } else modifier = 1;
+
+        // changing the speed factor of the robot
+        if (gamepad.x){
+            choppy.telementryLineMessage("x");
+            speed_control = gamepad.id;
+            joystick = true;
+            speedFactor = 0.2;
+        } else if (gamepad.y){
+            choppy.telementryLineMessage("y");
+
+            speed_control = gamepad.id;
+            joystick = true;
+            speedFactor = 0.5;
+        }  else {
+            if (speed_control == gamepad.id){
+                choppy.telementryLineMessage("speed factor none");
+                speedFactor = 1;
+                speed_control = 0;
+            }
+        }
+
+        //foundation hooks
+        if (gamepad.left_trigger > 0){
+            trigger_control = gamepad.id;
+            joystick = true;
+            //lower foundation
+            foundationPosition = closing;
+        } else if (gamepad.right_trigger > 0) {
+            trigger_control = gamepad.id;
+            joystick = true;
+            foundationPosition = opening; //FIX this actually closes
+            //raise foundation
+        } else{
+            if (trigger_control == gamepad.id) {
+            trigger_control = 0;
+            }
+        }
+
+        //squeezer control
+        if (gamepad.a){
+            intake_control = gamepad.id;
+            joystick = true;
+            SqueezerServoPos = SqueezerServoPosClosed;
+        } else if (gamepad.b){
+            intake_control = gamepad.id;
+            joystick = false;
+            SqueezerServoPos = SqueezerServoPosOpen;
+        } else{
+            if (intake_control == gamepad.id){
+                intake_control = 0;
+            }
+
+        }
+
+
+        //  Crane control
+        // If joystick is up, bring crane up!
+        y_crane_value = -gamepad.right_stick_y;
+        if (y_crane_value > 0){
+            if (choppy.rotateCrane.getCurrentPosition() < 2450){
+                crane_control = gamepad.id;
+                joystick = true;
+                directionCrane = 1;
+            }
+
+        } else if (y_crane_value < 0){
+            if (choppy.rotateCrane.getCurrentPosition() > 100){
+                crane_control = gamepad.id;
+                joystick = true;
+                directionCrane = -0.75; //slightly slower going down
+            }
+        } else{
+            if (crane_control == gamepad.id){
+                directionCrane = 0;
+                crane_control = 0;
+            }
+        }
+
+
+
+
+
+        powerCrane = directionCrane;//was not initialised before, meaning it had no value,
+        //The value was hidden inside the if statement
+
+
+
+
+
+    }
+
+    private void gamepad_control_motors(){
+        telemetry.addLine("GOT THROUGH THE METHOD!!");
+
+
+//        telemetry.addData("controller: ", gamepad.id);
 
 
         positionTR = choppy.driveTR.getCurrentPosition();
@@ -263,10 +372,48 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
 
         positionCrane = choppy.rotateCrane.getCurrentPosition();
 
+        boolean gamepad_2_movement = false;
+        boolean gamepad_1_movement = false;
+
+        //if gamepad one is moving the robot
+        if (gamepad1.dpad_down || gamepad1.dpad_up || gamepad1.dpad_left || gamepad1.dpad_right ||
+                gamepad1.right_bumper || gamepad1.left_bumper ||
+                ((Math.abs(gamepad1.left_stick_x) > 0)) || ((Math.abs(gamepad1.left_stick_y)) > 0)) {
+            gamepad_1_movement = true;
+
+            // if gamepad 2 is moving robot
+        } else if (gamepad2.dpad_down || gamepad2.dpad_up || gamepad2.dpad_left || gamepad2.dpad_right ||
+                    gamepad2.right_bumper || gamepad2.left_bumper ||
+                    ((Math.abs(gamepad2.left_stick_x) > 0)) || ((Math.abs(gamepad2.left_stick_y)) > 0)){
+            gamepad_2_movement = true;
+        }
+
+        if (gamepad_1_movement && !gamepad_2_movement){
+            motor_movement_control_method(gamepad1);
+        } else if (gamepad_2_movement && ! gamepad_1_movement){
+            motor_movement_control_method(gamepad2);
+        } else{
+            powerTR = 0;
+            powerTL = 0;
+            powerBR = 0;
+            powerBL = 0;
+        }
+
+
+        //final change to speed depending on user change of it
+        //eg. if user presses y it will reduce the speed till 0.25
+        powerTR *= speedFactor;
+        powerTL *= speedFactor;
+        powerBR *= speedFactor;
+        powerBL *= speedFactor;
+
+
+    }
+
+    private void motor_movement_control_method(Gamepad gamepad){
+        telemetry.addLine("GOT TO METHOD 2");
         //driving with the dpad
         if (gamepad.dpad_up) {
-
-
             telemetry.addLine("gamepad.dpad_up");
             telemetry.update();
             dpad = true;
@@ -307,7 +454,6 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
             telemetry.addLine("right bumper");
             telemetry.update();
             joystick = false;
-
             directionBR = -1;
             directionBL = 1;
             directionTR = -1;
@@ -318,7 +464,6 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
             telemetry.addLine("left bumper");
             telemetry.update();
             joystick = false;
-
             directionBR = 1;
             directionBL = -1;
             directionTR = 1;
@@ -333,70 +478,12 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
             directionBL = 0;
             directionBR = 0;
         }
-//        if (gamepad.a){
-//            modifier = 0.5;
-//        } else if (gamepad2.b){
-//            modifier = 0.25;
-//        } else modifier = 1;
 
-        // changing the speed factor of the robot
-        if (gamepad.x){
-            speed_control = gamepad.id;
-            joystick = true;
-            speedFactor = 0.25;
-        } else if (gamepad.y){
-
-            speed_control = gamepad.id;
-            joystick = true;
-            speedFactor = 0.5;
-        }  else {
-            if (speed_control == gamepad.id){
-                speedFactor = 1;
-                speed_control = 0;
-            }
-        }
-
-        //foundation hooks
-        if (gamepad.left_trigger > 0){
-            joystick = true;
-            //lower foundation
-            foundationPosition = closing;
-        } else if (gamepad.right_trigger > 0) {
-            joystick = true;
-            foundationPosition = opening; //FIX this actually closes
-            //raise foundation
-        }
-
-        //squeezer control
-        if (gamepad.a){
-            joystick = true;
-            SqueezerServoPos = SqueezerServoPosClosed;
-        } else if (gamepad.b){
-            joystick = false;
-            SqueezerServoPos = SqueezerServoPosOpen;
-        }
-
-
-        //  Crane control
-        // If joystick is up, bring crane up!
-        y_crane_value = -gamepad.right_stick_y;
-        if (y_crane_value > 0){
-            joystick = true;
-            directionCrane = 1;
-
-        } else if (y_crane_value < 0){
-            joystick = true;
-            directionCrane = -0.75; //slightly slower going down
-        } else{
-            directionCrane = 0;
-        }
-
-        powerBL = 0;
-        powerTR = 0;
-        powerBR =0;
-        powerTL = 0;
         //setting the motor powers
         if (!joystick) {
+
+//            moving_control= gamepad.id;
+
             telemetry.addLine("dpad driving");
             telemetry.update();
             powerTR = directionTR;
@@ -404,6 +491,7 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
             powerBL = directionBL;
             powerBR = directionBR;
         } else if (joystick){
+//            moving_control = gamepad.id;
             /* joystick controls */
             // only takes the up and down motion of the joystick and not the horizontal
             dpad = false;
@@ -496,17 +584,6 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
             }
 
         }
-
-        powerCrane = directionCrane;//was not initialised before, meaning it had no value,
-        //The value was hidden inside the if statement
-
-        //final change to speed depending on user change of it
-        //eg. if user presses y it will reduce the speed till 0.25
-
-        powerTR *= speedFactor;
-        powerTL *= speedFactor;
-        powerBR *= speedFactor;
-        powerBL *= speedFactor;
 
 
 
