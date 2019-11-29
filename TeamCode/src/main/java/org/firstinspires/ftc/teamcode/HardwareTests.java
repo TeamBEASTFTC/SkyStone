@@ -46,24 +46,21 @@ public class HardwareTests extends LinearOpMode {
 //        choppy.LFoundationHook.setPower(0);
 //        choppy.RFoundationHook.setPower(0);
 //        choppy.LFoundationHook.setDirection();
-<<<<<<< HEAD
-        choppy.setFoundationClipPower(-0.02);
         waitForStart();
 
 
 //        choppy.releaseCapstone();
 //        choppy.shuffle(0.75, 2000, false);
-        choppy.rotateEncoder(0.25, ((400/90)*6), false, true);
-        choppy.shuffleEncoder(0.5, 1000, false, false);
-=======
+/*        choppy.rotateEncoder(0.25, ((400/90)*6), false, true);
+        choppy.shuffleEncoder(0.5, 1000, false, false);*/
 //        choppy.setFoundationClipPower(-0.02);
         waitForStart();
-        choppy.setIntakeServoPos(0);
+//        choppy.setIntakeServoPos(0);
 //        choppy.setFoundationClipPosition(0);
         sleep(2000);
-        choppy.setIntakeServoPos(0.4);
+//        choppy.setIntakeServoPos(0.4);
         sleep(2000);
-        choppy.setIntakeServoPos(0.65);
+//        choppy.setIntakeServoPos(0.65);
 //        choppy.setFoundationClipPosition(0.5);
         sleep(2000);
         /*choppy.setFoundationClipPosition(1);
@@ -101,7 +98,6 @@ public class HardwareTests extends LinearOpMode {
 ////        choppy.shuffle(0.75, 2000, false);
 //        choppy.rotateEncoder(0.25, ((400/90)*6), false, true);
 //        choppy.shuffleEncoder(0.5, 1000, false, false);
->>>>>>> 6e8a9e375d947777b13c17492b961a2a5f50dd32
         /*
         Test:
         x: 850
