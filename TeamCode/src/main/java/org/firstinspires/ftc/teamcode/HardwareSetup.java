@@ -253,6 +253,7 @@ public class HardwareSetup {
             driveBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             driveTL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             driveTR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rotateCrane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         }
 
 
@@ -464,7 +465,7 @@ public class HardwareSetup {
            setDrivePower(power);
             this.telemetry.addData("Moving to position: ", encoderValue);
             this.telemetry.update();
-            while ((driveTL.isBusy() || driveTR.isBusy() || driveBL.isBusy() || driveBR.isBusy())) {
+            while ((driveTL.isBusy() && driveTR.isBusy() && driveBL.isBusy() && driveBR.isBusy())) {
                 telemetry.addData("Moved: ", "TL: %d, TR: %d, BL: %d, BR: %d",
                         driveTL.getCurrentPosition(), driveTR.getCurrentPosition(), driveBL.getCurrentPosition(), driveBR.getCurrentPosition());
                 telemetry.update();
@@ -526,7 +527,7 @@ public class HardwareSetup {
 
             this.telemetry.addData("Moving to position: ", encoderValue);
             this.telemetry.update();
-            while ((driveTL.isBusy() || driveTR.isBusy() || driveBL.isBusy() || driveBR.isBusy())) {
+            while ((driveTL.isBusy() && driveTR.isBusy() && driveBL.isBusy() && driveBR.isBusy())) {
                 telemetry.addData("Moved: ", "TL: %d, TR: %d, BL: %d, BR: %d",
                         driveTL.getCurrentPosition(), driveTR.getCurrentPosition(), driveBL.getCurrentPosition(), driveBR.getCurrentPosition());
                 telemetry.update();
@@ -588,7 +589,7 @@ public class HardwareSetup {
 
             this.telemetry.addData("Moving to position: ", encoderValue);
             this.telemetry.update();
-            while ((driveTL.isBusy() || driveTR.isBusy() || driveBL.isBusy() || driveBR.isBusy())) {
+            while ((driveTL.isBusy() && driveTR.isBusy() && driveBL.isBusy() && driveBR.isBusy())) {
                 telemetry.addData("Moved: ", "TL: %d, TR: %d, BL: %d, BR: %d",
                         driveTL.getCurrentPosition(), driveTR.getCurrentPosition(), driveBL.getCurrentPosition(), driveBR.getCurrentPosition());
                 telemetry.update();
