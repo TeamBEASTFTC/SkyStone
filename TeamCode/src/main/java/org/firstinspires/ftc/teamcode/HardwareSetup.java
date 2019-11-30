@@ -121,7 +121,7 @@ public class HardwareSetup {
     // NOTE: If you are running on a CONTROL HUB, with only one USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
     //
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
-    private static final boolean PHONE_IS_PORTRAIT = true;
+    private static final boolean PHONE_IS_PORTRAIT = false;
 
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
@@ -182,7 +182,7 @@ public class HardwareSetup {
     VuforiaTrackable stoneTarget;
 
     //For movement
-    boolean driveEncoders = false;//whether or not we are using encoders, defaults to false to nothing breaks
+    boolean driveEncoders = false;//whether or not we are using encoders, defaults to false so nothing breaks
     double d_encoderValue; //the double
     int encoderValue = (int) d_encoderValue;
     double pie = Math.PI;
@@ -245,7 +245,7 @@ public class HardwareSetup {
         setFoundationClipPosition(0);
         setIntakeServoPos(0);
         LSqueezer.setPosition(0);
-        RSqueezer.setPosition(0.9);
+        RSqueezer.setPosition(1);
 
         if (this.driveEncoders){
             // if we have encoders plugged, let's reset them
