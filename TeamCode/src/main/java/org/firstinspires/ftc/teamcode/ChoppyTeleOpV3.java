@@ -289,12 +289,12 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
         }
 
         //foundation hooks
-        if (gamepad.left_trigger > 0){
+        if (gamepad.a){
             trigger_control = gamepad.id;
             joystick = true;
             //lower foundation
             foundationPosition = closing;
-        } else if (gamepad.right_trigger > 0) {
+        } else if (gamepad.b) {
             trigger_control = gamepad.id;
             joystick = true;
             foundationPosition = opening; //FIX this actually closes
@@ -306,11 +306,12 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
         }
 
         //squeezer control
-        if (gamepad.a){
+        if (gamepad.right_trigger > 0){
+
             intake_control = gamepad.id;
             joystick = true;
             SqueezerServoPos = SqueezerServoPosClosed;
-        } else if (gamepad.b){
+        } else if (gamepad.left_trigger > 0){
             intake_control = gamepad.id;
             joystick = false;
             SqueezerServoPos = SqueezerServoPosOpen;
