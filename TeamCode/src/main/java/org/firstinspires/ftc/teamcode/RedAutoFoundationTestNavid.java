@@ -32,15 +32,20 @@ public class RedAutoFoundationTestNavid extends LinearOpMode{
         choppy.lowerFoundationClips();
         choppy.moveForwBackEncoder(0.25,22,true,false);
         choppy.raiseFoundationClips();
-        choppy.moveForwBackEncoder(0.5,5,true,false);
+        //move the foundation
+        choppy.moveForwBackEncoder(0.5,6,true,false);
         choppy.rotateEncoder(0.5,400,false,false);
         choppy.moveForwBackEncoder(0.5,18,true,false);
+        //obstruct the foundation
         choppy.rotateEncoder(0.5,400,false,false);
-        choppy.moveForwBackEncoder(0.5,59,true,false);
+        choppy.moveForwBackEncoder(0.5,62,true,false);
         choppy.rotateEncoder(0.5,400,false,false);
         choppy.moveForwBackEncoder(0.5,78.25,true,false);
         choppy.rotateEncoder(0.5,400,false,false);
-        choppy.moveForwBackEncoder(0.5,43.5,true,false);
+        choppy.moveForwBackEncoder(0.5,35,true,false);
+        choppy.rotateEncoder(0.5, 400, false, false);
+        choppy.moveForwBackEncoder(0.5, 35, true, false);
+        //move the foundation back
 
 
 
