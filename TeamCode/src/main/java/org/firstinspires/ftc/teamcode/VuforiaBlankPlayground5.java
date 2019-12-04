@@ -52,6 +52,7 @@ public class VuforiaBlankPlayground5 extends LinearOpMode {
         sleep(4000);
         waitForStart();
 
+        //
 
         boolean SkyStoneFound = false;
         int loopCounter = 0;

@@ -451,7 +451,7 @@ public class HardwareSetup {
             driveBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             driveTL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             driveTR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            sleep(500);
+            sleep(150);
             //ensuring the values we get allow us to do what we want
             if (back) {
                 distance = Math.abs(distance) *-1;
@@ -539,14 +539,14 @@ public class HardwareSetup {
 
             setDrivePower(power);
 
-            average_desired_position = encoderValue*0.95;
+            average_desired_position = encoderValue*0.9;
 
 
             this.telemetry.addData("Moving to position: ", encoderValue);
             this.telemetry.update();
             while ((driveTL.isBusy() && driveTR.isBusy() && driveBL.isBusy() && driveBR.isBusy() &&
                     (((Math.abs(driveTL.getCurrentPosition()) + Math.abs(driveTR.getCurrentPosition()) +
-                            Math.abs(driveBL.getCurrentPosition()) + Math.abs(driveBR.getCurrentPosition()))/4 <= encoderValue)))
+                            Math.abs(driveBL.getCurrentPosition()) + Math.abs(driveBR.getCurrentPosition()))/4) <= average_desired_position))
             ) {
                 telemetry.addData("Moved: ", "TL: %d, TR: %d, BL: %d, BR: %d",
                         driveTL.getCurrentPosition(), driveTR.getCurrentPosition(), driveBL.getCurrentPosition(), driveBR.getCurrentPosition());
@@ -740,7 +740,7 @@ public class HardwareSetup {
     public void releaseCapstone(){
         telementryLineMessage("Releasing the capstone!");
         setFoundationClipPosition(0.35);
-        sleep(1000);
+        sleep(750);
         setFoundationClipPosition(0);
     }
 
