@@ -447,7 +447,7 @@ public class HardwareSetup {
             driveBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             driveTL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             driveTR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            sleep(500);
+            sleep(150);
             //ensuring the values we get allow us to do what we want
             if (back) {
                 distance = Math.abs(distance) *-1;
@@ -736,7 +736,7 @@ public class HardwareSetup {
     public void releaseCapstone(){
         telementryLineMessage("Releasing the capstone!");
         setFoundationClipPosition(0.35);
-        sleep(1000);
+        sleep(750);
         setFoundationClipPosition(0);
     }
 
