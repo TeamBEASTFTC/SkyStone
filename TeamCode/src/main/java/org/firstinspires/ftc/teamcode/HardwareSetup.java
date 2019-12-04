@@ -526,7 +526,7 @@ public class HardwareSetup {
 
             setDrivePower(power);
 
-            average_desired_position = encoderValue*4;
+            average_desired_position = encoderValue*0.95;
 
 
             this.telemetry.addData("Moving to position: ", encoderValue);
