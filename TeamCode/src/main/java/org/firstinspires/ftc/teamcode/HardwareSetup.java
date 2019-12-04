@@ -176,7 +176,7 @@ public class HardwareSetup {
     //for the computer vision
     boolean targetVisible = false;
     String[] args = {"","","","",""};
-    boolean BlueAlliance = true; //FIX: for now...
+    boolean BlueAlliance; //FIX: for now...
     List<VuforiaTrackable>  allTrackables;
     VuforiaTrackables targetsSkyStone;
     VuforiaTrackable stoneTarget;
@@ -359,6 +359,10 @@ public class HardwareSetup {
                 phoneYRotate = 90;
             }
 
+            if (!blueAlliance && (CAMERA_CHOICE == BACK)){
+                phoneYRotate = 90;
+            }
+
             // Rotate the phone vertical about the X axis if it's in portrait mode
             if (PHONE_IS_PORTRAIT) {
                 phoneXRotate = 270;
@@ -366,9 +370,14 @@ public class HardwareSetup {
 
             // Next, translate the camera lens to where it is on the robot.
             // In this example, it is centered (left to right), but forward of the middle of the robot, and above ground level.
-            final float CAMERA_FORWARD_DISPLACEMENT = 0;   // eg: Camera is 4 Inches in front of robot center
-            final float CAMERA_VERTICAL_DISPLACEMENT = 2.0f * mmPerInch;   // eg: Camera is 8 Inches above ground
-            final float CAMERA_LEFT_DISPLACEMENT = -80;     // eg: Camera is ON the robot's center line
+            float CAMERA_FORWARD_DISPLACEMENT = 190;   // eg: Camera is 4 Inches in front of robot center
+            float CAMERA_VERTICAL_DISPLACEMENT = 150;   // eg: Camera is 8 Inches above ground
+            float CAMERA_LEFT_DISPLACEMENT = 50;
+            if (!blueAlliance){
+                CAMERA_FORWARD_DISPLACEMENT = 190;   // eg: Camera is 4 Inches in front of robot center
+                CAMERA_VERTICAL_DISPLACEMENT = 150;   // eg: Camera is 8 Inches above ground
+                CAMERA_LEFT_DISPLACEMENT = -50;
+            }
 
             OpenGLMatrix robotFromCamera = OpenGLMatrix
                     .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
@@ -755,7 +764,7 @@ public class HardwareSetup {
 
 
     // Computer vivion/Vuforia
-    public String[] computerVisionRunning(List<VuforiaTrackable> allTrackables) {
+    public String[] computerVisionRunning(List<VuforiaTrackable> allTrackables, boolean blueAlliance) {
 //  have code for computer vision reside here
         // check all the trackable targets to see which one (if any) is visible.
         targetVisible = false; // tells us if the target is visible
@@ -813,22 +822,20 @@ public class HardwareSetup {
             // If we are on the blue alliance side of the field
             telemetry.addData("X Pos: ", xPosition);
             telemetry.update();
-            sleep(3000); //REMOVE
-            if (!BlueAlliance) {
+            if (!blueAlliance) {
                 // flip the values
                 yPosition *= -1;
                 telemetry.addData("Y Pos flipped: ", yPosition);
                 telemetry.update();
-                sleep(3000); //REMOVE
             }
             if ((yPosition <= yPosCentreBoundaryRight) & (yPosition >= yPosCentreBoundaryLeft)) {
                 yposisitonSkystone = "CENTRE, GRAB!!";
 //                    }
 //                    if (yPosition > -1 ){
 //                        yposisitonSkystone = "LEFT";
-            } else if (yPosition > yPosCentreBoundaryRight) {
+            } else if (yPosition < yPosCentreBoundaryRight) {
                 yposisitonSkystone = "To Field Border";
-            } else if (yPosition < yPosCentreBoundaryLeft) {
+            } else if (yPosition > yPosCentreBoundaryLeft) {
                 yposisitonSkystone = "To Field Centre";
             }
 

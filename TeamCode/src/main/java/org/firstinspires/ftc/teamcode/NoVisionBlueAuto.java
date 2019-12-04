@@ -101,10 +101,8 @@ public class NoVisionBlueAuto extends LinearOpMode{
 
             choppy.targetsSkyStone.activate();
             //calling the computer vision now
-            String[] computerVisionResults = choppy.computerVisionRunning(choppy.allTrackables);
+            String[] computerVisionResults = choppy.computerVisionRunning(choppy.allTrackables, blueAlliance);
             choppy.targetsSkyStone.deactivate();
-
-
             //if robot is not center
             if (computerVisionResults[1].equals("CENTRE, GRAB!!")){
                 telemetry.addLine("HEEREE! centre");
@@ -115,7 +113,8 @@ public class NoVisionBlueAuto extends LinearOpMode{
             }else if ((computerVisionResults[1].equals("To Field Centre"))){
                 telemetry.addLine("HERE! To field centre");
                 telemetry.update();
-                distance_to_center_of_stone = Math.abs(Double.parseDouble(computerVisionResults[3])) + 10;//+10 for error correction
+                distance_to_center_of_stone = Math.abs(Double.parseDouble(computerVisionResults[3])) + 10;
+                //+10 for error correction
                 choppy.moveForwBackEncoder(0.3, distance_to_center_of_stone, false, true);
                 distance_to_gate -= distance_to_center_of_stone;
                 SkyStoneFound = false;//This may be set to true if the above is effective
@@ -127,12 +126,17 @@ public class NoVisionBlueAuto extends LinearOpMode{
                 // if this is not the first loop then we consider this more carefully
                 //we shuffle a tiny bit for adjustment's sake
                 if (loopCounter >= 1){
-                    distance_to_center_of_stone = Math.abs(Double.parseDouble(computerVisionResults[3])) + 10;//+10 for error correction
-                    choppy.moveForwBackEncoder(0.3, distance_to_center_of_stone, false, true);                    telemetry.addLine("To Field border!");
+                    distance_to_center_of_stone = Math.abs(Double.parseDouble(computerVisionResults[3]));
+                    //+10 for error correction
+                    choppy.moveForwBackEncoder(0.3, distance_to_center_of_stone, false, true);
+                    telemetry.addLine("To Field border!");
                     distance_to_gate += distance_to_center_of_stone;
                     telemetry.update();
                     sleep(500);
                     SkyStoneFound = false;
+                    if (loopCounter == 3){
+                        SkyStoneFound = true;
+                    }
                 }
 
             }else if (computerVisionResults[0].equals("false")) {
@@ -141,6 +145,11 @@ public class NoVisionBlueAuto extends LinearOpMode{
                 distance_to_gate += distance_to_center_of_stone;
                 choppy.telementryLineMessage("Vuforia computer vision = false");
                 sleep(1000);
+                if (loopCounter == 3){
+                    choppy.moveForwBackEncoder(0.5,distance_block_width, true,false);
+                    distance_to_gate += distance_to_center_of_stone;
+                    SkyStoneFound = true;
+                }
             } else {
                 // if for what ever reason something does not work, don't stop the robot... just keep trying!
                 choppy.moveForwBackEncoder(0.5,distance_block_width, true,false);

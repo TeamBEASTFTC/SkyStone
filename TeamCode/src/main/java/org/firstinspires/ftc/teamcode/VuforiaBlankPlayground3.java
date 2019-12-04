@@ -58,11 +58,12 @@ public class VuforiaBlankPlayground3 extends LinearOpMode {
 
     HardwareSetup choppy = new HardwareSetup();
     String inheritance_msg = "none";
+    boolean blueAlliance = false;
     @Override
     public void runOpMode() {
 
         //initialisation code first
-        choppy.init(hardwareMap, telemetry, true, true, true);
+        choppy.init(hardwareMap, telemetry, true, true, blueAlliance);
         choppy.telementryLineMessage("Message:");
         sleep(2000);
         telemetry.addData("From inheritance: ", this.inheritance_msg);
@@ -80,7 +81,7 @@ public class VuforiaBlankPlayground3 extends LinearOpMode {
 
             choppy.targetsSkyStone.activate();
             //calling the computer vision now
-            String[] computerVisionResults = choppy.computerVisionRunning(choppy.allTrackables);
+            String[] computerVisionResults = choppy.computerVisionRunning(choppy.allTrackables, blueAlliance);
             choppy.targetsSkyStone.deactivate();
 
 
