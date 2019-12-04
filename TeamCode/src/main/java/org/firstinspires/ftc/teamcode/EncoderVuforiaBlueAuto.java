@@ -51,7 +51,7 @@ public class EncoderVuforiaBlueAuto extends LinearOpMode{
 
             choppy.targetsSkyStone.activate();
             //calling the computer vision now
-            String[] computerVisionResults = choppy.computerVisionRunning(choppy.allTrackables);
+            String[] computerVisionResults = choppy.computerVisionRunning(choppy.allTrackables, blueAlliance);
             choppy.targetsSkyStone.deactivate();
 
 
