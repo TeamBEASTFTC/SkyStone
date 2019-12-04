@@ -851,7 +851,6 @@ public class HardwareSetup {
 
             telemetry.addData("yPositionSkyStone: ", yposisitonSkystone);
             telemetry.update();
-            sleep(4000); //REMOVE!
             // not using yet
             if (BlueAlliance) {
                 if (xPosition > -8) {
