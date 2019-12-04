@@ -24,22 +24,22 @@ public class RedAutoFoundationTestNavid extends LinearOpMode{
         choppy.rotateEncoder(0.5, 400,false, false);
         choppy.releaseCapstone();
         // moving to drop capstone
-        choppy.moveForwBackEncoder(0.75,20,true,false);
+        choppy.moveForwBackEncoder(0.75,35,true,false);
         choppy.rotateEncoder(0.5,400,false,false);
         choppy.moveForwBackEncoder(0.75,20,true,true);
         choppy.moveForwBackEncoder(0.25,4.5,true,true);
         //moving to grab the foundation.
         choppy.lowerFoundationClips();
-        choppy.moveForwBackEncoder(0.5,20,true,false);
+        choppy.moveForwBackEncoder(0.5,19,true,false);
         choppy.moveForwBackEncoder(0.25, 2, true, false);
         choppy.raiseFoundationClips();
         //move the foundation
-        choppy.moveForwBackEncoder(0.75,10,true,false);
+        choppy.moveForwBackEncoder(0.5,10,true,false);
         choppy.rotateEncoder(0.5,400,false,false);
-        choppy.moveForwBackEncoder(0.75,15,true,false);
+        choppy.moveForwBackEncoder(0.75,23,true,false);
         //obstruct the foundation
         choppy.rotateEncoder(0.5,400,false,false);
-        choppy.moveForwBackEncoder(1,60,true,false);
+        choppy.moveForwBackEncoder(0.75,55,true,false);
         choppy.rotateEncoder(0.5,400,false,false);
         choppy.moveForwBackEncoder(0.5,15.75,true,false);
         choppy.rotateEncoder(0.5,400,false,false);
