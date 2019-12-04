@@ -542,7 +542,7 @@ public class HardwareSetup {
             this.telemetry.update();
             while ((driveTL.isBusy() && driveTR.isBusy() && driveBL.isBusy() && driveBR.isBusy() &&
                     (((Math.abs(driveTL.getCurrentPosition()) + Math.abs(driveTR.getCurrentPosition()) +
-                            Math.abs(driveBL.getCurrentPosition()) + Math.abs(driveBR.getCurrentPosition()))/4) <= encoderValue))
+                            Math.abs(driveBL.getCurrentPosition()) + Math.abs(driveBR.getCurrentPosition()))/4) <= average_desired_position))
             ) {
                 telemetry.addData("Moved: ", "TL: %d, TR: %d, BL: %d, BR: %d",
                         driveTL.getCurrentPosition(), driveTR.getCurrentPosition(), driveBL.getCurrentPosition(), driveBR.getCurrentPosition());
