@@ -59,6 +59,20 @@ public class VuforiaBlankPlayground5 extends LinearOpMode {
         while (!(SkyStoneFound)){
             //calling the computer vision now
             String[] computerVisionResults = choppy.computerVisionRunning(choppy.allTrackables, blueAlliance);
+            //args:
+            //0 = targetVisible
+            //1 = yposisitonSkystone
+            //2 = xposisitonSkystone
+            //3 = xPosition value
+            //4 = yPosition value
+            telemetry.addData("Target Visible: ", computerVisionResults[0]);
+            telemetry.addData("yPos SkyStone: ", computerVisionResults[1]);
+            telemetry.addData("xPos SkyStone: ", computerVisionResults[2]);
+            telemetry.addData("xPos value: ", computerVisionResults[3]);
+            telemetry.addData("yPos value: ", computerVisionResults[4]);
+            telemetry.update();
+            sleep(4000);
+
         }
         choppy.targetsSkyStone.deactivate();
 

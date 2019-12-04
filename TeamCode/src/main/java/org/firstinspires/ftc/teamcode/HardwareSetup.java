@@ -109,8 +109,8 @@ public class HardwareSetup {
 
     //Positioning constants
 
-    private double yPosCentreBoundaryRight = 30.5;
-    private double yPosCentreBoundaryLeft = -30.5;
+    private double yPosCentreBoundaryRight = 50.5;
+    private double yPosCentreBoundaryLeft = -50.5;
 
 
     //Vuforia
@@ -390,6 +390,10 @@ public class HardwareSetup {
             this.allTrackables = allTrackables;
             this.targetsSkyStone= targetsSkyStone;
             this.stoneTarget = stoneTarget;
+
+            telementryLineMessage("DO NOT PRESS START");
+            sleep(10000);
+            telementryLineMessage("THANKS, please WAIT 6 seconds now");
 
         }// end vuforia if
 
@@ -765,6 +769,11 @@ public class HardwareSetup {
 
     // Computer vivion/Vuforia
     public String[] computerVisionRunning(List<VuforiaTrackable> allTrackables, boolean blueAlliance) {
+        //position variables
+        String yposisitonSkystone = "";
+        String xposisitonSkystone = "";
+        double xPosition;
+        double yPosition;
 //  have code for computer vision reside here
         // check all the trackable targets to see which one (if any) is visible.
         targetVisible = false; // tells us if the target is visible
@@ -804,8 +813,8 @@ public class HardwareSetup {
 
             // translation is vector array
             // x y z in that order
-            double xPosition = translation.get(0); //how far it is facing forward
-            double yPosition = translation.get(1); //how far left or right to the block
+            xPosition = translation.get(0); //how far it is facing forward
+            yPosition = translation.get(1); //how far left or right to the block
             //Y: -1 -> -1.5
             //+8 to the right
             //-3 for the left
@@ -816,17 +825,18 @@ public class HardwareSetup {
             //x value = value in front of camera
 
 
-            String yposisitonSkystone = "";
-            String xposisitonSkystone = "";
+
 
             // If we are on the blue alliance side of the field
             telemetry.addData("X Pos: ", xPosition);
             telemetry.update();
+
             if (!blueAlliance) {
                 // flip the values
-                yPosition *= -1;
+//                yPosition *= -1;
                 telemetry.addData("Y Pos flipped: ", yPosition);
                 telemetry.update();
+                sleep(500);
             }
             if ((yPosition <= yPosCentreBoundaryRight) & (yPosition >= yPosCentreBoundaryLeft)) {
                 yposisitonSkystone = "CENTRE, GRAB!!";
@@ -850,10 +860,10 @@ public class HardwareSetup {
                     xposisitonSkystone = "FORWARDS!";
                 }
             }
-            args[1] = yposisitonSkystone;
-            args[2] = xposisitonSkystone;
             args[3] = String.valueOf(xPosition);
             args[4] = String.valueOf(yPosition);
+
+
             telemetry.addData("positionSkystone: ", "Stone located: %s, %s", yposisitonSkystone, xposisitonSkystone);
 
             // express the rotation of the robot in degrees.
@@ -863,7 +873,18 @@ public class HardwareSetup {
 
         } else {
             telemetry.addData("Visible Target", "none");
+            //nullifying values
+            yposisitonSkystone = "";
+            xposisitonSkystone = "";
+            args[3] = "";;
+            args[4] = "";
+
+
+
         }
+        args[1] = yposisitonSkystone;
+        args[2] = xposisitonSkystone;
+
         telemetry.update();
 //        }
 
