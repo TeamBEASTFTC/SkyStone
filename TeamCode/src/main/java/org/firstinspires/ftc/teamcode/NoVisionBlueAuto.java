@@ -25,7 +25,7 @@ public class NoVisionBlueAuto extends LinearOpMode{
 
     @Override
     public void runOpMode() {
-        choppy.init(hardwareMap, telemetry, true, true);
+        choppy.init(hardwareMap, telemetry, true, true,true);
 
         waitForStart();
 //        choppy.moveForwBack(0.5, 2000, false);

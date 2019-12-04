@@ -188,6 +188,7 @@ public class HardwareSetup {
     double pie = Math.PI;
     double driveWheelCircumference = 2* pie * ((4 * mmPerInch)/2);//2 * pie * r
     int driveMotorTicks = 1120;
+    double average_desired_position;
 
 
     HardwareMap hardwareMap;
@@ -203,7 +204,7 @@ public class HardwareSetup {
     }
 
     /* Initialize standard Hardware interfaces */
-    public void init(HardwareMap hardwareMap, Telemetry telemetry, boolean vuforia_program, boolean driveEncoders) {
+    public void init(HardwareMap hardwareMap, Telemetry telemetry, boolean vuforia_program, boolean driveEncoders, boolean blueAlliance) {
 
         String[] args = {"","","","",""};
 
@@ -525,9 +526,15 @@ public class HardwareSetup {
 
             setDrivePower(power);
 
+            average_desired_position = encoderValue*4;
+
+
             this.telemetry.addData("Moving to position: ", encoderValue);
             this.telemetry.update();
-            while ((driveTL.isBusy() && driveTR.isBusy() && driveBL.isBusy() && driveBR.isBusy())) {
+            while ((driveTL.isBusy() && driveTR.isBusy() && driveBL.isBusy() && driveBR.isBusy() &&
+                    (((Math.abs(driveTL.getCurrentPosition()) + Math.abs(driveTR.getCurrentPosition()) +
+                            Math.abs(driveBL.getCurrentPosition()) + Math.abs(driveBR.getCurrentPosition()))/4 <= encoderValue)))
+            ) {
                 telemetry.addData("Moved: ", "TL: %d, TR: %d, BL: %d, BR: %d",
                         driveTL.getCurrentPosition(), driveTR.getCurrentPosition(), driveBL.getCurrentPosition(), driveBR.getCurrentPosition());
                 telemetry.update();
@@ -719,7 +726,7 @@ public class HardwareSetup {
 
     public void releaseCapstone(){
         telementryLineMessage("Releasing the capstone!");
-        setFoundationClipPosition(0.5);
+        setFoundationClipPosition(0.35);
         sleep(1000);
         setFoundationClipPosition(0);
     }

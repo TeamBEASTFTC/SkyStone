@@ -62,7 +62,7 @@ public class VuforiaBlankPlayground3 extends LinearOpMode {
     public void runOpMode() {
 
         //initialisation code first
-        choppy.init(hardwareMap, telemetry, true, true);
+        choppy.init(hardwareMap, telemetry, true, true, true);
         choppy.telementryLineMessage("Message:");
         sleep(2000);
         telemetry.addData("From inheritance: ", this.inheritance_msg);

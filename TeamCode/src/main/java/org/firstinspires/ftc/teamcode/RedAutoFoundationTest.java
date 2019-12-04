@@ -21,7 +21,7 @@ public class RedAutoFoundationTest extends LinearOpMode{
     public void runOpMode() {
 
 
-        choppy.init(hardwareMap, telemetry, true, false);
+        choppy.init(hardwareMap, telemetry, true, false,blueAlliance);
 
         waitForStart();
         choppy.moveForwBack(0.5,3000, true);

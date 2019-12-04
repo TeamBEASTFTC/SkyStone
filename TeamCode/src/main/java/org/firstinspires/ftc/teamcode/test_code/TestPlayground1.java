@@ -20,7 +20,7 @@ public class TestPlayground1 extends LinearOpMode{
     @Override
     public void runOpMode() {
 
-        robot.init(hardwareMap, telemetry, true, false);
+        robot.init(hardwareMap, telemetry, true, false, true);
 
         waitForStart();
         robot.moveForwBack(power,20000,false);

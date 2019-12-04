@@ -23,7 +23,7 @@ public class HardwareTests extends LinearOpMode {
     public void runOpMode() {
 
 
-        choppy.init(hardwareMap, telemetry, false, true);
+        choppy.init(hardwareMap, telemetry, false, true, true);
 //        choppy.setIntakeServoPos(0.5);
 /*        choppy.LSqueezer.setPosition(1);
         choppy.RSqueezer.setPosition(0);

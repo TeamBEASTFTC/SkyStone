@@ -15,7 +15,7 @@ public class EncoderTestOld extends LinearOpMode{
 
     @Override
     public void runOpMode() {
-        choppy.init(hardwareMap, telemetry, false, true);
+        choppy.init(hardwareMap, telemetry, false, true, true);
 
         waitForStart();
 //        choppy.moveForwBack(0.5, 2000, false);

@@ -130,7 +130,7 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-        choppy.init(hardwareMap, telemetry, false, false);
+        choppy.init(hardwareMap, telemetry, false, false, true);
 
         choppy.rotateCrane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         choppy.rotateCrane.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

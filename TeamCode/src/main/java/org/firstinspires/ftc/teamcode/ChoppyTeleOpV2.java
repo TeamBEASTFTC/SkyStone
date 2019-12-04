@@ -114,7 +114,7 @@ public class ChoppyTeleOpV2 extends LinearOpMode {
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-        choppy.init(hardwareMap, telemetry, false, false);
+        choppy.init(hardwareMap, telemetry, false, false, true);
 
 
 

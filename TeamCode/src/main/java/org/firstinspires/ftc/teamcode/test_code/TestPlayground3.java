@@ -15,7 +15,7 @@ public class TestPlayground3 extends LinearOpMode{
 
     @Override
     public void runOpMode() {
-        choppy.init(hardwareMap, telemetry, false, false);
+        choppy.init(hardwareMap, telemetry, false, false, true);
 
         waitForStart();
         choppy.moveForwBack(power,3000,true);

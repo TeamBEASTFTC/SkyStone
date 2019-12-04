@@ -14,7 +14,7 @@ public class RedAutoFoundationTestNavid extends LinearOpMode{
 //        !blueAlliance
 
 
-        choppy.init(hardwareMap, telemetry, true, true);
+        choppy.init(hardwareMap, telemetry, false, true,blueAlliance);
 
 //        choppy.setFoundationClipPower(-0.02);
 
@@ -38,7 +38,7 @@ public class RedAutoFoundationTestNavid extends LinearOpMode{
         choppy.moveForwBackEncoder(0.5,18,true,false);
         //obstruct the foundation
         choppy.rotateEncoder(0.5,400,false,false);
-        choppy.moveForwBackEncoder(0.5,62,true,false);
+        choppy.moveForwBackEncoder(0.5,60,true,false);
         choppy.rotateEncoder(0.5,400,false,false);
         choppy.moveForwBackEncoder(0.5,78.25,true,false);
         choppy.rotateEncoder(0.5,400,false,false);

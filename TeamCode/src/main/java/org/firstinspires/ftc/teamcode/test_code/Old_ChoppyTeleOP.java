@@ -149,7 +149,7 @@ public class Old_ChoppyTeleOP extends LinearOpMode {
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-        choppy.init(hardwareMap, telemetry, false, false);
+        choppy.init(hardwareMap, telemetry, false, false, true);
 
 /*        // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
