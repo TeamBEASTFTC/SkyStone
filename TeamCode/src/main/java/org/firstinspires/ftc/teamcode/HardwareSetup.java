@@ -806,7 +806,7 @@ public class HardwareSetup {
 //  have code for computer vision reside here
         // check all the trackable targets to see which one (if any) is visible.
         targetVisible = false; // tells us if the target is visible
-        sleep(1000);//A bit of time for the camera to process
+        sleep(500);//A bit of time for the camera to process
         //telemetry.addData(trackable.getName(), ((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible() ? "Visible" : "Not Visible");    //
 
         for (VuforiaTrackable trackable : allTrackables) {
@@ -865,7 +865,6 @@ public class HardwareSetup {
 //                yPosition *= -1;
                 telemetry.addData("Y Pos flipped: ", yPosition);
                 telemetry.update();
-                sleep(500);
             }
             if ((yPosition <= yPosCentreBoundaryRight) & (yPosition >= yPosCentreBoundaryLeft)) {
                 yposisitonSkystone = "CENTRE, GRAB!!";
