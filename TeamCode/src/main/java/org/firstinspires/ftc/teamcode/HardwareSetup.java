@@ -192,6 +192,7 @@ public class HardwareSetup {
     double average_desired_position_over;
     double current_average_position;
     int refinment_encoder_value_under;
+    int refinment_encoder_value;
     int refinment_encoder_value_over;
 
 
@@ -521,53 +522,29 @@ public class HardwareSetup {
             setDrivePower(power);
 
 
-            average_desired_position_under = encoderValue*0.9;
-            average_desired_position_over = encoderValue * 1.2;
-
-            telemetry.addData("desired: ", encoderValue);
-            telemetry.addData("average: ", average_desired_position_under);
-            this.telemetry.addData("Moving to position: ", encoderValue);
-            this.telemetry.update();
+//            average_desired_position_under = encoderValue*0.93;
+//            average_desired_position_over = encoderValue * 1.07;
+//
+//            telemetry.addData("desired: ", encoderValue);
+//            telemetry.addData("average: ", average_desired_position_under);
+//            this.telemetry.addData("Moving to position: ", encoderValue);
+//            this.telemetry.update();
             while ((driveTL.isBusy() && driveTR.isBusy() && driveBL.isBusy() && driveBR.isBusy())){
                 telemetry.addData("Moved: ", "TL: %d, TR: %d, BL: %d, BR: %d",
                         driveTL.getCurrentPosition(), driveTR.getCurrentPosition(), driveBL.getCurrentPosition(), driveBR.getCurrentPosition());
                 telemetry.update();
             }
             setDrivePower(0);
-            current_average_position = (Math.abs(driveTL.getCurrentPosition()) + Math.abs(driveTR.getCurrentPosition()) +
-                    Math.abs(driveBL.getCurrentPosition()) + Math.abs(driveBR.getCurrentPosition()))/4;
-            refinment_encoder_value_under = (int) Math.round(average_desired_position_under - current_average_position);//convert the double back to int after rounding
-            refinment_encoder_value_over = (int) Math.round(current_average_position - average_desired_position_over);//convert the double back to int after rounding
+            current_average_position = (driveTL.getCurrentPosition() + driveTR.getCurrentPosition() +
+                    driveBL.getCurrentPosition() + driveBR.getCurrentPosition())/4;
 
-            telemetry.addData("Refinment under: ", refinment_encoder_value_under);
-            telemetry.addData("Refinment over: ", refinment_encoder_value_over);
-            telemetry.update();
-            sleep(250);
-            if ( current_average_position <= average_desired_position_under){
+            if (Math.abs(current_average_position) > 50){
+                refinment_encoder_value = (int) (current_average_position *-1);
                 driveBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 driveBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 driveTL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 driveTR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                rotateEncoderSetup(refinment_encoder_value_under, clockwise);
-
-                //turning now
-                setDrivePower(power);
-                this.telemetry.addData("Moving to position: ", refinment_encoder_value_under);
-                this.telemetry.update();
-                while ((driveTL.isBusy() && driveTR.isBusy() && driveBL.isBusy() && driveBR.isBusy())){
-                    telemetry.addData("Moved: ", "TL: %d, TR: %d, BL: %d, BR: %d",
-                            driveTL.getCurrentPosition(), driveTR.getCurrentPosition(), driveBL.getCurrentPosition(), driveBR.getCurrentPosition());
-                    telemetry.update();
-                }
-                setDrivePower(0);
-
-            } else if (current_average_position >= average_desired_position_over){
-                driveBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                driveBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                driveTL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                driveTR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                sleep(200);
-                rotateEncoderSetup(refinment_encoder_value_over, !clockwise);
+                rotateEncoderSetup(refinment_encoder_value, clockwise);
 
                 //turning now
                 setDrivePower(power);
@@ -580,6 +557,37 @@ public class HardwareSetup {
                 }
                 setDrivePower(0);
             }
+//            refinment_encoder_value_under = (int) Math.round(average_desired_position_under - current_average_position);//convert the double back to int after rounding
+//            refinment_encoder_value_over = (int) Math.round(current_average_position - average_desired_position_over);//convert the double back to int after rounding
+//
+//            telemetry.addData("Refinment under: ", refinment_encoder_value_under);
+//            telemetry.addData("Refinment over: ", refinment_encoder_value_over);
+//            telemetry.update();
+//            sleep(250);
+//            if ( current_average_position <= average_desired_position_under){
+//                refinment_encoder_value = (int) current_average_position;
+//                driveBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//                driveBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//                driveTL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//                driveTR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//                sleep(200);
+//                rotateEncoderSetup(refinment_encoder_value, clockwise);
+//
+//                //turning now
+//                setDrivePower(power);
+//                this.telemetry.addData("Moving to position: ", refinment_encoder_value);
+//                this.telemetry.update();
+//                while ((driveTL.isBusy() && driveTR.isBusy() && driveBL.isBusy() && driveBR.isBusy())){
+//                    telemetry.addData("Moved: ", "TL: %d, TR: %d, BL: %d, BR: %d",
+//                            driveTL.getCurrentPosition(), driveTR.getCurrentPosition(), driveBL.getCurrentPosition(), driveBR.getCurrentPosition());
+//                    telemetry.update();
+//                }
+//                setDrivePower(0);
+//
+//
+//            } /*else if (current_average_position >= average_desired_position_over){
+
+//            }
 //            driveBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //            driveBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //            driveTL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

@@ -9,7 +9,7 @@ public class NoVisionBlueAuto extends LinearOpMode{
     //Write a catch for if it gets stuck in using the encoders
     double power=0.5;
 //    boolean redAlliance = false;
-    boolean blueAlliance = true;
+    boolean blueAlliance = false;
 
     // computer vision
     int false_counter = 0; //counts the number of times vision not found
@@ -74,13 +74,13 @@ public class NoVisionBlueAuto extends LinearOpMode{
 
         // Rotate towards the gate
 //        choppy.rotate90(blueAlliance, 1);
-        choppy.rotateEncoder(0.25, 400, false, !blueAlliance);
+        choppy.rotateEncoder(0.25, 395, false, !blueAlliance);
 
         // Move to the gate and a bit beyond
         telemetry.addData("distance to gate: ", distance_to_gate);
         telemetry.update();
         sleep(500);
-        choppy.moveForwBackEncoder(0.75, distance_to_gate+10, true, false);
+        choppy.moveForwBackEncoder(0.5, distance_to_gate+10, true, false);
 
         // Release the stone
         choppy.grabStoneFlipperControl(false);
