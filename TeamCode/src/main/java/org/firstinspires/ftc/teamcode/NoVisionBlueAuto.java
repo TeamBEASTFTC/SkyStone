@@ -39,8 +39,8 @@ public class NoVisionBlueAuto extends LinearOpMode{
         //NOTE USING INCHES: 1 inch = 1000 distance unit
         // robot is 15.75inches long
         // move by 18.5"
-        choppy.moveForwBackEncoder(0.5, 21.5, true, false); //move further forward 7 inches
-        distance_to_blocks_inches -= 21.5;
+        choppy.moveForwBackEncoder(0.5, 23.5, true, false); //move further forward 7 inches
+        distance_to_blocks_inches -= 23.5;
 
         //rotate90 towards the back wall
         choppy.rotateEncoder(0.25, 400, false, blueAlliance);
@@ -57,7 +57,7 @@ public class NoVisionBlueAuto extends LinearOpMode{
 
         // The robot is now lined up with the stone...well hopefully
         // Now we rotate to face it
-        choppy.rotateEncoder(0.25, 400, false, !blueAlliance);
+        choppy.rotateEncoder(0.25, 393, false, !blueAlliance);
 
         //prepare intake
 //        choppy.grabStoneFlipperControl(false);
