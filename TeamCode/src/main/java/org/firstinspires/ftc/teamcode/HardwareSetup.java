@@ -522,7 +522,7 @@ public class HardwareSetup {
 
 
             average_desired_position_under = encoderValue*0.9;
-            average_desired_position_over = encoderValue * 1.1;
+            average_desired_position_over = encoderValue * 1.2;
 
             telemetry.addData("desired: ", encoderValue);
             telemetry.addData("average: ", average_desired_position_under);
@@ -534,11 +534,15 @@ public class HardwareSetup {
                 telemetry.update();
             }
             setDrivePower(0);
-            current_average_position = Math.abs(driveTL.getCurrentPosition()) + Math.abs(driveTR.getCurrentPosition()) +
-                    Math.abs(driveBL.getCurrentPosition()) + Math.abs(driveBR.getCurrentPosition())/4;
+            current_average_position = (Math.abs(driveTL.getCurrentPosition()) + Math.abs(driveTR.getCurrentPosition()) +
+                    Math.abs(driveBL.getCurrentPosition()) + Math.abs(driveBR.getCurrentPosition()))/4;
             refinment_encoder_value_under = (int) Math.round(average_desired_position_under - current_average_position);//convert the double back to int after rounding
             refinment_encoder_value_over = (int) Math.round(current_average_position - average_desired_position_over);//convert the double back to int after rounding
 
+            telemetry.addData("Refinment under: ", refinment_encoder_value_under);
+            telemetry.addData("Refinment over: ", refinment_encoder_value_over);
+            telemetry.update();
+            sleep(250);
             if ( current_average_position <= average_desired_position_under){
                 driveBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 driveBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
