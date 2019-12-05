@@ -19,7 +19,7 @@ public class NoVisionBlueAuto extends LinearOpMode{
     double distance_to_blocks_inches = 55.0 - robot_inch_distance;
     double distance_block_width = 8;//8"
 //    double distance_to_gate = 13.5; // starting distance to gate 13.5"
-    double distance_to_gate = 19.5; // starting distance to gate 13.5"
+    double distance_to_gate = 28.5; // starting distance to gate 13.5"
 
     double distance_to_center_of_stone;
 
@@ -40,7 +40,7 @@ public class NoVisionBlueAuto extends LinearOpMode{
         // robot is 15.75inches long
         // move by 18.5"
         choppy.moveForwBackEncoder(0.5, 21.5, true, false); //move further forward 7 inches
-        distance_to_blocks_inches -= 22;
+        distance_to_blocks_inches -= 21.5;
 
         //rotate90 towards the back wall
         choppy.rotateEncoder(0.25, 400, false, blueAlliance);
@@ -52,6 +52,7 @@ public class NoVisionBlueAuto extends LinearOpMode{
 //        choppy.moveForwBackEncoder(0.5,distance_block_width, true,false);
 //        distance_to_gate += distance_to_center_of_stone;
         CVCode();
+        choppy.moveForwBackEncoder(0.5, distance_block_width/2, true, false);
 
 
         // The robot is now lined up with the stone...well hopefully
@@ -73,7 +74,7 @@ public class NoVisionBlueAuto extends LinearOpMode{
 
         // Rotate towards the gate
 //        choppy.rotate90(blueAlliance, 1);
-        choppy.rotateEncoder(0.5, 400, false, !blueAlliance);
+        choppy.rotateEncoder(0.25, 400, false, !blueAlliance);
 
         // Move to the gate and a bit beyond
         telemetry.addData("distance to gate: ", distance_to_gate);
@@ -118,14 +119,14 @@ public class NoVisionBlueAuto extends LinearOpMode{
             if (computerVisionResults[1].equals("CENTRE, GRAB!!")){
                 telemetry.addLine("HEEREE! centre");
                 telemetry.update();
-                sleep(250);
+                sleep(100);
                 SkyStoneFound = true;
 
             }else if ((computerVisionResults[1].equals("To Field Centre"))){
                 telemetry.addLine("HERE! To field centre");
                 telemetry.addData("moving: ", computerVisionResults[4]);
                 telemetry.update();
-                sleep(250);
+                sleep(100);
                 distance_to_center_of_stone = Math.abs(Double.parseDouble(computerVisionResults[4]));
 //            distance_to_center_of_stone = distance_block_width/2; try other again
                 //+10 for error correction
@@ -173,8 +174,8 @@ public class NoVisionBlueAuto extends LinearOpMode{
                         SkyStoneFound = true;
                         // if we are at the third block, have not moved with CV and see no block just MOVE then grab it
                     }else if (loopCounter >= 2 && !movedUsingVision){
-                        choppy.moveForwBackEncoder(0.5, distance_block_width, true, false);
-                        distance_to_gate += distance_block_width;
+//                        choppy.moveForwBackEncoder(0.5, distance_block_width, true, false);
+//                        distance_to_gate += distance_block_width;
                         choppy.telementryLineMessage("moving forwards last block");
                         SkyStoneFound = true;
                     }
