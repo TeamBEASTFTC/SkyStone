@@ -188,9 +188,11 @@ public class HardwareSetup {
     double pie = Math.PI;
     double driveWheelCircumference = 2* pie * ((4 * mmPerInch)/2);//2 * pie * r
     int driveMotorTicks = 1120;
-    double average_desired_position;
+    double average_desired_position_under;
+    double average_desired_position_over;
     double current_average_position;
-    int refinment_encoder_value;
+    int refinment_encoder_value_under;
+    int refinment_encoder_value_over;
 
 
     HardwareMap hardwareMap;
@@ -502,6 +504,7 @@ public class HardwareSetup {
             driveBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             driveTL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             driveTR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            sleep(200);
             //ensuring the values we get allow us to do what we want
             if (is_distances_in_inches){
                 distance *= mmPerInch;
@@ -518,10 +521,11 @@ public class HardwareSetup {
             setDrivePower(power);
 
 
-            average_desired_position = encoderValue*0.95;
+            average_desired_position_under = encoderValue*0.9;
+            average_desired_position_over = encoderValue * 1.1;
 
             telemetry.addData("desired: ", encoderValue);
-            telemetry.addData("average: ", average_desired_position);
+            telemetry.addData("average: ", average_desired_position_under);
             this.telemetry.addData("Moving to position: ", encoderValue);
             this.telemetry.update();
             while ((driveTL.isBusy() && driveTR.isBusy() && driveBL.isBusy() && driveBR.isBusy())){
@@ -532,19 +536,19 @@ public class HardwareSetup {
             setDrivePower(0);
             current_average_position = Math.abs(driveTL.getCurrentPosition()) + Math.abs(driveTR.getCurrentPosition()) +
                     Math.abs(driveBL.getCurrentPosition()) + Math.abs(driveBR.getCurrentPosition())/4;
-            refinment_encoder_value = (int) Math.round(average_desired_position - current_average_position);//convert the double back to int after rounding
+            refinment_encoder_value_under = (int) Math.round(average_desired_position_under - current_average_position);//convert the double back to int after rounding
+            refinment_encoder_value_over = (int) Math.round(current_average_position - average_desired_position_over);//convert the double back to int after rounding
 
-
-            if ( current_average_position <= average_desired_position){
+            if ( current_average_position <= average_desired_position_under){
                 driveBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 driveBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 driveTL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 driveTR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                rotateEncoderSetup(refinment_encoder_value, clockwise);
+                rotateEncoderSetup(refinment_encoder_value_under, clockwise);
 
                 //turning now
                 setDrivePower(power);
-                this.telemetry.addData("Moving to position: ", refinment_encoder_value);
+                this.telemetry.addData("Moving to position: ", refinment_encoder_value_under);
                 this.telemetry.update();
                 while ((driveTL.isBusy() && driveTR.isBusy() && driveBL.isBusy() && driveBR.isBusy())){
                     telemetry.addData("Moved: ", "TL: %d, TR: %d, BL: %d, BR: %d",
@@ -553,6 +557,24 @@ public class HardwareSetup {
                 }
                 setDrivePower(0);
 
+            } else if (current_average_position >= average_desired_position_over){
+                driveBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                driveBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                driveTL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                driveTR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                sleep(200);
+                rotateEncoderSetup(refinment_encoder_value_over, !clockwise);
+
+                //turning now
+                setDrivePower(power);
+                this.telemetry.addData("Moving to position: ", refinment_encoder_value_under);
+                this.telemetry.update();
+                while ((driveTL.isBusy() && driveTR.isBusy() && driveBL.isBusy() && driveBR.isBusy())){
+                    telemetry.addData("Moved: ", "TL: %d, TR: %d, BL: %d, BR: %d",
+                            driveTL.getCurrentPosition(), driveTR.getCurrentPosition(), driveBL.getCurrentPosition(), driveBR.getCurrentPosition());
+                    telemetry.update();
+                }
+                setDrivePower(0);
             }
 //            driveBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //            driveBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
