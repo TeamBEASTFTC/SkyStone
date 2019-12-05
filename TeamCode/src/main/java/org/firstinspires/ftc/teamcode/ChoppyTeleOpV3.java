@@ -212,44 +212,43 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
 
         if (x > 0){
             // Top Right of circle
-            if ((y/x) >= 0 && (x/y) > (1/(Math.tan(pie/8))))
-            {
+            if ((y/x) >= 0 && (x/y) > (root_3/1)){
                 sector = 1;
             }
 
-            else if (((x/y) < ((1/(Math.tan(pie/8))))) && ((x/y) >= (1/(Math.tan(3*pie/8))))){
+            else if ((x/y) > (1/root_3) && (x/y) <= (root_3/1)){
                 sector = 2;
 
-            } else if ( (x/y) < (1/(Math.tan(3*pie/8))) && (x/y) >= (0)){
+            } else if ( (x/y) > 0 && (x/y) <= (1/root_3)){
                 sector = 3;
             }
 
             // Bottom Right of circle
-            else if ((y/x) < 0 && (x/y) <= (-1/(Math.tan(pie/8)))){
-                sector = 1;
-            }else if ((x/y) > (-1/(Math.tan(pie/8))) && (x/y) <= (-1/(Math.tan(3*pie/8)))){
-                sector = 8;
+            else if ((y/x) < 0 && (x/y) <= (-root_3/1)){
+                sector = 12;
+            }else if ((x/y) > (-root_3/1) && (x/y) <= (-1/root_3)){
+                sector = 11;
 
-            } else if ((x/y) > (-1/(Math.tan(3*pie/8))) && (x/y) <= 0){
-                sector = 7;
+            } else if ((x/y) > (-1/root_3) && (x/y) <= 0){
+                sector = 10;
             }
         }
         else if (x<0){
             // Top Left of circle
-            if ((x/y) <= 0 && (x/y) > (-1/(Math.tan(3*pie/8)))){
-                sector = 3;
-            }else if ((x/y) <= (-1/(Math.tan(3*pie/8))) && (x/y) > (-1/(Math.tan(pie/8)))){
+            if ((x/y) <= 0 && (x/y) > (-1/root_3)){
                 sector = 4;
-            } else if ((x/y) <= (-1/(Math.tan(pie/8))) && (y/x) < 0 ){
+            }else if ((x/y) <= (-1/root_3) && (x/y) > (-root_3/1)){
                 sector = 5;
-
-            // Bottom Left of circle
-            }else if ((y/x) >= 0 && (x/y) > (1/(Math.tan(pie/8)))){
-                sector = 5;
-            } else if ((x/y) <= (1/(Math.tan(pie/8))) && (x/y) > (1/(Math.tan(3*pie/8)))){
+            } else if ((x/y) <= (-root_3/1) && (y/x) < 0 ){
                 sector = 6;
-            } else if ((x/y) <= (1/(Math.tan(3*pie/8))) && (x/y) > 0){
+
+                // Bottom Left of circle
+            }else if ((y/x) >= 0 && (x/y) > (root_3/1)){
                 sector = 7;
+            } else if ((x/y) <= (root_3/1) && (x/y) > (1/root_3)){
+                sector = 8;
+            } else if ((x/y) <= (1/root_3) && (x/y) > 0){
+                sector = 9;
             }
         }
 
