@@ -29,6 +29,7 @@
 
 package org.firstinspires.ftc.teamcode.test_code;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -40,7 +41,7 @@ import org.firstinspires.ftc.teamcode.HardwareSetup;
 
 
 @TeleOp(name = "Old_ChoppyTeleOP", group = "Linear Opmode")
-
+@Disabled
 public class Old_ChoppyTeleOP extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();

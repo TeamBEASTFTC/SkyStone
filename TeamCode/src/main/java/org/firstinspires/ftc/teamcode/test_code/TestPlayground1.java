@@ -14,6 +14,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.HardwareSetup;
 
 @Autonomous(name="TestPlayground1", group="Tests")
+@Disabled
 public class TestPlayground1 extends LinearOpMode{
     double power=0.5;
     HardwareSetup robot = new HardwareSetup();

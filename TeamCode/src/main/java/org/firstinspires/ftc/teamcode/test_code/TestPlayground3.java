@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.test_code;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.HardwareSetup;
 
 @Autonomous(name="TestPlayground3", group="Tests")
+@Disabled
 public class TestPlayground3 extends LinearOpMode{
     double power=0.5;
     boolean redAlliance = false;
