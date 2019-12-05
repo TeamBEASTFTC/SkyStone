@@ -519,12 +519,9 @@ public class HardwareSetup {
 
 
             average_desired_position = encoderValue*0.95;
+
             telemetry.addData("desired: ", encoderValue);
             telemetry.addData("average: ", average_desired_position);
-            telemetry.update();
-            sleep(2000);
-
-
             this.telemetry.addData("Moving to position: ", encoderValue);
             this.telemetry.update();
             while ((driveTL.isBusy() && driveTR.isBusy() && driveBL.isBusy() && driveBR.isBusy())){
@@ -554,11 +551,9 @@ public class HardwareSetup {
                             driveTL.getCurrentPosition(), driveTR.getCurrentPosition(), driveBL.getCurrentPosition(), driveBR.getCurrentPosition());
                     telemetry.update();
                 }
-                sleep(2000);
                 setDrivePower(0);
 
             }
-            sleep(2000);
 //            driveBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //            driveBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //            driveTL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

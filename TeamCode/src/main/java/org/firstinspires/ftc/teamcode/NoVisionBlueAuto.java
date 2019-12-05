@@ -111,7 +111,7 @@ public class NoVisionBlueAuto extends LinearOpMode{
 
             choppy.targetsSkyStone.activate();
             //calling the computer vision now
-            sleep(1000);// wait a bit for it to look
+            sleep(250);// wait a bit for it to look
             computerVisionResults = choppy.computerVisionRunning(choppy.allTrackables, blueAlliance);
             choppy.targetsSkyStone.deactivate();
             //if robot is not center
