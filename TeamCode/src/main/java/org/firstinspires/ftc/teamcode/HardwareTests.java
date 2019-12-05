@@ -49,14 +49,16 @@ public class HardwareTests extends LinearOpMode {
 
 //        choppy.setFoundationClipPower(-0.02);
         waitForStart();
-        choppy.setIntakeServoPos(0);
-//        choppy.setFoundationClipPosition(0);
-        sleep(2000);
-        choppy.setIntakeServoPos(0.4);
-        sleep(2000);
-        choppy.setIntakeServoPos(0.65);
-//        choppy.setFoundationClipPosition(0.5);
-        sleep(2000);
+        choppy.moveForwBackEncoder(0.5, 200, false, false);
+        choppy.rotateEncoder(0.5, 400, false, true);
+//        choppy.setIntakeServoPos(0);
+////        choppy.setFoundationClipPosition(0);
+//        sleep(2000);
+//        choppy.setIntakeServoPos(0.4);
+//        sleep(2000);
+//        choppy.setIntakeServoPos(0.65);
+////        choppy.setFoundationClipPosition(0.5);
+//        sleep(2000);
         /*choppy.setFoundationClipPosition(1);
 //        choppy.LFoundationHook.setPosition(0);
 //        choppy.RFoundationHook.setPosition(0.9);
