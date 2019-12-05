@@ -39,11 +39,11 @@ public class NoVisionBlueAuto extends LinearOpMode{
         //NOTE USING INCHES: 1 inch = 1000 distance unit
         // robot is 15.75inches long
         // move by 18.5"
-        choppy.moveForwBackEncoder(0.5, 25.5, true, false); //move further forward 7 inches
+        choppy.moveForwBackEncoder(0.5, 21.5, true, false); //move further forward 7 inches
         distance_to_blocks_inches -= 22;
 
         //rotate90 towards the back wall
-        choppy.rotateEncoder(0.5, 400, false, !blueAlliance);
+        choppy.rotateEncoder(0.25, 400, false, blueAlliance);
 
 
         //work your way towards the SkyStone
@@ -56,7 +56,7 @@ public class NoVisionBlueAuto extends LinearOpMode{
 
         // The robot is now lined up with the stone...well hopefully
         // Now we rotate to face it
-        choppy.rotateEncoder(0.5, 400, false, blueAlliance);
+        choppy.rotateEncoder(0.25, 400, false, !blueAlliance);
 
         //prepare intake
 //        choppy.grabStoneFlipperControl(false);
@@ -73,12 +73,12 @@ public class NoVisionBlueAuto extends LinearOpMode{
 
         // Rotate towards the gate
 //        choppy.rotate90(blueAlliance, 1);
-        choppy.rotateEncoder(0.5, 400, false, blueAlliance);
+        choppy.rotateEncoder(0.5, 400, false, !blueAlliance);
 
         // Move to the gate and a bit beyond
         telemetry.addData("distance to gate: ", distance_to_gate);
         telemetry.update();
-        sleep(1000);
+        sleep(500);
         choppy.moveForwBackEncoder(0.75, distance_to_gate+10, true, false);
 
         // Release the stone
@@ -106,17 +106,7 @@ public class NoVisionBlueAuto extends LinearOpMode{
             telemetry.addData("Loop counter: ", loopCounter);
             telemetry.update();
 
-            // if we have moved with CV then we are not aligned as per our setup position, so just take where we are
-            if (loopCounter >= 3 && (computerVisionResults[0].equals("false")) && movedUsingVision){
-                choppy.telementryLineMessage("we are done here!");
-                SkyStoneFound = true;
-                // if we are at the third block, have not moved with CV and see no block just MOVE then grab it
-            }else if (loopCounter >= 3 && (computerVisionResults[0].equals("false") && !movedUsingVision)){
-                choppy.moveForwBackEncoder(0.5, distance_block_width, true, false);
-                distance_to_gate += distance_block_width;
-                choppy.telementryLineMessage("moving forwards last block");
-                SkyStoneFound = true;
-            }
+
 
 
             choppy.targetsSkyStone.activate();
@@ -141,7 +131,7 @@ public class NoVisionBlueAuto extends LinearOpMode{
                 //+10 for error correction
             choppy.moveForwBackEncoder(0.3, distance_to_center_of_stone, false, true);
             distance_to_gate -= distance_to_center_of_stone;
-                SkyStoneFound = false;//This may be set to true if the above is effective
+                SkyStoneFound = true;//This may be set to true if the above is ineffective
                 movedUsingVision = true;
 
             } else if (computerVisionResults[1].equals("To Field Border")){
@@ -160,7 +150,7 @@ public class NoVisionBlueAuto extends LinearOpMode{
 //             distance_to_gate += distance_to_center_of_stone;
                 telemetry.update();
                 sleep(250);
-                SkyStoneFound = false; //if not working change to true
+                SkyStoneFound = true; //if not working change to true
                 movedUsingVision = true;
 //                if (loopCounter == 3){
 //                    SkyStoneFound = true;
@@ -177,6 +167,17 @@ public class NoVisionBlueAuto extends LinearOpMode{
                     choppy.telementryLineMessage("Vuforia computer vision = false");
                     sleep(250);
                     false_counter = 0;
+                    // if we have moved with CV then we are not aligned as per our setup position, so just take where we are
+                    if (loopCounter >= 2 && movedUsingVision){
+                        choppy.telementryLineMessage("we are done here!");
+                        SkyStoneFound = true;
+                        // if we are at the third block, have not moved with CV and see no block just MOVE then grab it
+                    }else if (loopCounter >= 2 && !movedUsingVision){
+                        choppy.moveForwBackEncoder(0.5, distance_block_width, true, false);
+                        distance_to_gate += distance_block_width;
+                        choppy.telementryLineMessage("moving forwards last block");
+                        SkyStoneFound = true;
+                    }
 
                     // if we are at the third block and the others have not been found then,
                     // this block must be what we are looking for!
