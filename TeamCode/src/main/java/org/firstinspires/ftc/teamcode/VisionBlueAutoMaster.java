@@ -3,16 +3,17 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-@Autonomous(name="NoVisionBlueAuto", group="Tests")
-public class NoVisionBlueAuto extends LinearOpMode{
+@Autonomous(name="VisionBlueAutoMaster", group="Tests")
+public class VisionBlueAutoMaster extends LinearOpMode{
     //TO do:
     //Write a catch for if it gets stuck in using the encoders
     double power=0.5;
 //    boolean redAlliance = false;
-    boolean blueAlliance = false;
+    boolean blueAlliance = true;
 
     // computer vision
     int false_counter = 0; //counts the number of times vision not found
+    int loopCounter = 0;
 
     // distances
     double robot_inch_distance = 15.75; // 15.75"
@@ -20,6 +21,7 @@ public class NoVisionBlueAuto extends LinearOpMode{
     double distance_block_width = 8;//8"
 //    double distance_to_gate = 13.5; // starting distance to gate 13.5"
     double distance_to_gate = 28.5; // starting distance to gate 13.5"
+    double distance_to_wall = distance_to_blocks_inches - 5;
 
     double distance_to_center_of_stone;
 
@@ -28,7 +30,7 @@ public class NoVisionBlueAuto extends LinearOpMode{
 
     @Override
     public void runOpMode() {
-        choppy.init(hardwareMap, telemetry, true, true,true);
+        choppy.init(hardwareMap, telemetry, true, true,blueAlliance);
 
         waitForStart();
 //        choppy.moveForwBack(0.5, 2000, false);
@@ -52,7 +54,10 @@ public class NoVisionBlueAuto extends LinearOpMode{
 //        choppy.moveForwBackEncoder(0.5,distance_block_width, true,false);
 //        distance_to_gate += distance_to_center_of_stone;
         CVCode();
-        choppy.moveForwBackEncoder(0.5, distance_block_width/2, true, false);
+        if (loopCounter > 1){
+            // if it is not the first block
+            choppy.moveForwBackEncoder(0.5, distance_block_width/2, true, false);
+        }
 
 
         // The robot is now lined up with the stone...well hopefully
@@ -65,12 +70,14 @@ public class NoVisionBlueAuto extends LinearOpMode{
         // Move towards the block
         choppy.moveForwBackEncoder(0.5, distance_to_blocks_inches, true, false);
 
+
         // Grab the block
 //        choppy.grabStoneFlipperControl(true);
         choppy.setIntakeServoPos(0.65);
+        choppy.moveCrane(200, 0.7);//  lifting crane so it does not drag
 
         // Move back
-        choppy.moveForwBackEncoder(0.5, distance_to_blocks_inches, true, true);
+        choppy.moveForwBackEncoder(0.5, distance_to_gate, true, true);
 
         // Rotate towards the gate
 //        choppy.rotate90(blueAlliance, 1);
@@ -85,6 +92,7 @@ public class NoVisionBlueAuto extends LinearOpMode{
         // Release the stone
         choppy.grabStoneFlipperControl(false);
         choppy.setIntakeServoPos(0.4);
+        choppy.moveCrane(0, 0.5);//  lifting crane so it does not drag
 
         // Move back under the gate
         choppy.moveForwBackEncoder(0.5, 10, true, true);
@@ -99,8 +107,6 @@ public class NoVisionBlueAuto extends LinearOpMode{
     private void CVCode(){
         boolean SkyStoneFound = false;
         boolean movedUsingVision = false;
-        int loopCounter = 0;
-        int false_counter = 0;
         String [] computerVisionResults = {"false", "", "", "", ""};
         while (!(SkyStoneFound)){
             loopCounter += 1;
