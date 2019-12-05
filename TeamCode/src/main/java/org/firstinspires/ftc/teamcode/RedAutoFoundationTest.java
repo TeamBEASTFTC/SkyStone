@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @Autonomous(name="RedAutoFoundationTest", group="Tests")
+@Disabled
 public class RedAutoFoundationTest extends LinearOpMode{
 //    double power=0.5;
     boolean blueAlliance = false;
