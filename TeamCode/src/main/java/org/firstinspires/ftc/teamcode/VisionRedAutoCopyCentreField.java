@@ -23,9 +23,9 @@ public class VisionRedAutoCopyCentreField extends LinearOpMode{
     double robot_inch_distance = 15.75; // 15.75"
     double distance_to_blocks_inches = 55.0 - robot_inch_distance;
     double distance_block_width = 8;//8"
-    double horizontal_distance_to_gate = robot_inch_distance-2;
+    double horizontal_distance_to_gate = robot_inch_distance-6;
     //    double distance_to_gate = 13.5; // starting distance to gate 13.5"
-    double distance_to_gate = 29.5; // starting distance to gate 13.5"
+    double distance_to_gate = 33.5; // starting distance to gate 13.5"
     double distance_to_wall = distance_to_blocks_inches - 7;
 
     double distance_to_center_of_stone;
@@ -82,7 +82,7 @@ public class VisionRedAutoCopyCentreField extends LinearOpMode{
         choppy.moveCrane(200, 0.7, true);//  lifting crane so it does not drag
 
         // Move back into the wall
-        choppy.moveForwBackEncoder(1, horizontal_distance_to_gate, true, true);
+        choppy.moveForwBackEncoder(0.75, horizontal_distance_to_gate, true, true);
         //a bit of space to rotate
 //        choppy.moveForwBackEncoder(0.5, 3, true, false);
 
@@ -96,8 +96,8 @@ public class VisionRedAutoCopyCentreField extends LinearOpMode{
         // Move to the gate and a bit beyond
         telemetry.addData("distance to gate: ", distance_to_gate);
         telemetry.update();
-        sleep(500);
-        choppy.moveForwBackEncoder(0.75, 20, true, false);
+//        sleep(500);
+        choppy.moveForwBackEncoder(0.8, 20, true, false);
         distance_to_gate -= 20;
         //release da capstone
         choppy.releaseCapstone();
@@ -110,7 +110,7 @@ public class VisionRedAutoCopyCentreField extends LinearOpMode{
         choppy.moveCrane(0, 0.5, false);//  lifting crane so it does not drag
 
         // Move back under the gate
-        choppy.moveForwBackEncoder(0.5, 17, true, true);
+        choppy.moveForwBackEncoder(0.5, 10, true, true);
 
 
         // DONE
@@ -166,7 +166,7 @@ public class VisionRedAutoCopyCentreField extends LinearOpMode{
                 choppy.moveForwBackEncoder(0.3, distance_to_center_of_stone, false, false);
                 telemetry.addLine("To Field border!");
 //                choppy.telementryLineMessage("moving slightly forwards");
-//             distance_to_gate += distance_to_center_of_stone;
+                distance_to_gate += distance_to_center_of_stone;
                 telemetry.update();
                 sleep(10);
                 SkyStoneFound = true; //if not working change to true
