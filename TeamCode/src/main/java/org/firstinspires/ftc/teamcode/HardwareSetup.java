@@ -807,6 +807,30 @@ public class HardwareSetup {
         setFoundationClipPosition(0);
     }
 
+    //crane
+    public void moveCrane(int encoder_value, double power){
+        rotateCrane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rotateCrane.setTargetPosition(encoder_value);
+
+        rotateCrane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+
+        rotateCrane.setPower(power);
+
+        this.telemetry.addData("Moving to position: ", encoderValue);
+        this.telemetry.update();
+        while ((rotateCrane.isBusy() )) {
+            telemetry.addData("Moved: ", rotateCrane.getCurrentPosition());
+            telemetry.update();
+        }
+        rotateCrane.setPower(0);
+    }
+
+
+
+
+
 
     // Intake Servos
     public void setIntakeServoPos(double position){
