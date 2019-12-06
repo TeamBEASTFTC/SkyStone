@@ -25,7 +25,7 @@ public class VisionRedAutoCopy extends LinearOpMode{
     double distance_to_blocks_inches = 55.0 - robot_inch_distance;
     double distance_block_width = 8;//8"
     //    double distance_to_gate = 13.5; // starting distance to gate 13.5"
-    double distance_to_gate = 32.5; // starting distance to gate 13.5"
+    double distance_to_gate = 33.5; // starting distance to gate 13.5"
     double distance_to_wall = distance_to_blocks_inches - 7;
 
     double distance_to_center_of_stone;
@@ -46,11 +46,11 @@ public class VisionRedAutoCopy extends LinearOpMode{
         //NOTE USING INCHES: 1 inch = 1000 distance unit
         // robot is 15.75inches long
         // move by 18.5"
-        choppy.moveForwBackEncoder(0.5, 23.5, true, false); //move further forward 7 inches
-        distance_to_blocks_inches -= 23.5;
+        choppy.moveForwBackEncoder(0.65, 23, true, false); //move further forward 7 inches
+        distance_to_blocks_inches -= 23;
 
-        //rotate90 towards the back wall
-        choppy.rotateEncoder(0.25, 400, false, blueAlliance);
+        //rotate90 towards the block
+        choppy.rotateEncoder(0.25, 395, false, blueAlliance);
 
 
         //work your way towards the SkyStone
@@ -73,7 +73,7 @@ public class VisionRedAutoCopy extends LinearOpMode{
 //        choppy.grabStoneFlipperControl(false);
         choppy.setIntakeServoPos(0.4);
         // Move towards the block
-        choppy.moveForwBackEncoder(0.5, distance_to_blocks_inches, true, false);
+        choppy.moveForwBackEncoder(0.75, distance_to_blocks_inches, true, false);
 
 
         // Grab the block
@@ -96,21 +96,23 @@ public class VisionRedAutoCopy extends LinearOpMode{
         // Move to the gate and a bit beyond
         telemetry.addData("distance to gate: ", distance_to_gate);
         telemetry.update();
-        sleep(500);
-        choppy.moveForwBackEncoder(0.75, 20, true, false);
+//        sleep(500);
+        choppy.moveForwBackEncoder(0.8, 20, true, false);
         distance_to_gate -= 20;
         //release da capstone
         choppy.releaseCapstone();
-        choppy.moveForwBackEncoder(0.8, distance_to_gate+17, true, false);
+        choppy.moveForwBackEncoder(0.8, distance_to_gate, true, false);
         //passing further than gate
 
         // Release the stone
         choppy.grabStoneFlipperControl(false);
         choppy.setIntakeServoPos(0.4);
-        choppy.moveCrane(0, 0.5, false);//  lifting crane so it does not drag
 
         // Move back under the gate
         choppy.moveForwBackEncoder(0.5, 17, true, true);
+
+        choppy.moveCrane(0, 0.5, false);//  lifting crane so it does not drag
+
 
 
         // DONE
@@ -145,10 +147,10 @@ public class VisionRedAutoCopy extends LinearOpMode{
                 telemetry.addData("moving: ", computerVisionResults[4]);
                 telemetry.update();
                 sleep(10);
-                distance_to_center_of_stone = Math.abs(Double.parseDouble(computerVisionResults[4])) -10;
+                distance_to_center_of_stone = Math.abs(Double.parseDouble(computerVisionResults[4])) - 10;
 //            distance_to_center_of_stone = distance_block_width/2; try other again
                 //+10 for error correction
-                choppy.moveForwBackEncoder(0.3, distance_to_center_of_stone, false, true);
+                choppy.moveForwBackEncoder(0.5, distance_to_center_of_stone, false, true);
                 distance_to_gate -= distance_to_center_of_stone;
                 SkyStoneFound = true;//This may be set to true if the above is ineffective
                 movedUsingVision = true;
@@ -159,11 +161,11 @@ public class VisionRedAutoCopy extends LinearOpMode{
                 telemetry.update();
                 sleep(10);
 
-                distance_to_center_of_stone = Math.abs(Double.parseDouble(computerVisionResults[4])) -10;
+                distance_to_center_of_stone = Math.abs(Double.parseDouble(computerVisionResults[4])) - 10;
 //                distance_to_center_of_stone = distance_block_width/2; I recogn try the other one again
 
                 //+10 for error correction
-                choppy.moveForwBackEncoder(0.3, distance_to_center_of_stone, false, false);
+                choppy.moveForwBackEncoder(0.5, distance_to_center_of_stone, false, false);
                 telemetry.addLine("To Field border!");
 //                choppy.telementryLineMessage("moving slightly forwards");
 //             distance_to_gate += distance_to_center_of_stone;
@@ -196,7 +198,7 @@ public class VisionRedAutoCopy extends LinearOpMode{
                         choppy.telementryLineMessage("moving back last block");
                         SkyStoneFound = true;
                     } else{
-                        choppy.moveForwBackEncoder(0.5, distance_block_width, true, false);
+                        choppy.moveForwBackEncoder(0.65, distance_block_width, true, false);
                         distance_to_gate += distance_block_width;
                     }
 
@@ -213,7 +215,7 @@ public class VisionRedAutoCopy extends LinearOpMode{
 
             } else {
                 // if for what ever reason something does not work, don't stop the robot... just keep trying!
-                choppy.moveForwBackEncoder(0.5,distance_block_width, true,false);
+                choppy.moveForwBackEncoder(0.65,distance_block_width, true,false);
                 distance_to_gate += distance_to_center_of_stone;
                 choppy.telementryLineMessage("Vuforia else statement");
                 sleep(10);
