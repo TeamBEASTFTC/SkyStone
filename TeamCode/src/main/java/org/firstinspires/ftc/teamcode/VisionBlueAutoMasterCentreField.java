@@ -25,7 +25,7 @@ public class VisionBlueAutoMasterCentreField extends LinearOpMode{
     double distance_block_width = 8;//8"
     double horizontal_distance_to_gate = robot_inch_distance-6;
 //    double distance_to_gate = 13.5; // starting distance to gate 13.5"
-    double distance_to_gate = 33.5; // starting distance to gate 13.5"
+    double distance_to_gate = 28.5; // starting distance to gate 13.5"
     double distance_to_wall = distance_to_blocks_inches - 7;
 
     double distance_to_center_of_stone;

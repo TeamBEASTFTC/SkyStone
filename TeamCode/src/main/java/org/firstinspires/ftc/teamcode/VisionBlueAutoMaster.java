@@ -20,6 +20,8 @@ public class VisionBlueAutoMaster extends LinearOpMode{
 
 
     // distances
+    private static final float mmPerInch = 25.4f;
+
     double robot_inch_distance = 15.75; // 15.75"
     double distance_to_blocks_inches = 55.0 - robot_inch_distance;
     double distance_block_width = 8;//8"
@@ -81,7 +83,7 @@ public class VisionBlueAutoMaster extends LinearOpMode{
         choppy.moveCrane(200, 0.7, true);//  lifting crane so it does not drag
 
         // Move back into the wall
-        choppy.moveForwBackEncoder(1, distance_to_gate, true, true);
+        choppy.moveForwBackEncoder(0.8, distance_to_gate+5, true, true);
         //a bit of space to rotate
         choppy.moveForwBackEncoder(0.5, 3, true, false);
 
@@ -108,7 +110,7 @@ public class VisionBlueAutoMaster extends LinearOpMode{
         choppy.setIntakeServoPos(0.4);
 
         // Move back under the gate
-        choppy.moveForwBackEncoder(0.5, 17, true, true);
+        choppy.moveForwBackEncoder(0.8, 17, true, true);
 
         choppy.moveCrane(0, 0.5, false);//  lifting crane so it does not drag
 
@@ -150,7 +152,7 @@ public class VisionBlueAutoMaster extends LinearOpMode{
 //            distance_to_center_of_stone = distance_block_width/2; try other again
                 //+10 for error correction
             choppy.moveForwBackEncoder(0.5, distance_to_center_of_stone, false, true);
-            distance_to_gate -= distance_to_center_of_stone;
+            distance_to_gate -= distance_to_center_of_stone/mmPerInch;
                 SkyStoneFound = true;//This may be set to true if the above is ineffective
                 movedUsingVision = true;
 
@@ -165,6 +167,7 @@ public class VisionBlueAutoMaster extends LinearOpMode{
 
                 //+10 for error correction
                 choppy.moveForwBackEncoder(0.5, distance_to_center_of_stone, false, false);
+                distance_to_gate -= distance_to_center_of_stone/mmPerInch;
                 telemetry.addLine("To Field border!");
 //                choppy.telementryLineMessage("moving slightly forwards");
 //             distance_to_gate += distance_to_center_of_stone;
