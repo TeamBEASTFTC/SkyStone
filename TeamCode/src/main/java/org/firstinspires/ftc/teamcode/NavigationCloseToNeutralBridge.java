@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-@Autonomous(name="NavigationCloseToNeutralBridge", group="Tests")
+@Autonomous(name="NavigationCloseToNeutralBridge", group="Auto")
 public class NavigationCloseToNeutralBridge extends LinearOpMode{
     //TO do:
     //Write a catch for if it gets stuck in using the encoders
@@ -17,10 +17,9 @@ public class NavigationCloseToNeutralBridge extends LinearOpMode{
 
     @Override
     public void runOpMode() {
-        choppy.init(hardwareMap, telemetry, false, true,true);
+        choppy.init(hardwareMap, telemetry, false, true,blueAlliance);
 
 
-        choppy.init(hardwareMap, telemetry, true, false,blueAlliance);
 
         waitForStart();
         choppy.moveForwBackEncoder(0.25,36, true, false);

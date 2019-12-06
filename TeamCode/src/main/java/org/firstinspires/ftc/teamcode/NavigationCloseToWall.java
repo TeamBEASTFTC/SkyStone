@@ -19,10 +19,9 @@ public class NavigationCloseToWall extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        choppy.init(hardwareMap, telemetry, false, true, true);
+        choppy.init(hardwareMap, telemetry, false, true, blueAlliance);
 
 
-        choppy.init(hardwareMap, telemetry, true, false, blueAlliance);
 
         waitForStart();
         choppy.moveForwBackEncoder(0.25, 12, true, false);
