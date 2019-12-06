@@ -14,14 +14,18 @@ public class VisionBlueAutoMaster extends LinearOpMode{
     // computer vision
     int false_counter = 0; //counts the number of times vision not found
     int loopCounter = 0;
+    boolean movedUsingVision = false;
+    boolean SkyStoneFound = false;
+
+
 
     // distances
     double robot_inch_distance = 15.75; // 15.75"
     double distance_to_blocks_inches = 55.0 - robot_inch_distance;
     double distance_block_width = 8;//8"
 //    double distance_to_gate = 13.5; // starting distance to gate 13.5"
-    double distance_to_gate = 28.5; // starting distance to gate 13.5"
-    double distance_to_wall = distance_to_blocks_inches - 5;
+    double distance_to_gate = 32.5; // starting distance to gate 13.5"
+    double distance_to_wall = distance_to_blocks_inches - 7;
 
     double distance_to_center_of_stone;
 
@@ -54,9 +58,9 @@ public class VisionBlueAutoMaster extends LinearOpMode{
 //        choppy.moveForwBackEncoder(0.5,distance_block_width, true,false);
 //        distance_to_gate += distance_to_center_of_stone;
         CVCode();
-        if (loopCounter > 1){
+        if (loopCounter > 1 && !movedUsingVision){
             // if it is not the first block
-            choppy.moveForwBackEncoder(0.5, distance_block_width/2, true, false);
+            choppy.moveForwBackEncoder(0.5, distance_block_width/3, true, false);
         }
 
 
@@ -76,22 +80,28 @@ public class VisionBlueAutoMaster extends LinearOpMode{
         choppy.setIntakeServoPos(0.65);
         choppy.moveCrane(200, 0.7);//  lifting crane so it does not drag
 
-        // Move back
+        // Move back into the wall
         choppy.moveForwBackEncoder(0.5, distance_to_gate, true, true);
+        //a bit of space to rotate
+        choppy.moveForwBackEncoder(0.5, 3, true, false);
 
         // Rotate towards the gate
 //        choppy.rotate90(blueAlliance, 1);
         choppy.rotateEncoder(0.25, 395, false, !blueAlliance);
 
-        //release da capstone
-        choppy.releaseCapstone();
+
 
 
         // Move to the gate and a bit beyond
         telemetry.addData("distance to gate: ", distance_to_gate);
         telemetry.update();
         sleep(500);
-        choppy.moveForwBackEncoder(0.5, distance_to_gate+10, true, false);
+        choppy.moveForwBackEncoder(0.5, 20, true, false);
+        distance_to_gate -= 20;
+        //release da capstone
+        choppy.releaseCapstone();
+        choppy.moveForwBackEncoder(0.5, distance_to_gate+17, true, false);
+        //passing further than gate
 
         // Release the stone
         choppy.grabStoneFlipperControl(false);
@@ -99,7 +109,7 @@ public class VisionBlueAutoMaster extends LinearOpMode{
         choppy.moveCrane(0, 0.5);//  lifting crane so it does not drag
 
         // Move back under the gate
-        choppy.moveForwBackEncoder(0.5, 10, true, true);
+        choppy.moveForwBackEncoder(0.5, 17, true, true);
 
 
         // DONE
@@ -108,8 +118,6 @@ public class VisionBlueAutoMaster extends LinearOpMode{
     }
 
     private void CVCode(){
-        boolean SkyStoneFound = false;
-        boolean movedUsingVision = false;
         String [] computerVisionResults = {"false", "", "", "", ""};
         while (!(SkyStoneFound)){
             loopCounter += 1;
