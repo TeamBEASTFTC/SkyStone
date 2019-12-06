@@ -802,14 +802,16 @@ public class HardwareSetup {
 
     public void releaseCapstone(){
         telementryLineMessage("Releasing the capstone!");
-        setFoundationClipPosition(0.35);
+        setFoundationClipPosition(0.5);
         sleep(750);
         setFoundationClipPosition(0);
     }
 
     //crane
-    public void moveCrane(int encoder_value, double power){
-//        rotateCrane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    public void moveCrane(int encoder_value, double power, boolean reset){
+        if (reset){
+          rotateCrane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        }
         rotateCrane.setTargetPosition(encoder_value);
 
         rotateCrane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
