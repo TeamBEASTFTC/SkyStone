@@ -809,7 +809,7 @@ public class HardwareSetup {
 
     //crane
     public void moveCrane(int encoder_value, double power){
-        rotateCrane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        rotateCrane.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rotateCrane.setTargetPosition(encoder_value);
 
         rotateCrane.setMode(DcMotor.RunMode.RUN_TO_POSITION);
