@@ -325,11 +325,11 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
         //  Crane control
         // If joystick is up, bring crane up!
         y_crane_value = -gamepad.right_stick_y;
-        if (y_crane_value > 0){
+        if (y_crane_value > 0.5){
             if (choppy.rotateCrane.getCurrentPosition() < 2600){
                 crane_control = gamepad.id;
                 joystick = true;
-                directionCrane = 1;
+                directionCrane = 0.8;
             }
 
         } else if (y_crane_value < 0){
@@ -496,92 +496,92 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
             // only takes the up and down motion of the joystick and not the horizontal
             dpad = false;
 
-            if (sector == 1) {
-                choppy.telementryLineMessage("Sector 1: Shuffling right");
-                powerTR = -1;
-                powerTL = 1;
-                powerBR = 1;
-                powerBL = -1;
-
-            } else if (sector == 2) {
-                choppy.telementryLineMessage("Sector 2: Diagonal top right");
-                powerTR = 0;
-                powerTL = 1;
-                powerBR = 1;
-                powerBL = 0;
-            } else if (sector == 3) {
-                choppy.telementryLineMessage("Sector 3: Forwards");
-                powerTR = 1;
-                powerTL = 1;
-                powerBR = 1;
-                powerBL = 1;
-            } else if (sector == 4) {
-                choppy.telementryLineMessage("Sector 4: Forwards");
-                powerTR = 1;
-                powerTL = 1;
-                powerBR = 1;
-                powerBL = 1;
-            } else if (sector == 5) {
-                choppy.telementryLineMessage("Sector 5: Diagonal top left");
-                powerTR = 1;
-                powerTL = 0;
-                powerBR = 0;
-                powerBL = 1;
-            } else if (sector == 6) {
-                choppy.telementryLineMessage("Sector 6: Shuffling left");
-                powerTR = 1;
-                powerTL = -1;
-                powerBR = -1;
-                powerBL = 1;
-            } else if (sector == 7) {
-                choppy.telementryLineMessage("Sector 6: Shuffling left");
-                powerTR = 1;
-                powerTL = -1;
-                powerBR = -1;
-                powerBL = 1;
-            } else if (sector == 8) {
-                choppy.telementryLineMessage("Sector 8: Diagonal bottom left");
-                powerTR = 0;
-                powerTL = -1;
-                powerBR = -1;
-                powerBL = 0;
-            } else if (sector == 9) {
-                choppy.telementryLineMessage("Sector 9: Backwards");
-                powerTR = -1;
-                powerTL = -1;
-                powerBR = -1;
-                powerBL = -1;
-            } else if (sector == 10) {
-                choppy.telementryLineMessage("Sector 10: Backwards");
-                powerTR = -1;
-                powerTL = -1;
-                powerBR = -1;
-                powerBL = -1;
-            } else if (sector == 11) {
-                choppy.telementryLineMessage("Sector 11: Diagonal bottom right");
-                powerTR = -1;
-                powerTL = 0;
-                powerBR = 0;
-                powerBL = -1;
-            } else if (sector == 12) {
-                choppy.telementryLineMessage("Sector 12: Shuffling right");
-                powerTR = -1;
-                powerTL = 1;
-                powerBR = 1;
-                powerBL = -1;
-            } else if (sector == 0){
-                choppy.telementryLineMessage("Sector 0: Off");
-                powerBL = 0;
-                powerBR = 0;
-                powerTR = 0;
-                powerBL = 0;
-            } else {
-                choppy.telementryLineMessage("Sector None: Off");
-                powerTR = 0;
-                powerTL = 0;
-                powerBR = 0;
-                powerBL = 0;
-            }
+//            if (sector == 1) {
+//                choppy.telementryLineMessage("Sector 1: Shuffling right");
+//                powerTR = -1;
+//                powerTL = 1;
+//                powerBR = 1;
+//                powerBL = -1;
+//
+//            } else if (sector == 2) {
+//                choppy.telementryLineMessage("Sector 2: Diagonal top right");
+//                powerTR = 0;
+//                powerTL = 1;
+//                powerBR = 1;
+//                powerBL = 0;
+//            } else if (sector == 3) {
+//                choppy.telementryLineMessage("Sector 3: Forwards");
+//                powerTR = 1;
+//                powerTL = 1;
+//                powerBR = 1;
+//                powerBL = 1;
+//            } else if (sector == 4) {
+//                choppy.telementryLineMessage("Sector 4: Forwards");
+//                powerTR = 1;
+//                powerTL = 1;
+//                powerBR = 1;
+//                powerBL = 1;
+//            } else if (sector == 5) {
+//                choppy.telementryLineMessage("Sector 5: Diagonal top left");
+//                powerTR = 1;
+//                powerTL = 0;
+//                powerBR = 0;
+//                powerBL = 1;
+//            } else if (sector == 6) {
+//                choppy.telementryLineMessage("Sector 6: Shuffling left");
+//                powerTR = 1;
+//                powerTL = -1;
+//                powerBR = -1;
+//                powerBL = 1;
+//            } else if (sector == 7) {
+//                choppy.telementryLineMessage("Sector 6: Shuffling left");
+//                powerTR = 1;
+//                powerTL = -1;
+//                powerBR = -1;
+//                powerBL = 1;
+//            } else if (sector == 8) {
+//                choppy.telementryLineMessage("Sector 8: Diagonal bottom left");
+//                powerTR = 0;
+//                powerTL = -1;
+//                powerBR = -1;
+//                powerBL = 0;
+//            } else if (sector == 9) {
+//                choppy.telementryLineMessage("Sector 9: Backwards");
+//                powerTR = -1;
+//                powerTL = -1;
+//                powerBR = -1;
+//                powerBL = -1;
+//            } else if (sector == 10) {
+//                choppy.telementryLineMessage("Sector 10: Backwards");
+//                powerTR = -1;
+//                powerTL = -1;
+//                powerBR = -1;
+//                powerBL = -1;
+//            } else if (sector == 11) {
+//                choppy.telementryLineMessage("Sector 11: Diagonal bottom right");
+//                powerTR = -1;
+//                powerTL = 0;
+//                powerBR = 0;
+//                powerBL = -1;
+//            } else if (sector == 12) {
+//                choppy.telementryLineMessage("Sector 12: Shuffling right");
+////                powerTR = -1;
+////                powerTL = 1;
+////                powerBR = 1;
+////                powerBL = -1;
+//            } else if (sector == 0){
+//                choppy.telementryLineMessage("Sector 0: Off");
+//                powerBL = 0;
+//                powerBR = 0;
+//                powerTR = 0;
+//                powerBL = 0;
+//            } else {
+//                choppy.telementryLineMessage("Sector None: Off");
+//                powerTR = 0;
+//                powerTL = 0;
+//                powerBR = 0;
+//                powerBL = 0;
+//            }
 
         }
 
