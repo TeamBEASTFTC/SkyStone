@@ -83,6 +83,10 @@ public class VisionBlueAutoMaster extends LinearOpMode{
 //        choppy.rotate90(blueAlliance, 1);
         choppy.rotateEncoder(0.25, 395, false, !blueAlliance);
 
+        //release da capstone
+        choppy.releaseCapstone();
+
+
         // Move to the gate and a bit beyond
         telemetry.addData("distance to gate: ", distance_to_gate);
         telemetry.update();
@@ -97,7 +101,6 @@ public class VisionBlueAutoMaster extends LinearOpMode{
         // Move back under the gate
         choppy.moveForwBackEncoder(0.5, 10, true, true);
 
-        choppy.releaseCapstone();
 
         // DONE
 
