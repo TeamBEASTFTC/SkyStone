@@ -53,7 +53,7 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
     double positionBR;
     double positionCrane;
 
-   //servo positions
+    //servo positions
     double LSqueezerClose = 0.56;
     double LSqueezerOpen = 0.4;
 
@@ -186,7 +186,7 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
             gamepad_control_motors();
             motor_output();
 //            sendOutput();
-        //shuffling is rotating
+            //shuffling is rotating
             //shuffle right rotates right
             // the two classes are causing for it to be jumpy
             // foundation hook is too fast
@@ -300,7 +300,7 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
             //raise foundation
         } else{
             if (trigger_control == gamepad.id) {
-            trigger_control = 0;
+                trigger_control = 0;
             }
         }
 
@@ -383,8 +383,8 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
 
             // if gamepad 2 is moving robot
         } else if (gamepad2.dpad_down || gamepad2.dpad_up || gamepad2.dpad_left || gamepad2.dpad_right ||
-                    gamepad2.right_bumper || gamepad2.left_bumper ||
-                    ((Math.abs(gamepad2.left_stick_x) > 0)) || ((Math.abs(gamepad2.left_stick_y)) > 0)){
+                gamepad2.right_bumper || gamepad2.left_bumper ||
+                ((Math.abs(gamepad2.left_stick_x) > 0)) || ((Math.abs(gamepad2.left_stick_y)) > 0)){
             gamepad_2_movement = true;
         }
 

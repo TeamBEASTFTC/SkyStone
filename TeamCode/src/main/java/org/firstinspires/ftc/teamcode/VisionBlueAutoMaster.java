@@ -81,7 +81,7 @@ public class VisionBlueAutoMaster extends LinearOpMode{
         choppy.moveCrane(200, 0.7);//  lifting crane so it does not drag
 
         // Move back into the wall
-        choppy.moveForwBackEncoder(0.5, distance_to_gate, true, true);
+        choppy.moveForwBackEncoder(0.75, distance_to_gate, true, true);
         //a bit of space to rotate
         choppy.moveForwBackEncoder(0.5, 3, true, false);
 
@@ -96,11 +96,11 @@ public class VisionBlueAutoMaster extends LinearOpMode{
         telemetry.addData("distance to gate: ", distance_to_gate);
         telemetry.update();
         sleep(500);
-        choppy.moveForwBackEncoder(0.5, 20, true, false);
+        choppy.moveForwBackEncoder(0.75, 20, true, false);
         distance_to_gate -= 20;
         //release da capstone
         choppy.releaseCapstone();
-        choppy.moveForwBackEncoder(0.5, distance_to_gate+17, true, false);
+        choppy.moveForwBackEncoder(0.8, distance_to_gate+17, true, false);
         //passing further than gate
 
         // Release the stone
