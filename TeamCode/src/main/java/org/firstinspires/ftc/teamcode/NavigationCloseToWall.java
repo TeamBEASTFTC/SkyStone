@@ -24,11 +24,12 @@ public class NavigationCloseToWall extends LinearOpMode {
 
 
         waitForStart();
-        choppy.moveForwBackEncoder(0.25, 12, true, false);
-        choppy.rotateEncoder(0.25, ((400 / 90) * 6), false, blueAlliance);
-        choppy.shuffleEncoder(0.5, (24 / 0.8), true, !blueAlliance);
-        choppy.rotateEncoder(0.5,390, false, blueAlliance);
+        choppy.moveForwBackEncoder(0.5, 4, true, false);
+        choppy.rotateEncoder(0.25, ((400 / 90) * 6), false, !blueAlliance);
+        choppy.shuffleEncoder(0.75, (24 / 0.8), true, blueAlliance);
+        choppy.moveForwBackEncoder(0.5, 10, true, true);
+//        choppy.rotateEncoder(0.5,390, false, blueAlliance);
 
-        choppy.releaseCapstone();
+//        choppy.releaseCapstone();
     }
 }
