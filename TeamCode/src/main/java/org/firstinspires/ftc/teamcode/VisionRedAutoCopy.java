@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 @Autonomous(name="VisionRedAutoCopy", group="Tests")
 public class VisionRedAutoCopy extends LinearOpMode{
@@ -60,7 +61,7 @@ public class VisionRedAutoCopy extends LinearOpMode{
         CVCode();
         if (loopCounter > 1 && !movedUsingVision){
             // if it is not the first block
-            choppy.moveForwBackEncoder(0.5, distance_block_width/3, true, false);
+//            choppy.moveForwBackEncoder(0.5, distance_block_width/3, true, false);
         }
 
 
@@ -78,10 +79,10 @@ public class VisionRedAutoCopy extends LinearOpMode{
         // Grab the block
 //        choppy.grabStoneFlipperControl(true);
         choppy.setIntakeServoPos(0.65);
-        choppy.moveCrane(200, 0.7);//  lifting crane so it does not drag
+        choppy.moveCrane(200, 0.7, true);//  lifting crane so it does not drag
 
         // Move back into the wall
-        choppy.moveForwBackEncoder(0.75, distance_to_gate, true, true);
+        choppy.moveForwBackEncoder(1, distance_to_gate, true, true);
         //a bit of space to rotate
         choppy.moveForwBackEncoder(0.5, 3, true, false);
 
@@ -106,7 +107,7 @@ public class VisionRedAutoCopy extends LinearOpMode{
         // Release the stone
         choppy.grabStoneFlipperControl(false);
         choppy.setIntakeServoPos(0.4);
-        choppy.moveCrane(0, 0.5);//  lifting crane so it does not drag
+        choppy.moveCrane(0, 0.5, false);//  lifting crane so it does not drag
 
         // Move back under the gate
         choppy.moveForwBackEncoder(0.5, 17, true, true);
@@ -136,15 +137,15 @@ public class VisionRedAutoCopy extends LinearOpMode{
             if (computerVisionResults[1].equals("CENTRE, GRAB!!")){
                 telemetry.addLine("HEEREE! centre");
                 telemetry.update();
-                sleep(100);
+                sleep(10);
                 SkyStoneFound = true;
 
             }else if ((computerVisionResults[1].equals("To Field Centre"))){
                 telemetry.addLine("HERE! To field centre");
                 telemetry.addData("moving: ", computerVisionResults[4]);
                 telemetry.update();
-                sleep(100);
-                distance_to_center_of_stone = Math.abs(Double.parseDouble(computerVisionResults[4]));
+                sleep(10);
+                distance_to_center_of_stone = Math.abs(Double.parseDouble(computerVisionResults[4])) -10;
 //            distance_to_center_of_stone = distance_block_width/2; try other again
                 //+10 for error correction
                 choppy.moveForwBackEncoder(0.3, distance_to_center_of_stone, false, true);
@@ -156,9 +157,9 @@ public class VisionRedAutoCopy extends LinearOpMode{
                 telemetry.addLine("HERE! To field border");
                 telemetry.addData("moving: ", computerVisionResults[4]);
                 telemetry.update();
-                sleep(250);
+                sleep(10);
 
-                distance_to_center_of_stone = Math.abs(Double.parseDouble(computerVisionResults[4]));
+                distance_to_center_of_stone = Math.abs(Double.parseDouble(computerVisionResults[4])) -10;
 //                distance_to_center_of_stone = distance_block_width/2; I recogn try the other one again
 
                 //+10 for error correction
@@ -167,7 +168,7 @@ public class VisionRedAutoCopy extends LinearOpMode{
 //                choppy.telementryLineMessage("moving slightly forwards");
 //             distance_to_gate += distance_to_center_of_stone;
                 telemetry.update();
-                sleep(250);
+                sleep(10);
                 SkyStoneFound = true; //if not working change to true
                 movedUsingVision = true;
 //                if (loopCounter == 3){
@@ -179,22 +180,24 @@ public class VisionRedAutoCopy extends LinearOpMode{
                 if (false_counter == 2) {
                     //double check the program first
                     // move down a block distance!,
-                    choppy.moveForwBackEncoder(0.5, distance_block_width, true, false);
-                    distance_to_gate += distance_block_width;
+
 
                     choppy.telementryLineMessage("Vuforia computer vision = false");
-                    sleep(250);
+                    sleep(10);
                     false_counter = 0;
                     // if we have moved with CV then we are not aligned as per our setup position, so just take where we are
-                    if (loopCounter >= 2 && movedUsingVision){
+                    if (loopCounter >= 3 && movedUsingVision){
                         choppy.telementryLineMessage("we are done here!");
                         SkyStoneFound = true;
                         // if we are at the third block, have not moved with CV and see no block just MOVE then grab it
-                    }else if (loopCounter >= 2 && !movedUsingVision){
-//                        choppy.moveForwBackEncoder(0.5, distance_block_width, true, false);
-//                        distance_to_gate += distance_block_width;
-                        choppy.telementryLineMessage("moving forwards last block");
+                    }else if (loopCounter >= 3 && !movedUsingVision){
+//                        choppy.moveForwBackEncoder(0.5, distance_block_width, true, true);
+//                        distance_to_gate -= distance_block_width;
+                        choppy.telementryLineMessage("moving back last block");
                         SkyStoneFound = true;
+                    } else{
+                        choppy.moveForwBackEncoder(0.5, distance_block_width, true, false);
+                        distance_to_gate += distance_block_width;
                     }
 
                     // if we are at the third block and the others have not been found then,
@@ -213,7 +216,7 @@ public class VisionRedAutoCopy extends LinearOpMode{
                 choppy.moveForwBackEncoder(0.5,distance_block_width, true,false);
                 distance_to_gate += distance_to_center_of_stone;
                 choppy.telementryLineMessage("Vuforia else statement");
-                sleep(250);
+                sleep(10);
 
             }
 
