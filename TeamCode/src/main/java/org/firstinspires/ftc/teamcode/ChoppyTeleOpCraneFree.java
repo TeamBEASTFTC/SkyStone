@@ -36,9 +36,9 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-@TeleOp(name = "ChoppyTeleOpV3", group = "Linear Opmode")
+@TeleOp(name = "ChoppyTeleOpCraneFree", group = "Linear Opmode")
 
-public class ChoppyTeleOpV3 extends LinearOpMode {
+public class ChoppyTeleOpCraneFree extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
     HardwareSetup choppy = new HardwareSetup();
@@ -326,18 +326,16 @@ public class ChoppyTeleOpV3 extends LinearOpMode {
         // If joystick is up, bring crane up!
         y_crane_value = -gamepad.right_stick_y;
         if (y_crane_value > 0){
-            if (choppy.rotateCrane.getCurrentPosition() < 2600){
                 crane_control = gamepad.id;
                 joystick = true;
                 directionCrane = 1;
-            }
+
 
         } else if (y_crane_value < 0){
-            if (choppy.rotateCrane.getCurrentPosition() > 100){
                 crane_control = gamepad.id;
                 joystick = true;
                 directionCrane = -0.75; //slightly slower going down
-            }
+
         } else{
             if (crane_control == gamepad.id){
                 directionCrane = 0;
