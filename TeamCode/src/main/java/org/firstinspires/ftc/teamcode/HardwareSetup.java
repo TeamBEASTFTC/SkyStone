@@ -802,7 +802,7 @@ public class HardwareSetup {
 
     public void releaseCapstone(){
         telementryLineMessage("Releasing the capstone!");
-        setFoundationClipPosition(0.5);
+        setFoundationClipPosition(0.7);
         sleep(750);
         setFoundationClipPosition(0);
     }
