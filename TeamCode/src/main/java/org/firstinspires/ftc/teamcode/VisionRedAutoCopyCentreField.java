@@ -25,8 +25,8 @@ public class VisionRedAutoCopyCentreField extends LinearOpMode{
     double distance_block_width = 8;//8"
     double horizontal_distance_to_gate = robot_inch_distance-6;
     //    double distance_to_gate = 13.5; // starting distance to gate 13.5"
-    double distance_to_gate = 33.5; // starting distance to gate 13.5"
-    double distance_to_wall = distance_to_blocks_inches - 7;
+    double distance_to_gate = 40; // ,\]   starting distance to gate 13.5"
+    double distance_to_wall = distance_to_blocks_inches - 31;
 
     double distance_to_center_of_stone;
 
@@ -61,7 +61,7 @@ public class VisionRedAutoCopyCentreField extends LinearOpMode{
         CVCode();
         if (loopCounter > 1 && !movedUsingVision){
             // if it is not the first block
-//            choppy.moveForwBackEncoder(0.5, distance_block_width/3, true, false);
+            choppy.moveForwBackEncoder(0.5, distance_block_width/3, true, false);
         }
 
 
@@ -109,7 +109,7 @@ public class VisionRedAutoCopyCentreField extends LinearOpMode{
         choppy.setIntakeServoPos(0.4);
 
         // Move back under the gate
-        choppy.moveForwBackEncoder(0.5, 10, true, true);
+        choppy.moveForwBackEncoder(0.5, 13.5, true, true);
 
         choppy.moveCrane(0, 0.5, false);//  lifting crane so it does not drag
 

@@ -3,15 +3,10 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+@Autonomous(name="NavigationCloseToWallBlue", group="Auto")
+public class NavigationCloseToWallBlue extends LinearOpMode {
 
-import org.firstinspires.ftc.teamcode.HardwareSetup;
-
-@Autonomous(name="NavigationCloseToWall", group="Auto")
-public class NavigationCloseToWall extends LinearOpMode {
-
-    boolean blueAlliance = false;
+    boolean blueAlliance = true;
 
 
     HardwareSetup choppy = new HardwareSetup();
